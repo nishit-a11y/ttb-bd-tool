@@ -1,0 +1,35 @@
+.head{
+    background-color: #002E5A;    
+    padding-left: 2%;
+    padding-right: 2%;
+}
+
+.profile{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.drop{
+    padding-left: 5px;
+    cursor: pointer;
+}
+
+.css-2s90m6-MuiAvatar-root{
+    width: 35px!important;
+    height: 35px!important;
+}
+
+.username{
+    color: white;
+    margin: auto;
+    padding-left: 8px;
+    padding-right: 8px;
+    font-family: 'Proxima Nova';
+    font-size: small;
+    font-weight: 600;
+}
+
+.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.MuiMenu-paper.MuiPaper-elevation8.MuiPopover-paper.css-1poimk-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper {
+    margin-top: 20px;
+}

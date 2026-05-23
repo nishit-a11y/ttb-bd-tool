@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+
+# Environment files (contain API keys)
+.env
+.env.local
+.env.production
+
+# Firebase service account (sensitive)
+key.json
+
+# React build output
+build/
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*
+
+# Package lock (optional - remove if you want to track it)
+# package-lock.json

@@ -1,0 +1,94 @@
+.login_wrap{
+    height: 100%;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.login_form_forgot{
+    display: flex;
+    justify-content: center;
+    margin: auto 0;
+    align-items: center;
+    height: 100vh;
+}
+
+.reset_btn{
+    font-weight: 600;
+    color: #ffff;
+    font-family: 'Proxima Nova';
+    font-size: 18px;
+}
+
+#login-form-forgot{
+    width: 448px;
+}
+
+
+.forgot-title{
+    text-align: left!important;
+    font-family: 'Proxima Nova';
+    font-weight: 600;
+    color: white;
+    
+}
+
+.forgot-description{
+    color: white;
+    text-align: left!important;
+    font-family: 'Proxima Nova';
+    font-size: smaller;
+}
+
+label{
+    display: flex!important;
+    padding-bottom: 4px;
+    font-weight: 600;
+    color: #ffff;
+    font-family: 'Proxima Nova';
+    font-size: 16px;
+}
+
+input[type="email"], input[type="password"] {
+
+    background-color : #002E5A;
+    border-color: #CFCFCF;
+    color: #ffff; 
+  
+}
+
+input[type="email"]:focus, input[type="password"]:focus {
+
+    box-shadow: none;
+    background-color : #002E5A;
+    border-color: #CFCFCF;
+    color: #ffff; 
+  
+}
+
+.sub{
+    width: 100%!important;
+    background-color: #FE7300!important;
+    text-decoration-color: #ffff!important;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border: none!important;
+    font-size: 18px!important;
+}
+
+
+
+
+
+@media screen and (max-width: 768px) {
+    #login-form{
+        width: 80%;
+    }
+
+}
+
+@media (min-width: 768px) and (max-width: 992px){
+    #login-form{
+        width: 40%;
+    }
+
+}

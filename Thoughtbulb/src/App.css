@@ -1,0 +1,12 @@
+.App {
+  text-align: center;
+  
+}
+
+html{
+  background-color: #E5E5E5;
+}
+
+.ant-picker-dropdown{
+  z-index: 9999 !important;
+}
