@@ -24,7 +24,7 @@
     "handlebars": "^4.7.7",
     "moment": "^2.29.4",
     "nodemon": "^2.0.20",
-    "@sparticuz/chromium": "^112.0.0",
-    "puppeteer-core": "^20.1.0"
+    "@sparticuz/chromium-min": "^119.0.0",
+    "puppeteer-core": "^21.6.0"
   }
 }

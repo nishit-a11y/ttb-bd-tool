@@ -1,4 +1,4 @@
-const chromium = require("@sparticuz/chromium");
+const chromium = require("@sparticuz/chromium-min");
 const puppeteer = require("puppeteer-core");
 const hbs = require("handlebars");
 const moment = require("moment");
@@ -351,7 +351,9 @@ const generate = async function (data, objs, games, preview) {
         const browser = await puppeteer.launch({
             args: chromium.args,
             defaultViewport: chromium.defaultViewport,
-            executablePath: await chromium.executablePath(),
+            executablePath: await chromium.executablePath(
+                "https://github.com/Sparticuz/chromium/releases/download/v119.0.0/chromium-v119.0.0-pack.tar"
+            ),
             headless: true,
         });
          
