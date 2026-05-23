@@ -348,17 +348,6 @@ const generate = async function (data, objs, games, preview) {
 
         //End - Praveen
 
-        const browser = await puppeteer.launch({
-            args: chromium.args,
-            defaultViewport: chromium.defaultViewport,
-            executablePath: await chromium.executablePath(
-                "https://github.com/Sparticuz/chromium/releases/download/v119.0.0/chromium-v119.0.0-pack.tar"
-            ),
-            headless: true,
-        });
-         
-        const page = await browser.newPage();
-
         let content;
 
         if (data.inperson == true){
@@ -370,6 +359,17 @@ const generate = async function (data, objs, games, preview) {
         if (preview) {
             return content;
         }
+
+        const browser = await puppeteer.launch({
+            args: chromium.args,
+            defaultViewport: chromium.defaultViewport,
+            executablePath: await chromium.executablePath(
+                "https://github.com/Sparticuz/chromium/releases/download/v119.0.0/chromium-v119.0.0-pack.tar"
+            ),
+            headless: true,
+        });
+
+        const page = await browser.newPage();
         await page.setContent(content);
 
         await page.pdf({
