@@ -1764,7 +1764,10 @@ function Proposal() {
                       alert("PDF Generated Successfully");
                       navigate("/admin-dashboard");
                     })
-                    .catch((error) => {});
+                    .catch((error) => {
+                      alert("PDF generation failed: " + (error.response?.data || error.message));
+                      setLoading(false);
+                    });
                 });
               } catch (err) {
                 alert(err);
@@ -1831,7 +1834,10 @@ function Proposal() {
                 alert("PDF Generated Successfully");
                 navigate("/admin-dashboard");
               })
-              .catch((error) => {});
+              .catch((error) => {
+                alert("PDF generation failed: " + (error.response?.data || error.message));
+                setLoading(false);
+              });
           });
         } catch (err) {
           alert(err);
@@ -1914,7 +1920,10 @@ function Proposal() {
                       alert("PDF Generated Successfully");
                       navigate("/admin-dashboard");
                     })
-                    .catch((error) => {});
+                    .catch((error) => {
+                      alert("PDF generation failed: " + (error.response?.data || error.message));
+                      setLoading(false);
+                    });
                 });
               } catch (err) {
                 alert(err);
@@ -1977,7 +1986,10 @@ function Proposal() {
                   alert("PDF Generated Successfully");
                   navigate("/admin-dashboard");
                 })
-                .catch((error) => {});
+                .catch((error) => {
+                  alert("PDF generation failed: " + (error.response?.data || error.message));
+                  setLoading(false);
+                });
             }
           );
         } catch (err) {
