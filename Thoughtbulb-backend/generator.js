@@ -352,7 +352,7 @@ const generate = async function (data, objs, games, preview) {
             args: chromium.args,
             defaultViewport: chromium.defaultViewport,
             executablePath: await chromium.executablePath(),
-            headless: chromium.headless,
+            headless: true,
         });
          
         const page = await browser.newPage();
