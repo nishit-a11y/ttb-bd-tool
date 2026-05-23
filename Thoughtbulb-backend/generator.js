@@ -9,7 +9,7 @@ const path = require("path");
 require("./templates/helpers");
 
 const compile = async function (templateName, data) {
-    const filePath = path.join(process.cwd(), "templates", `${templateName}.hbs`);
+    const filePath = path.join(__dirname, "templates", `${templateName}.hbs`);
 
     const html = await fs.readFile(filePath, "utf8");
     return hbs.compile(html)(data);
