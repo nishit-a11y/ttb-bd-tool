@@ -655,6 +655,13 @@ function Admin_dashboard() {
     axios.get(url + `/api/preview/${id}`)
       .then((response) => {
         const filename = `${program_type} Team Engagement for ${company_name}`;
+        if (!response.data || response.data.length < 10) {
+          alert("Preview returned empty content. Please try again.");
+          const new_arr = [...pdf_loading];
+          new_arr[index] = false;
+          setPdf_loading(new_arr);
+          return;
+        }
         const printWindow = window.open("", "_blank");
         if (!printWindow) {
           alert("Please allow pop-ups for this site to generate the PDF.");
@@ -672,6 +679,7 @@ function Admin_dashboard() {
         setPdf_loading(new_arr);
       })
       .catch((error) => {
+        alert("PDF generation failed: " + (error.response?.data || error.message));
         const new_arr = [...pdf_loading];
         new_arr[index] = false;
         setPdf_loading(new_arr);
