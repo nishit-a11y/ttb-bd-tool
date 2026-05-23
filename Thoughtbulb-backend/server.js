@@ -12,7 +12,7 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 
 const admin = require("firebase-admin");
-const creds = require("./key.json");
+const creds = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
 
 admin.initializeApp({
     credential: admin.credential.cert(creds),
@@ -39,7 +39,7 @@ app.get("/api/generate/:id", async (req, res) => {
         // res.send(response.data())
 
         if (await gen.generate(response.data(), obj_response.data(), game_data)) {
-            fs.readFile("Report.pdf", (err, data) => {
+            fs.readFile("/tmp/Report.pdf", (err, data) => {
                 if (err) {
                     return res.status(500).send(err);
                 }

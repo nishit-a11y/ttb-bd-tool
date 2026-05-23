@@ -371,7 +371,7 @@ const generate = async function (data, objs, games, preview) {
         await page.setContent(content);
 
         await page.pdf({
-            path: "Report.pdf",
+            path: "/tmp/Report.pdf",
             landscape: true,
             printBackground: true,
             width: "608",
