@@ -1713,23 +1713,19 @@ function Proposal() {
                 ).then((doc) => {
                   const url = baseUrl;
 
-                  axios(url + `/api/generate/${myContext.proposal_id}`, {
-                    method: "GET",
-                    responseType: "blob",
-                  })
+                  axios.get(url + `/api/preview/${myContext.proposal_id}`)
                     .then((response) => {
-                      const file = new Blob([response.data], {
-                        type: "application/pdf",
-                      });
-                      const fileURL = URL.createObjectURL(file);
-                      const link = document.createElement("a");
-                      link.href = fileURL;
-                      link.download = `${
-                        myContext.inperson ? "In-person" : "Virtual"
-                      } Team Engagement for ${myContext.company_name}.pdf`;
-                      document.body.appendChild(link);
-                      link.click();
-                      link.parentNode.removeChild(link);
+                      const filename = `${myContext.inperson ? "In-person" : "Virtual"} Team Engagement for ${myContext.company_name}`;
+                      const printWindow = window.open("", "_blank");
+                      if (!printWindow) {
+                        alert("Please allow pop-ups to generate the PDF.");
+                      } else {
+                        const style = `<style>@media print{@page{size:landscape;margin:0}}</style>`;
+                        const script = `<script>window.onload=function(){document.title="${filename.replace(/"/g, '\\"')}";setTimeout(window.print,800);}<\/script>`;
+                        const html = response.data.replace("</head>", style + "</head>").replace("</body>", script + "</body>");
+                        printWindow.document.write(html);
+                        printWindow.document.close();
+                      }
                       myContext.setCompany_logo(null);
                       myContext.setCompany_name("");
                       myContext.setCreated_date("");
@@ -1784,23 +1780,19 @@ function Proposal() {
           ).then((docs) => {
             const url = baseUrl;
 
-            axios(url + `/api/generate/${myContext.proposal_id}`, {
-              method: "GET",
-              responseType: "blob",
-            })
+            axios.get(url + `/api/preview/${myContext.proposal_id}`)
               .then((response) => {
-                const file = new Blob([response.data], {
-                  type: "application/pdf",
-                });
-                const fileURL = URL.createObjectURL(file);
-                const link = document.createElement("a");
-                link.href = fileURL;
-                link.download = `${
-                  myContext.inperson ? "In-person" : "Virtual"
-                } Team Engagement for ${myContext.company_name}.pdf`;
-                document.body.appendChild(link);
-                link.click();
-                link.parentNode.removeChild(link);
+                const filename = `${myContext.inperson ? "In-person" : "Virtual"} Team Engagement for ${myContext.company_name}`;
+                const printWindow = window.open("", "_blank");
+                if (!printWindow) {
+                  alert("Please allow pop-ups to generate the PDF.");
+                } else {
+                  const style = `<style>@media print{@page{size:landscape;margin:0}}</style>`;
+                  const script = `<script>window.onload=function(){document.title="${filename.replace(/"/g, '\\"')}";setTimeout(window.print,800);}<\/script>`;
+                  const html = response.data.replace("</head>", style + "</head>").replace("</body>", script + "</body>");
+                  printWindow.document.write(html);
+                  printWindow.document.close();
+                }
                 myContext.setCompany_logo(null);
                 myContext.setCompany_name("");
                 myContext.setCreated_date("");
@@ -1873,23 +1865,19 @@ function Proposal() {
                 ).then((doc) => {
                   const url = baseUrl;
 
-                  axios(url + `/api/generate/${doc.id}`, {
-                    method: "GET",
-                    responseType: "blob",
-                  })
+                  axios.get(url + `/api/preview/${doc.id}`)
                     .then((response) => {
-                      const file = new Blob([response.data], {
-                        type: "application/pdf",
-                      });
-                      const fileURL = URL.createObjectURL(file);
-                      const link = document.createElement("a");
-                      link.href = fileURL;
-                      link.download = `${
-                        myContext.inperson ? "In-person" : "Virtual"
-                      } Team Engagement for ${myContext.company_name}.pdf`;
-                      document.body.appendChild(link);
-                      link.click();
-                      link.parentNode.removeChild(link);
+                      const filename = `${myContext.inperson ? "In-person" : "Virtual"} Team Engagement for ${myContext.company_name}`;
+                      const printWindow = window.open("", "_blank");
+                      if (!printWindow) {
+                        alert("Please allow pop-ups to generate the PDF.");
+                      } else {
+                        const style = `<style>@media print{@page{size:landscape;margin:0}}</style>`;
+                        const script = `<script>window.onload=function(){document.title="${filename.replace(/"/g, '\\"')}";setTimeout(window.print,800);}<\/script>`;
+                        const html = response.data.replace("</head>", style + "</head>").replace("</body>", script + "</body>");
+                        printWindow.document.write(html);
+                        printWindow.document.close();
+                      }
                       myContext.setCompany_logo(null);
                       myContext.setCompany_name("");
                       myContext.setCreated_date("");
@@ -1940,23 +1928,19 @@ function Proposal() {
             (doc) => {
               const url = baseUrl;
 
-              axios(url + `/api/generate/${doc.id}`, {
-                method: "GET",
-                responseType: "blob",
-              })
+              axios.get(url + `/api/preview/${doc.id}`)
                 .then((response) => {
-                  const file = new Blob([response.data], {
-                    type: "application/pdf",
-                  });
-                  const fileURL = URL.createObjectURL(file);
-                  const link = document.createElement("a");
-                  link.href = fileURL;
-                  link.download = `${
-                    myContext.inperson ? "In-person" : "Virtual"
-                  } Team Engagement for ${myContext.company_name}.pdf`;
-                  document.body.appendChild(link);
-                  link.click();
-                  link.parentNode.removeChild(link);
+                  const filename = `${myContext.inperson ? "In-person" : "Virtual"} Team Engagement for ${myContext.company_name}`;
+                  const printWindow = window.open("", "_blank");
+                  if (!printWindow) {
+                    alert("Please allow pop-ups to generate the PDF.");
+                  } else {
+                    const style = `<style>@media print{@page{size:landscape;margin:0}}</style>`;
+                    const script = `<script>window.onload=function(){document.title="${filename.replace(/"/g, '\\"')}";setTimeout(window.print,800);}<\/script>`;
+                    const html = response.data.replace("</head>", style + "</head>").replace("</body>", script + "</body>");
+                    printWindow.document.write(html);
+                    printWindow.document.close();
+                  }
                   myContext.setCompany_logo(null);
                   myContext.setCompany_name("");
                   myContext.setCreated_date("");

@@ -290,20 +290,21 @@ function Admin_dashboard() {
     setPdf_loading(new_arr);
     const url = baseUrl;
 
-    axios(url + `/api/generate/${id}`, {
-      method: "GET",
-      responseType: "blob",
-    })
+    axios.get(url + `/api/preview/${id}`)
       .then((response) => {
-        const file = new Blob([response.data], { type: "application/pdf" });
-        const fileURL = URL.createObjectURL(file);
-        const link = document.createElement("a");
-        link.href = fileURL;
-        link.download = `${program_type} Team Engagement for ${company_name}.pdf`;
-
-        document.body.appendChild(link);
-        link.click();
-        link.parentNode.removeChild(link);
+        const filename = `${program_type} Team Engagement for ${company_name}`;
+        const printWindow = window.open("", "_blank");
+        if (!printWindow) {
+          alert("Please allow pop-ups for this site to generate the PDF.");
+        } else {
+          const style = `<style>@media print{@page{size:landscape;margin:0}}</style>`;
+          const script = `<script>window.onload=function(){document.title="${filename.replace(/"/g, '\\"')}";setTimeout(window.print,800);}<\/script>`;
+          const html = response.data
+            .replace("</head>", style + "</head>")
+            .replace("</body>", script + "</body>");
+          printWindow.document.write(html);
+          printWindow.document.close();
+        }
         const new_arr = [...pdf_loading];
         new_arr[index] = false;
         setPdf_loading(new_arr);
