@@ -70,9 +70,12 @@ app.get("/api/preview/:id", async (req, res) => {
         // res.send(response.data())
 
         let html = await gen.generate(response.data(), obj_response.data(), game_data, true);
+        if (!html) {
+            return res.status(500).send('generate() returned empty');
+        }
         res.send(html);
     } catch (error) {
-        res.send(500).send(error);
+        res.status(500).send('Preview error: ' + error.toString() + '\n' + error.stack);
     }
 });
 

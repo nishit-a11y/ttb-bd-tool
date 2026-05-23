@@ -389,6 +389,7 @@ const generate = async function (data, objs, games, preview) {
         return true;
     } catch (e) {
         console.log(e);
+        throw e;
     }
 };
 
