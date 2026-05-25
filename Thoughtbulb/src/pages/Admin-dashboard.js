@@ -666,7 +666,7 @@ function Admin_dashboard() {
         if (!printWindow) {
           alert("Please allow pop-ups for this site to generate the PDF.");
         } else {
-          const style = `<style>*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important;}@media print{@page{size:1080px 608px;margin:0}}#pricing-page{transform:scale(0.82);transform-origin:top left;width:calc(1080px / 0.82)!important;}</style>`;
+          const style = `<style>*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important;}@media print{@page{size:1080px 608px;margin:0}}</style>`;
           const script = `<script>window.onload=function(){document.title="${filename.replace(/"/g, '\\"')}";setTimeout(window.print,800);}<\/script>`;
           const html = response.data
             .replace("</head>", style + "</head>")
