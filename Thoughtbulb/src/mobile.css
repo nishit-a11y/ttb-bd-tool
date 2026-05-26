@@ -96,6 +96,110 @@
     display: none !important;
   }
 
+  /* ── Phase 2: Admin Dashboard ────────────────────────────── */
+
+  /* Insights cards — wrap so all 3 fit without overflow */
+  .analytics > div[style] {
+    flex-wrap: wrap !important;
+  }
+
+  .analytics > div[style] > div[style] {
+    flex: 1 1 28% !important;
+    min-width: 90px !important;
+    margin: 6px !important;
+    padding: 8px !important;
+  }
+
+  .analyt-title {
+    font-size: 11px !important;
+    margin-bottom: 4px !important;
+  }
+
+  .analyt-value {
+    font-size: 22px !important;
+    margin: 0 !important;
+  }
+
+  .analytics {
+    padding: 10px !important;
+  }
+
+  /* Table header section — stack title row vertically */
+  .table-head .row {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  .table-head .col-lg-8,
+  .table-head .col-lg-2,
+  .table-head .col-md-2,
+  .table-head .col-md-3,
+  .table-head .col-md-6 {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 8px !important;
+  }
+
+  .table-head {
+    padding: 10px 0 !important;
+  }
+
+  /* Search bar — full width */
+  .search {
+    width: 100% !important;
+  }
+
+  .search-row {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  /* Create Proposal button — full width */
+  .notify-button-wrap {
+    padding: 0 8px !important;
+  }
+
+  .notify-button {
+    width: 100% !important;
+    padding: 8px !important;
+  }
+
+  /* Table — horizontal scroll */
+  .table-responsive-lg {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* Table cells — compact on mobile */
+  .table > :not(caption) > * > * {
+    padding: 8px 6px !important;
+    font-size: 13px !important;
+    white-space: nowrap !important;
+  }
+
+  /* Company name column — allow wrap */
+  .com-name {
+    max-width: 120px !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+  }
+
+  /* Table section padding */
+  .table-section {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  /* Pagination — compact */
+  .MuiTablePagination-root {
+    overflow-x: auto !important;
+  }
+
+  .MuiTablePagination-toolbar {
+    flex-wrap: wrap !important;
+    font-size: 12px !important;
+  }
+
 }
 
 /* Hamburger hidden on desktop */
