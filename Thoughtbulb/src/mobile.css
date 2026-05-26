@@ -128,28 +128,39 @@
     padding: 10px !important;
   }
 
-  /* Table header section — stack title/search/button vertically */
+  /* Table header section — fix Bootstrap row negative margins, stack vertically */
   .table-head .row {
     flex-direction: column !important;
     gap: 8px !important;
     align-items: stretch !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
   }
 
   .table-head .col-lg-8,
   .table-head .col-lg-2,
-  .table-head .col-md-3 {
+  .table-head .col-md-2,
+  .table-head .col-md-3,
+  .table-head .col-md-6,
+  .table-title-wrap,
+  .notify-button-wrap {
     width: 100% !important;
     max-width: 100% !important;
-    padding: 0 8px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    flex: unset !important;
   }
 
   .table-head {
-    padding: 10px 0 !important;
+    padding: 10px 8px !important;
   }
 
   /* Search bar — full width, keep icon+input in a row */
   .search {
     width: 100% !important;
+    border: 1px solid #ddd !important;
+    border-radius: 6px !important;
+    background: white !important;
   }
 
   .search-row {
@@ -159,12 +170,13 @@
     width: 100% !important;
     margin: 0 !important;
     flex-wrap: nowrap !important;
+    padding: 6px 10px !important;
   }
 
   .search-icon {
     width: auto !important;
     flex-shrink: 0 !important;
-    padding: 0 8px !important;
+    padding: 0 8px 0 0 !important;
   }
 
   .padding-7 {
@@ -175,18 +187,21 @@
 
   .search-input {
     width: 100% !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
   }
 
-  /* Create Proposal button — full width */
+  /* Create Proposal button — full width, prominent */
   .notify-button-wrap {
-    padding: 0 8px !important;
-    width: 100% !important;
-    max-width: 100% !important;
+    display: block !important;
   }
 
   .notify-button {
     width: 100% !important;
-    padding: 8px !important;
+    padding: 10px !important;
+    font-size: 15px !important;
+    border-radius: 6px !important;
   }
 
   /* Table — horizontal scroll */
