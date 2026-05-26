@@ -15,6 +15,10 @@ function Header() {
   const auth = getAuth(fire);
   const myContext = useContext(AppContext);
 
+  function toggleSidebar() {
+    document.body.classList.toggle("sidebar-open");
+  }
+
   function logout_user() {
     localStorage.removeItem("authenticated");
     localStorage.removeItem("admin-auth");
@@ -30,13 +34,20 @@ function Header() {
   return (
     <div className="container-fluid head">
       <nav className="navbar">
-        <a className="navbar-brand">
-          <img
-            src={require("../assets/images/logo1.png")}
-            width="60"
-            alt=""
-          ></img>
-        </a>
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          <button className="hamburger-btn" onClick={toggleSidebar} aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          <a className="navbar-brand">
+            <img
+              src={require("../assets/images/logo1.png")}
+              width="60"
+              alt=""
+            ></img>
+          </a>
+        </div>
         <div className="profile">
           <Avatar
             src={
@@ -72,6 +83,8 @@ function Header() {
           </PopupState>
         </div>
       </nav>
+      {/* Mobile sidebar backdrop */}
+      <div className="sidebar-backdrop" onClick={toggleSidebar}></div>
     </div>
   );
 }
