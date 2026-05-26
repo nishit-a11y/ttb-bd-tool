@@ -1614,6 +1614,14 @@ function Proposal() {
   };
 
   function generate_pdf() {
+    // Open window synchronously in user-click context so mobile Safari doesn't block it
+    const printWindow = window.open("", "_blank");
+    if (!printWindow) {
+      alert("Please allow pop-ups for this site to generate the PDF.");
+      return;
+    }
+    printWindow.document.write("<html><body><p style='font-family:sans-serif;padding:20px'>Loading PDF preview...</p></body></html>");
+
     setLoading(true);
     let tempArr = [];
     selected_games_arr.map((gameObj) => {
@@ -1716,16 +1724,12 @@ function Proposal() {
                   axios.get(url + `/api/preview/${myContext.proposal_id}`)
                     .then((response) => {
                       const filename = `${myContext.inperson ? "In-person" : "Virtual"} Team Engagement for ${myContext.company_name}`;
-                      const printWindow = window.open("", "_blank");
-                      if (!printWindow) {
-                        alert("Please allow pop-ups to generate the PDF.");
-                      } else {
-                        const style = `<style>*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important;}@media print{@page{size:1080px 608px;margin:0}}</style>`;
-                        const script = `<script>window.onload=function(){document.title="${filename.replace(/"/g, '\\"')}";setTimeout(window.print,800);}<\/script>`;
-                        const html = response.data.replace("</head>", style + "</head>").replace("</body>", script + "</body>");
-                        printWindow.document.write(html);
-                        printWindow.document.close();
-                      }
+                      const style = `<style>*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important;}@media print{@page{size:1080px 608px;margin:0}}</style>`;
+                      const script = `<script>window.onload=function(){document.title="${filename.replace(/"/g, '\\"')}";setTimeout(window.print,800);}<\/script>`;
+                      const html = response.data.replace("</head>", style + "</head>").replace("</body>", script + "</body>");
+                      printWindow.document.open();
+                      printWindow.document.write(html);
+                      printWindow.document.close();
                       myContext.setCompany_logo(null);
                       myContext.setCompany_name("");
                       myContext.setCreated_date("");
@@ -1765,6 +1769,7 @@ function Proposal() {
                       navigate("/admin-dashboard");
                     })
                     .catch((error) => {
+                      printWindow.close();
                       alert("PDF generation failed: " + (error.response?.data || error.message));
                       setLoading(false);
                     });
@@ -1921,6 +1926,7 @@ function Proposal() {
                       navigate("/admin-dashboard");
                     })
                     .catch((error) => {
+                      printWindow.close();
                       alert("PDF generation failed: " + (error.response?.data || error.message));
                       setLoading(false);
                     });

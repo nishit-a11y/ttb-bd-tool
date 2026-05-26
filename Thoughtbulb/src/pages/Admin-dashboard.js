@@ -651,34 +651,43 @@ function Admin_dashboard() {
     new_arr[index] = true;
     setPdf_loading(new_arr);
     const url = baseUrl;
+    const filename = `${program_type} Team Engagement for ${company_name}`;
+
+    // Open window synchronously (must happen in user-click context for mobile Safari)
+    const printWindow = window.open("", "_blank");
+    if (!printWindow) {
+      alert("Please allow pop-ups for this site to generate the PDF.");
+      const new_arr = [...pdf_loading];
+      new_arr[index] = false;
+      setPdf_loading(new_arr);
+      return;
+    }
+    printWindow.document.write("<html><body><p style='font-family:sans-serif;padding:20px'>Loading PDF preview...</p></body></html>");
 
     axios.get(url + `/api/preview/${id}`)
       .then((response) => {
-        const filename = `${program_type} Team Engagement for ${company_name}`;
         if (!response.data || response.data.length < 10) {
+          printWindow.close();
           alert("Preview returned empty content. Please try again.");
           const new_arr = [...pdf_loading];
           new_arr[index] = false;
           setPdf_loading(new_arr);
           return;
         }
-        const printWindow = window.open("", "_blank");
-        if (!printWindow) {
-          alert("Please allow pop-ups for this site to generate the PDF.");
-        } else {
-          const style = `<style>*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important;}@media print{@page{size:1080px 608px;margin:0}}</style>`;
-          const script = `<script>window.onload=function(){document.title="${filename.replace(/"/g, '\\"')}";setTimeout(window.print,800);}<\/script>`;
-          const html = response.data
-            .replace("</head>", style + "</head>")
-            .replace("</body>", script + "</body>");
-          printWindow.document.write(html);
-          printWindow.document.close();
-        }
+        const style = `<style>*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important;}@media print{@page{size:1080px 608px;margin:0}}</style>`;
+        const script = `<script>window.onload=function(){document.title="${filename.replace(/"/g, '\\"')}";setTimeout(window.print,800);}<\/script>`;
+        const html = response.data
+          .replace("</head>", style + "</head>")
+          .replace("</body>", script + "</body>");
+        printWindow.document.open();
+        printWindow.document.write(html);
+        printWindow.document.close();
         const new_arr = [...pdf_loading];
         new_arr[index] = false;
         setPdf_loading(new_arr);
       })
       .catch((error) => {
+        printWindow.close();
         alert("PDF generation failed: " + (error.response?.data || error.message));
         const new_arr = [...pdf_loading];
         new_arr[index] = false;
