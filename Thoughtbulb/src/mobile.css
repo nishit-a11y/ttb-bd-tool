@@ -98,25 +98,29 @@
 
   /* ── Phase 2: Admin Dashboard ────────────────────────────── */
 
-  /* Insights cards — wrap so all 3 fit without overflow */
+  /* Insights cards — all 3 in one row */
   .analytics > div[style] {
-    flex-wrap: wrap !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    gap: 4px !important;
+    padding: 0 4px !important;
   }
 
   .analytics > div[style] > div[style] {
-    flex: 1 1 28% !important;
-    min-width: 90px !important;
-    margin: 6px !important;
-    padding: 8px !important;
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    margin: 4px !important;
+    padding: 8px 6px !important;
   }
 
   .analyt-title {
     font-size: 11px !important;
     margin-bottom: 4px !important;
+    line-height: 1.2 !important;
   }
 
   .analyt-value {
-    font-size: 22px !important;
+    font-size: 20px !important;
     margin: 0 !important;
   }
 
@@ -124,17 +128,16 @@
     padding: 10px !important;
   }
 
-  /* Table header section — stack title row vertically */
+  /* Table header section — stack title/search/button vertically */
   .table-head .row {
     flex-direction: column !important;
     gap: 8px !important;
+    align-items: stretch !important;
   }
 
   .table-head .col-lg-8,
   .table-head .col-lg-2,
-  .table-head .col-md-2,
-  .table-head .col-md-3,
-  .table-head .col-md-6 {
+  .table-head .col-md-3 {
     width: 100% !important;
     max-width: 100% !important;
     padding: 0 8px !important;
@@ -144,19 +147,41 @@
     padding: 10px 0 !important;
   }
 
-  /* Search bar — full width */
+  /* Search bar — full width, keep icon+input in a row */
   .search {
     width: 100% !important;
   }
 
   .search-row {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
     width: 100% !important;
     margin: 0 !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .search-icon {
+    width: auto !important;
+    flex-shrink: 0 !important;
+    padding: 0 8px !important;
+  }
+
+  .padding-7 {
+    flex: 1 !important;
+    width: auto !important;
+    padding: 0 !important;
+  }
+
+  .search-input {
+    width: 100% !important;
   }
 
   /* Create Proposal button — full width */
   .notify-button-wrap {
     padding: 0 8px !important;
+    width: 100% !important;
+    max-width: 100% !important;
   }
 
   .notify-button {
@@ -165,9 +190,11 @@
   }
 
   /* Table — horizontal scroll */
-  .table-responsive-lg {
+  .table-responsive-lg,
+  .MuiTableContainer-root {
     overflow-x: auto !important;
     -webkit-overflow-scrolling: touch !important;
+    max-width: 100vw !important;
   }
 
   /* Table cells — compact on mobile */
@@ -175,6 +202,13 @@
     padding: 8px 6px !important;
     font-size: 13px !important;
     white-space: nowrap !important;
+  }
+
+  /* MUI table cells */
+  .MuiTableCell-root {
+    white-space: nowrap !important;
+    padding: 8px 6px !important;
+    font-size: 13px !important;
   }
 
   /* Company name column — allow wrap */
@@ -198,6 +232,8 @@
   .MuiTablePagination-toolbar {
     flex-wrap: wrap !important;
     font-size: 12px !important;
+    min-height: unset !important;
+    padding: 4px 8px !important;
   }
 
 }
