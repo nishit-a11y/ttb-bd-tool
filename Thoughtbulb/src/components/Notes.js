@@ -272,20 +272,20 @@ VISUAL INSTRUCTIONS:
     new Promise((resolve) => {
       const img = new Image();
       img.onload = () => {
-        const maxDim = 600;
+        // Scale down to fit within 900x600 (landscape-friendly) while preserving ratio
+        const maxWidth = 900;
+        const maxHeight = 600;
         let { width, height } = img;
-        if (width >= height) {
-          height = Math.round((height * maxDim) / width);
-          width = maxDim;
-        } else {
-          width = Math.round((width * maxDim) / height);
-          height = maxDim;
+        const ratio = Math.max(width / maxWidth, height / maxHeight);
+        if (ratio > 1) {
+          width = Math.round(width / ratio);
+          height = Math.round(height / ratio);
         }
         const canvas = document.createElement("canvas");
         canvas.width = width;
         canvas.height = height;
         canvas.getContext("2d").drawImage(img, 0, 0, width, height);
-        resolve(canvas.toDataURL("image/jpeg", 0.65));
+        resolve(canvas.toDataURL("image/jpeg", 0.72));
       };
       img.src = `data:image/png;base64,${b64}`;
     });

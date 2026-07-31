@@ -198,7 +198,7 @@ app.post("/api/ai/image", verifyFirebaseToken, aiRateLimit, async (req, res) => 
                 model: "gpt-image-2",
                 prompt: prompt,
                 n: 1,
-                size: "1024x1024",
+                size: "1536x1024",
             }),
         });
         const data = await response.json();
