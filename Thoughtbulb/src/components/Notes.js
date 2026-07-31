@@ -252,20 +252,11 @@ Return only the final HTML. No preamble, no explanation.`;
 
   const buildImagePrompt = (game) => {
     const clientContext = aiDescription ? `\n\nClient brief: ${aiDescription}` : "";
-    return `Create a high-quality, visually compelling illustration for a corporate team-building proposal.
-
-Activity: "${game.name}"
+    return `Activity: "${game.name}"
 Theme: ${game.game_objective}
 Key pillars: ${game.key_title1}, ${game.key_title2}, ${game.key_title3}${clientContext}
 
-VISUAL INSTRUCTIONS:
-- If the client brief describes specific stages or steps, divide the image into clearly distinct visual panels or sections (one per stage), each depicting that stage as an action scene with people.
-- Show diverse, professional corporate participants actively engaged.
-- Use a consistent, polished visual style throughout — modern, vibrant, high-contrast.
-- The overall composition should feel dynamic and story-driven, not static or clip-art.
-- No text, labels, or numbers in the image — communicate stages through visual metaphor and distinct scenes.
-- Suitable for embedding in a professional business proposal document.
-- Aspect ratio: square (1:1).`;
+Image size: 1536x1024.`;
   };
 
   const compressBase64Image = (b64) =>
