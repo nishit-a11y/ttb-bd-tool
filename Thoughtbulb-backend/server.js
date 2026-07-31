@@ -195,7 +195,7 @@ app.post("/api/ai/image", verifyFirebaseToken, aiRateLimit, async (req, res) => 
                 Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
             },
             body: JSON.stringify({
-                model: "chatgpt-image-latest",
+                model: "gpt-image-2",
                 prompt: prompt,
                 n: 1,
                 size: "1536x1024",
