@@ -2426,7 +2426,7 @@ font-weight: 800;
 
 
       <div class="leftbox">
-        
+
         <div class="text orange-color-text event-name" style="font-size: 22px; font-weight: 800;">
               Notes
         </div>
@@ -2447,7 +2447,7 @@ font-weight: 800;
               <img class="event-image" style=" width: 60px; height: 60px;" src="{{data.game_logo}}" />
         </div>
 
-      <div style="height: 90%;align-items: center";> 
+      <div style="height: 90%;align-items: center";>
         <div style="font-size: 16px; padding: 10px 0; text-align: justify; color: #002F59;">
           {{{custom_notes}}}
         </div>
@@ -2458,6 +2458,41 @@ font-weight: 800;
     </div>
   </div>
   {{/if}}
+
+  {{!-- AI generated image slide --}}
+  {{#if custom_image}}
+  <div class="page" style="
+  background: url('https://api.bd.eskoops.com/assets/pngAssets/NEW_BG/BG5.jpg');
+  background-repeat: no-repeat;
+  background-size: 1080px 608px;">
+    <div style="height: 100%; display: flex; flex-direction: row; align-items: center;">
+
+      <div class="leftbox">
+        <div class="text orange-color-text event-name" style="font-size: 22px; font-weight: 800;">
+          Visual
+        </div>
+        {{#if data.game_url}}
+        <a href="{{data.game_url}}" target="_blank">
+          <img class="image" style="width: 80px; height: 80px; opacity: 0.90"
+            src="https://api.bd.eskoops.com/assets/pngAssets/notes.png" />
+        </a>
+        {{/if}}
+      </div>
+
+      <div class="rightbox" style="height:80%;display: flex; flex-direction: column; align-items: left;">
+        <div class="normal-text" style="font-size: 24px;">
+          {{data.game_name}}: Customization
+          <img class="event-image" style="width: 60px; height: 60px;" src="{{data.game_logo}}" />
+        </div>
+        <div style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 8px 0;">
+          <img src="{{custom_image}}" style="max-width: 100%; max-height: 430px; object-fit: contain; display: block; border-radius: 8px;" />
+        </div>
+      </div>
+
+    </div>
+  </div>
+  {{/if}}
+
   {{/each}}
 
 

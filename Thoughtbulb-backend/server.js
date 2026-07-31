@@ -184,6 +184,32 @@ app.post("/api/ai/chat", verifyFirebaseToken, aiRateLimit, async (req, res) => {
     }
 });
 
+app.post("/api/ai/image", verifyFirebaseToken, aiRateLimit, async (req, res) => {
+    try {
+        const { prompt } = req.body;
+        if (!prompt) return res.status(400).json({ error: "prompt is required" });
+        const response = await fetch("https://api.openai.com/v1/images/generations", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+            },
+            body: JSON.stringify({
+                model: "dall-e-3",
+                prompt: prompt,
+                n: 1,
+                size: "1024x1024",
+                response_format: "b64_json",
+            }),
+        });
+        const data = await response.json();
+        if (data.error) return res.status(400).json({ error: data.error });
+        res.json({ b64_json: data.data[0].b64_json });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {

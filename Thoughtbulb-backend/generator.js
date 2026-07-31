@@ -305,7 +305,9 @@ const generate = async function (data, objs, games, preview) {
                     //  if (data.custom_notes)
                     // console.log("custom notes"+ JSON.parse(data.custom_notes).length)
 
-                  game.custom_notes=JSON.parse(data.custom_notes).filter(noteobj => noteobj.id==game.id)[0].note;
+                  const noteObj = JSON.parse(data.custom_notes).filter(noteobj => noteobj.id == game.id)[0];
+                  game.custom_notes = noteObj.note || "";
+                  game.custom_image = noteObj.image || "";
                     selected_games.push(game);
 
                 }
