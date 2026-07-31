@@ -372,7 +372,7 @@ const generate = async function (data, objs, games, preview) {
         });
 
         const page = await browser.newPage();
-        await page.setContent(content);
+        await page.setContent(content, { waitUntil: "networkidle0" });
 
         await page.pdf({
             path: "/tmp/Report.pdf",
