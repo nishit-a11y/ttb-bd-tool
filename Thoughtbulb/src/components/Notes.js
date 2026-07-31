@@ -264,8 +264,8 @@ Image size: 1536x1024.`;
       const img = new Image();
       img.onload = () => {
         // Scale down to fit within 900x600 (landscape-friendly) while preserving ratio
-        const maxWidth = 900;
-        const maxHeight = 600;
+        const maxWidth = 1400;
+        const maxHeight = 933;
         let { width, height } = img;
         const ratio = Math.max(width / maxWidth, height / maxHeight);
         if (ratio > 1) {
@@ -276,7 +276,7 @@ Image size: 1536x1024.`;
         canvas.width = width;
         canvas.height = height;
         canvas.getContext("2d").drawImage(img, 0, 0, width, height);
-        resolve(canvas.toDataURL("image/jpeg", 0.72));
+        resolve(canvas.toDataURL("image/jpeg", 0.90));
       };
       img.src = `data:image/png;base64,${b64}`;
     });
