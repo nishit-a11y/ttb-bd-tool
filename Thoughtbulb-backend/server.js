@@ -188,7 +188,6 @@ app.post("/api/ai/image", verifyFirebaseToken, aiRateLimit, async (req, res) => 
     try {
         const { prompt } = req.body;
         if (!prompt) return res.status(400).json({ error: "prompt is required" });
-        // Generate image — returns a URL by default (works across all API tiers)
         const response = await fetch("https://api.openai.com/v1/images/generations", {
             method: "POST",
             headers: {
@@ -196,7 +195,7 @@ app.post("/api/ai/image", verifyFirebaseToken, aiRateLimit, async (req, res) => 
                 Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
             },
             body: JSON.stringify({
-                model: "dall-e-3",
+                model: "gpt-image-1",
                 prompt: prompt,
                 n: 1,
                 size: "1024x1024",
@@ -204,11 +203,13 @@ app.post("/api/ai/image", verifyFirebaseToken, aiRateLimit, async (req, res) => 
         });
         const data = await response.json();
         if (data.error) return res.status(400).json({ error: data.error });
-        // Fetch the image from the temporary URL and convert to base64
-        const imageUrl = data.data[0].url;
-        const imgResponse = await fetch(imageUrl);
-        const arrayBuffer = await imgResponse.arrayBuffer();
-        const b64 = Buffer.from(arrayBuffer).toString("base64");
+        // gpt-image-1 returns b64_json directly; fall back to URL fetch for other models
+        let b64 = data.data[0].b64_json;
+        if (!b64 && data.data[0].url) {
+            const imgResponse = await fetch(data.data[0].url);
+            const arrayBuffer = await imgResponse.arrayBuffer();
+            b64 = Buffer.from(arrayBuffer).toString("base64");
+        }
         res.json({ b64_json: b64 });
     } catch (error) {
         res.status(500).json({ error: error.message });
