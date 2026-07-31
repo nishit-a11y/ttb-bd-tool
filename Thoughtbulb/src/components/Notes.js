@@ -251,7 +251,21 @@ Return only the final HTML. No preamble, no explanation.`;
   // ── Image AI generation ───────────────────────────────────────────────────
 
   const buildImagePrompt = (game) => {
-    return `Professional corporate team-building activity illustration. Activity name: "${game.name}". Core theme: ${game.game_objective}. Key focus areas: ${game.key_title1}, ${game.key_title2}, ${game.key_title3}. Client context: ${aiDescription || "a professional corporate team"}. Style: clean, modern, vibrant corporate illustration with a collaborative, energetic feel. No text, words, or letters anywhere in the image. Suitable for inclusion in a business proposal document.`;
+    const clientContext = aiDescription ? `\n\nClient brief: ${aiDescription}` : "";
+    return `Create a high-quality, visually compelling illustration for a corporate team-building proposal.
+
+Activity: "${game.name}"
+Theme: ${game.game_objective}
+Key pillars: ${game.key_title1}, ${game.key_title2}, ${game.key_title3}${clientContext}
+
+VISUAL INSTRUCTIONS:
+- If the client brief describes specific stages or steps, divide the image into clearly distinct visual panels or sections (one per stage), each depicting that stage as an action scene with people.
+- Show diverse, professional corporate participants actively engaged.
+- Use a consistent, polished visual style throughout — modern, vibrant, high-contrast.
+- The overall composition should feel dynamic and story-driven, not static or clip-art.
+- No text, labels, or numbers in the image — communicate stages through visual metaphor and distinct scenes.
+- Suitable for embedding in a professional business proposal document.
+- Aspect ratio: square (1:1).`;
   };
 
   const compressBase64Image = (b64) =>
