@@ -265,7 +265,7 @@ Image size: 1536x1024.`;
       img.onload = () => {
         // Scale down to fit within 900x600 (landscape-friendly) while preserving ratio
         const maxWidth = 1400;
-        const maxHeight = 933;
+        const maxHeight = 788;
         let { width, height } = img;
         const ratio = Math.max(width / maxWidth, height / maxHeight);
         if (ratio > 1) {
