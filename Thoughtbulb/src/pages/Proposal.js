@@ -1879,16 +1879,12 @@ function Proposal() {
                   axios.get(url + `/api/preview/${doc.id}`)
                     .then((response) => {
                       const filename = `${myContext.inperson ? "In-person" : "Virtual"} Team Engagement for ${myContext.company_name}`;
-                      const printWindow = window.open("", "_blank");
-                      if (!printWindow) {
-                        alert("Please allow pop-ups to generate the PDF.");
-                      } else {
-                        const style = `<style>*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important;}@media print{@page{size:1080px 608px;margin:0}}</style>`;
-                        const script = `<script>window.onload=function(){document.title="${filename.replace(/"/g, '\\"')}";setTimeout(window.print,800);}<\/script>`;
-                        const html = response.data.replace("</head>", style + "</head>").replace("</body>", script + "</body>");
-                        printWindow.document.write(html);
-                        printWindow.document.close();
-                      }
+                      const style = `<style>*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important;}@media print{@page{size:1080px 608px;margin:0}}</style>`;
+                      const script = `<script>window.onload=function(){document.title="${filename.replace(/"/g, '\\"')}";setTimeout(window.print,800);}<\/script>`;
+                      const html = response.data.replace("</head>", style + "</head>").replace("</body>", script + "</body>");
+                      printWindow.document.open();
+                      printWindow.document.write(html);
+                      printWindow.document.close();
                       myContext.setCompany_logo(null);
                       myContext.setCompany_name("");
                       myContext.setCreated_date("");
@@ -1930,77 +1926,80 @@ function Proposal() {
                       alert("PDF generation failed: " + (error.response?.data || error.message));
                       setLoading(false);
                     });
+                }).catch((err) => {
+                  printWindow.close();
+                  alert("Failed to save proposal: " + err.message);
+                  setLoading(false);
                 });
               } catch (err) {
+                printWindow.close();
                 alert(err);
+                setLoading(false);
               }
             });
           }
         );
       } else {
-        try {
-          addDoc(collection(db, CollectionName.proposals), final_data).then(
-            (doc) => {
-              const url = baseUrl;
+        addDoc(collection(db, CollectionName.proposals), final_data).then(
+          (doc) => {
+            const url = baseUrl;
 
-              axios.get(url + `/api/preview/${doc.id}`)
-                .then((response) => {
-                  const filename = `${myContext.inperson ? "In-person" : "Virtual"} Team Engagement for ${myContext.company_name}`;
-                  const printWindow = window.open("", "_blank");
-                  if (!printWindow) {
-                    alert("Please allow pop-ups to generate the PDF.");
-                  } else {
-                    const style = `<style>*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important;}@media print{@page{size:1080px 608px;margin:0}}</style>`;
-                    const script = `<script>window.onload=function(){document.title="${filename.replace(/"/g, '\\"')}";setTimeout(window.print,800);}<\/script>`;
-                    const html = response.data.replace("</head>", style + "</head>").replace("</body>", script + "</body>");
-                    printWindow.document.write(html);
-                    printWindow.document.close();
-                  }
-                  myContext.setCompany_logo(null);
-                  myContext.setCompany_name("");
-                  myContext.setCreated_date("");
-                  myContext.setDraft(true);
-                  myContext.setInperson(true);
-                  myContext.setVirtual(false);
-                  myContext.setInperson_location("");
-                  myContext.setInperson_days(0);
-                  myContext.setInperson_day1_date("");
-                  myContext.setInperson_day1_time("");
-                  myContext.setInperson_day1_participants(0);
-                  myContext.setInperson_day2_date("");
-                  myContext.setInperson_day2_time("");
-                  myContext.setInperson_day2_participants(0);
-                  myContext.setVirtual_days(0);
-                  myContext.setVirtual_day1_date("");
-                  myContext.setVirtual_day1_time("");
-                  myContext.setVirtual_day1_participants(0);
-                  myContext.setVirtual_day2_date("");
-                  myContext.setVirtual_day2_time("");
-                  myContext.setVirtual_day2_participants(0);
-                  myContext.setDefault_obj(true);
-                  myContext.setCustom_obj(false);
-                  myContext.default_obj_info.length = 0;
-                  myContext.setCustom_obj_info("");
-                  myContext.games.length = 0;
-                  myContext.setFacilitation_fee(0);
-                  myContext.setTravel_stay_meals(0);
-                  myContext.setAddon_description("");
-                  myContext.setAddon_fee(0);
-                  myContext.material_cost_fees.length = 0;
-                  myContext.setCreated_by("");
-                  setLoading(false);
-                  alert("PDF Generated Successfully");
-                  navigate("/admin-dashboard");
-                })
-                .catch((error) => {
-                  alert("PDF generation failed: " + (error.response?.data || error.message));
-                  setLoading(false);
-                });
-            }
-          );
-        } catch (err) {
-          alert(err);
-        }
+            axios.get(url + `/api/preview/${doc.id}`)
+              .then((response) => {
+                const filename = `${myContext.inperson ? "In-person" : "Virtual"} Team Engagement for ${myContext.company_name}`;
+                const style = `<style>*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important;}@media print{@page{size:1080px 608px;margin:0}}</style>`;
+                const script = `<script>window.onload=function(){document.title="${filename.replace(/"/g, '\\"')}";setTimeout(window.print,800);}<\/script>`;
+                const html = response.data.replace("</head>", style + "</head>").replace("</body>", script + "</body>");
+                printWindow.document.open();
+                printWindow.document.write(html);
+                printWindow.document.close();
+                myContext.setCompany_logo(null);
+                myContext.setCompany_name("");
+                myContext.setCreated_date("");
+                myContext.setDraft(true);
+                myContext.setInperson(true);
+                myContext.setVirtual(false);
+                myContext.setInperson_location("");
+                myContext.setInperson_days(0);
+                myContext.setInperson_day1_date("");
+                myContext.setInperson_day1_time("");
+                myContext.setInperson_day1_participants(0);
+                myContext.setInperson_day2_date("");
+                myContext.setInperson_day2_time("");
+                myContext.setInperson_day2_participants(0);
+                myContext.setVirtual_days(0);
+                myContext.setVirtual_day1_date("");
+                myContext.setVirtual_day1_time("");
+                myContext.setVirtual_day1_participants(0);
+                myContext.setVirtual_day2_date("");
+                myContext.setVirtual_day2_time("");
+                myContext.setVirtual_day2_participants(0);
+                myContext.setDefault_obj(true);
+                myContext.setCustom_obj(false);
+                myContext.default_obj_info.length = 0;
+                myContext.setCustom_obj_info("");
+                myContext.games.length = 0;
+                myContext.setFacilitation_fee(0);
+                myContext.setTravel_stay_meals(0);
+                myContext.setAddon_description("");
+                myContext.setAddon_fee(0);
+                myContext.material_cost_fees.length = 0;
+                myContext.setCreated_by("");
+                setLoading(false);
+                alert("PDF Generated Successfully");
+                navigate("/admin-dashboard");
+              })
+              .catch((error) => {
+                printWindow.close();
+                alert("PDF generation failed: " + (error.response?.data || error.message));
+                setLoading(false);
+              });
+          }
+        ).catch((err) => {
+          printWindow.close();
+          alert("Failed to save proposal: " + err.message);
+          setLoading(false);
+        });
       }
     }
   }
