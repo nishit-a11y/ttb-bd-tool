@@ -14,6 +14,7 @@ import { FaRegStickyNote, FaImage } from "react-icons/fa";
 import "./Notes.css";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+import { getStorage, ref, uploadString, getDownloadURL } from "firebase/storage";
 import fire from "./Firebase";
 import { baseUrl } from "../pages/collection_config";
 
@@ -306,7 +307,14 @@ Image size: 1536x1024.`;
         return;
       }
       const dataUrl = await compressBase64Image(data.b64_json);
-      setEditorImage(dataUrl);
+
+      // Upload to Firebase Storage so Firestore document stays under 1MB limit
+      const storage = getStorage(fire);
+      const storageRef = ref(storage, `ai_images/${Date.now()}_${editorGameId}.jpg`);
+      await uploadString(storageRef, dataUrl, "data_url");
+      const storageUrl = await getDownloadURL(storageRef);
+
+      setEditorImage(storageUrl);
       setAiImageLoading(false);
       setShowAiImagePopup(false);
     } catch (err) {
