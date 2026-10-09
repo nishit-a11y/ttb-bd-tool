@@ -4,6 +4,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   editActivity: null,
   objectiveData: "",
+  objectivePoints: ["", "", ""], // slide bullets -> game_obj_1..3 (**phrase** = bold)
+  outcomes: ["", "", ""], // "Teams walk away with" -> game_outcome_1..3
   descriptionData: { title: [], description: [] },
   game_name: "",
   game_url: "",
@@ -37,6 +39,12 @@ export const CreateActivitySlice = createSlice({
     },
     setObjectiveData: (state, action) => {
       state.objectiveData = action.payload;
+    },
+    setObjectivePoints: (state, action) => {
+      state.objectivePoints = action.payload;
+    },
+    setOutcomes: (state, action) => {
+      state.outcomes = action.payload;
     },
     setDescriptionData: (state, action) => {
       state.descriptionData = action.payload;
@@ -94,6 +102,8 @@ export const CreateActivitySlice = createSlice({
 export const {
   setDescriptionData,
   setObjectiveData,
+  setObjectivePoints,
+  setOutcomes,
   setGameName,
   setGameURL,
   setActivity,

@@ -53,6 +53,8 @@ import {
   setImagesSpecial,
   setMaterialCost,
   setObjectiveData,
+  setObjectivePoints,
+  setOutcomes,
   setProgramFee,
   setSpecialActivity,
   reset,
@@ -343,6 +345,20 @@ function BottomSection({ activityData }) {
 
           dispatch(setgame_type(data.data.game_type));
           dispatch(setObjectiveData(data.data.game_objective));
+          dispatch(
+            setObjectivePoints([
+              data.data.game_obj_1 ?? "",
+              data.data.game_obj_2 ?? "",
+              data.data.game_obj_3 ?? "",
+            ])
+          );
+          dispatch(
+            setOutcomes([
+              data.data.game_outcome_1 ?? "",
+              data.data.game_outcome_2 ?? "",
+              data.data.game_outcome_3 ?? "",
+            ])
+          );
         }
         navigate("/create-activity");
       });
