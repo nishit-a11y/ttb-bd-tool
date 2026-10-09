@@ -6,6 +6,11 @@ const initialState = {
   objectiveData: "",
   objectivePoints: ["", "", ""], // slide bullets -> game_obj_1..3 (**phrase** = bold)
   outcomes: ["", "", ""], // "Teams walk away with" -> game_outcome_1..3
+  welcomeSlide: {
+    tagline: "", welcome: "", model_name: "", model_type: "wheel", model_reference: "",
+    elements: [{ label: "", line: "" }, { label: "", line: "" }, { label: "", line: "" }, { label: "", line: "" }],
+    image: "", // welcome illustration: existing URL or new dataURL (uploaded on save)
+  },
   descriptionData: { title: [], description: [] },
   game_name: "",
   game_url: "",
@@ -45,6 +50,9 @@ export const CreateActivitySlice = createSlice({
     },
     setOutcomes: (state, action) => {
       state.outcomes = action.payload;
+    },
+    setWelcomeSlide: (state, action) => {
+      state.welcomeSlide = { ...state.welcomeSlide, ...action.payload };
     },
     setDescriptionData: (state, action) => {
       state.descriptionData = action.payload;
@@ -104,6 +112,7 @@ export const {
   setObjectiveData,
   setObjectivePoints,
   setOutcomes,
+  setWelcomeSlide,
   setGameName,
   setGameURL,
   setActivity,

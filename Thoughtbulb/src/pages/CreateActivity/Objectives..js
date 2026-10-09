@@ -11,7 +11,17 @@ import {
   setObjectiveData,
   setObjectivePoints,
   setOutcomes,
+  setWelcomeSlide,
 } from "./CreateActivitySlice";
+
+const MODEL_TYPES = [
+  { value: "wheel", label: "Wheel — skills that sit side by side" },
+  { value: "staircase", label: "Staircase — steps that build in order" },
+  { value: "cycle", label: "Cycle — a repeating loop (feedback, learning)" },
+  { value: "quadrant", label: "Quadrant — four roles, styles or perspectives" },
+  { value: "clover", label: "Clover — values, wellbeing, culture" },
+];
+const LIMITS = { tagline: 32, welcome: 130, label: 11, line: 30 };
 
 const POINT_MAX = 120;
 const OUTCOME_MAX = 40;
@@ -42,8 +52,21 @@ const Objectives = ({
   setDisabled,
   handleContinue,
 }) => {
-  const { objectiveData, objectivePoints, outcomes } = useSelector(
+  const { objectiveData, objectivePoints, outcomes, welcomeSlide } = useSelector(
     (state) => state.createActivity
+  );
+  const ws = welcomeSlide ?? { elements: [{}, {}, {}, {}] };
+  const setWS = (patch) => dispatch(setWelcomeSlide(patch));
+  const setElement = (i, key, value) =>
+    setWS({ elements: (ws.elements || []).map((e, k) => (k === i ? { ...e, [key]: value } : e)) });
+  const onWelcomeImage = (file) => {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => setWS({ image: reader.result });
+    reader.readAsDataURL(file);
+  };
+  const counter = (len, max) => (
+    <span className="char-count" style={{ color: len > max ? "#d32f2f" : undefined }}>{len}/{max}</span>
   );
   const points = objectivePoints ?? ["", "", ""];
   const takeaways = outcomes ?? ["", "", ""];
@@ -73,6 +96,17 @@ const Objectives = ({
     } else if (takeaways.some((o) => o.length > OUTCOME_MAX)) {
       alert(`Each "Teams walk away with" point should be under ${OUTCOME_MAX} characters`);
       return false;
+    } else if (ws.tagline && ws.tagline.trim()) {
+      // Welcome slide is optional, but if a tagline is given the rest must be complete
+      const els = ws.elements || [];
+      if (ws.tagline.length > LIMITS.tagline) { alert(`Tagline should be under ${LIMITS.tagline} characters`); return false; }
+      if (!ws.welcome || ws.welcome.trim().length < 10) { alert("Please add the welcome line for the welcome slide"); return false; }
+      if (ws.welcome.length > LIMITS.welcome) { alert(`Welcome line should be under ${LIMITS.welcome} characters`); return false; }
+      if (!ws.model_name || !ws.model_name.trim()) { alert("Please name the learning model"); return false; }
+      if (els.length < 4 || els.some((e) => !e.label || !e.label.trim() || !e.line || !e.line.trim())) { alert("Please fill all 4 learning model elements (label and line)"); return false; }
+      if (els.some((e) => e.label.length > LIMITS.label)) { alert(`Each model label should be under ${LIMITS.label} characters`); return false; }
+      if (els.some((e) => e.line.length > LIMITS.line)) { alert(`Each model line should be under ${LIMITS.line} characters`); return false; }
+      return true;
     } else {
       return true;
     }
@@ -173,6 +207,67 @@ const Objectives = ({
           </div>
         </div>
 
+
+        <hr className="my-4" />
+        <div>
+          <label className="labels" style={{ fontSize: 18 }}>Welcome slide (first activity slide)</label>
+          <p className="objective-description mb-3">
+            Optional. When a tagline is filled in, proposals show the new welcome slide (tagline, welcome line, learning model and
+            illustration) instead of the old cover image.
+          </p>
+          <div className="row">
+            <div className="form-group col-md-5 mb-3">
+              <label className="labels">Tagline</label>
+              <input type="text" className="form-control" placeholder="e.g. Unleash team superpowers" value={ws.tagline || ""}
+                onChange={(e) => setWS({ tagline: e.target.value })} />
+              <p className="objective-description mb-0 mt-1">{counter((ws.tagline || "").length, LIMITS.tagline)}</p>
+            </div>
+            <div className="form-group col-md-7 mb-3">
+              <label className="labels">Welcome line (to participants)</label>
+              <input type="text" className="form-control" placeholder="e.g. You'll become storytellers, turning your company's message into a comic strip."
+                value={ws.welcome || ""} onChange={(e) => setWS({ welcome: e.target.value })} />
+              <p className="objective-description mb-0 mt-1">{counter((ws.welcome || "").length, LIMITS.welcome)}</p>
+            </div>
+          </div>
+          <div className="row">
+            <div className="form-group col-md-5 mb-3">
+              <label className="labels">Learning model name</label>
+              <input type="text" className="form-control" placeholder="e.g. Message to vision" value={ws.model_name || ""}
+                onChange={(e) => setWS({ model_name: e.target.value })} />
+            </div>
+            <div className="form-group col-md-7 mb-3">
+              <label className="labels">Model layout</label>
+              <select className="form-control" value={ws.model_type || "wheel"} onChange={(e) => setWS({ model_type: e.target.value })}>
+                {MODEL_TYPES.map((m) => (<option key={m.value} value={m.value}>{m.label}</option>))}
+              </select>
+            </div>
+          </div>
+          <label className="labels">Learning model — 4 elements</label>
+          <p className="objective-description mb-2">A one-word label plus a short line for each. The activity name sits in the centre.</p>
+          {(ws.elements || []).slice(0, 4).map((el, i) => (
+            <div className="row" key={`el-${i}`}>
+              <div className="form-group col-md-4 mb-2">
+                <input type="text" className="form-control" placeholder={`Element ${i + 1} label, e.g. ${["Message", "Values", "Story", "Alignment"][i]}`}
+                  value={el.label || ""} onChange={(e) => setElement(i, "label", e.target.value)} />
+                <p className="objective-description mb-0 mt-1">{counter((el.label || "").length, LIMITS.label)}</p>
+              </div>
+              <div className="form-group col-md-8 mb-2">
+                <input type="text" className="form-control" placeholder={["Pick the idea worth telling", "Bring company values to life", "Shape a memorable narrative", "Rally everyone behind one vision"][i]}
+                  value={el.line || ""} onChange={(e) => setElement(i, "line", e.target.value)} />
+                <p className="objective-description mb-0 mt-1">{counter((el.line || "").length, LIMITS.line)}</p>
+              </div>
+            </div>
+          ))}
+          <div className="form-group mt-3 mb-2">
+            <label className="labels">Welcome illustration</label>
+            <p className="objective-description mb-2">Portrait image (about 1024 x 1536). If left empty, the first activity photo is used.</p>
+            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+              {ws.image ? <img src={ws.image} alt="welcome illustration" style={{ width: 80, height: 120, objectFit: "cover", borderRadius: 8 }} /> : null}
+              <input type="file" accept="image/*" onChange={(e) => onWelcomeImage(e.target.files?.[0])} />
+              {ws.image ? <button type="button" className="btn btn-link p-0" onClick={() => setWS({ image: "" })}>Remove</button> : null}
+            </div>
+          </div>
+        </div>
         <div className="continue">
           <button
             class="btn btn-primary continue-button"

@@ -65,7 +65,7 @@ function groupURLsByFolder(urls, promiseArray) {
 
 export function pushToFBStorage() {
   
-  const { imageCover, imagesLogo, imagesActivity, imagesSpecial, game_name } =
+  const { imageCover, imagesLogo, imagesActivity, imagesSpecial, game_name, welcomeSlide } =
     store.getState().createActivity;
   const filteredImagesLogo = imagesLogo.filter((image) => image !== "");
   const filteredImageCover = imageCover.filter((image) => image !== "");
@@ -78,6 +78,7 @@ export function pushToFBStorage() {
     { images: filteredImagesLogo, folder: "games_logo" },
     { images: filteredImagesActivity, folder: "games_activity" },
     { images: filteredImagesSpecial, folder: "games_special" },
+    { images: welcomeSlide?.image ? [welcomeSlide.image] : [], folder: "welcome_images" },
   ];
 
   imageArrays.forEach(({ images, folder }) => {

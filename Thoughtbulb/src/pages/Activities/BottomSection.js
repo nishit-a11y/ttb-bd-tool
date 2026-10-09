@@ -55,6 +55,7 @@ import {
   setObjectiveData,
   setObjectivePoints,
   setOutcomes,
+  setWelcomeSlide,
   setProgramFee,
   setSpecialActivity,
   reset,
@@ -352,6 +353,20 @@ function BottomSection({ activityData }) {
               data.data.game_obj_3 ?? "",
             ])
           );
+          {
+            const els = Array.isArray(data.data.model_elements) ? data.data.model_elements : [];
+            dispatch(
+              setWelcomeSlide({
+                tagline: data.data.game_tagline ?? "",
+                welcome: data.data.game_welcome ?? "",
+                model_name: data.data.model_name ?? "",
+                model_type: data.data.model_type || "wheel",
+                model_reference: data.data.model_reference ?? "",
+                elements: [0, 1, 2, 3].map((i) => ({ label: els[i]?.label ?? "", line: els[i]?.line ?? "" })),
+                image: data.data.game_welcome_image ?? "",
+              })
+            );
+          }
           dispatch(
             setOutcomes([
               data.data.game_outcome_1 ?? "",
