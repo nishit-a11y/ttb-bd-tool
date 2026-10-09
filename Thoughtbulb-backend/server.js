@@ -11,6 +11,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// DEBUG: log every incoming request to understand Vercel routing
+app.use((req, _res, next) => {
+    console.log('[DEBUG] incoming:', req.method, req.url, '| path:', req.path);
+    next();
+});
+
 const admin = require("firebase-admin");
 const creds = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
 
