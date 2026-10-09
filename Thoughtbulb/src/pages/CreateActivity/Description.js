@@ -106,7 +106,7 @@ const Description = ({
       game_image2: groupedURLs["games_activity"]?.[2] ?? "",
       game_logo: groupedURLs["games_logo"][0] ?? "",
       special_images: groupedURLs["games_special"] ?? [],
-      game_cover: (groupedURLs.games_cover && groupedURLs.games_cover[0]) ?? ""
+      game_cover: "" // cover slide retired (welcome slide replaces it)
     };
     finalData["draft"] = false;
     if (editActivity != null) {

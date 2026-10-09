@@ -74,7 +74,7 @@ export function pushToFBStorage() {
   const promises = [];
 
   const imageArrays = [
-    { images: filteredImageCover, folder: "games_cover" },
+    // games_cover retired: cover slide replaced by the welcome slide
     { images: filteredImagesLogo, folder: "games_logo" },
     { images: filteredImagesActivity, folder: "games_activity" },
     { images: filteredImagesSpecial, folder: "games_special" },

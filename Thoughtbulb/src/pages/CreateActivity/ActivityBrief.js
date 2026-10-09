@@ -412,6 +412,8 @@ const ActivityBrief = ({
           </div>
         </div>
         {imageTypeState?.map((type, index) => {
+          // Cover image upload retired: the welcome slide (step 2) replaces the old cover slide
+          if (index === 0) return null;
 
           const filteredImageCover = imageCover.filter((image) => image && image !== "");
           console.log("cover images size", filteredImageCover.length)

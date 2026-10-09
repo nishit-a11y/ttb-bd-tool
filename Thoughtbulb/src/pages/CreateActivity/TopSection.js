@@ -72,7 +72,7 @@ const TopSection = () => {
       game_image1: groupedURLs["games_activity"]?.[1] ?? "",
       game_image2: groupedURLs["games_activity"]?.[2] ?? "",
       game_logo: groupedURLs["games_logo"]?.[0] ?? "",
-      game_cover: (groupedURLs.games_cover && groupedURLs.games_cover[0]) ?? "",
+      game_cover: "", // cover slide retired (welcome slide replaces it)
       special_images: groupedURLs["games_special"] ?? [],
     };
     finalData["draft"] = true;
