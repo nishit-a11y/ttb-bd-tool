@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { draftWelcome, generateIllustration, hasEnoughContext } from "./welcomeAI";
+import { draftWelcome, generateIllustration, generateIcon, hasEnoughContext } from "./welcomeAI";
 import "./index.css";
 import { useSelector, useDispatch } from "react-redux";
 import "cropperjs/dist/cropper.css";
@@ -59,6 +59,21 @@ const Objectives = ({
   const formState = useSelector((state) => state.createActivity);
   const [drafting, setDrafting] = useState(false);
   const [generatingImg, setGeneratingImg] = useState(false);
+  const [generatingIcon, setGeneratingIcon] = useState(false);
+  const onGenerateIcon = async () => {
+    if (!formState.game_name) { alert("Please fill the activity name (step 1) first."); return; }
+    if (ws.icon && !window.confirm("Replace the current slide icon with a new AI icon? (about $0.04 per icon)")) return;
+    setGeneratingIcon(true);
+    try { const url = await generateIcon(formState, ws.icon_concept); setWS({ icon: url }); }
+    catch (e) { alert(e.message || "Icon generation failed. Please try again."); }
+    finally { setGeneratingIcon(false); }
+  };
+  const onIconUpload = (file) => {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => setWS({ icon: reader.result });
+    reader.readAsDataURL(file);
+  };
   const ws = welcomeSlide ?? { elements: [{}, {}, {}, {}] };
   const onDraft = async () => {
     if (!hasEnoughContext(formState)) { alert("Please fill the activity name (step 1) and the Objective above first, so the AI has context."); return; }
@@ -285,6 +300,20 @@ const Objectives = ({
               </div>
             </div>
           ))}
+          <div className="form-group mt-3 mb-3">
+            <label className="labels">Slide icon (shown above "Option" on the slides)</label>
+            <p className="objective-description mb-2">Square icon with a transparent background. Generate one in the house style or upload your own. If empty, the activity logo is used.</p>
+            <input type="text" className="form-control mb-2" placeholder="What the icon shows (optional) — e.g. a regal handmade throne with a small crown on the seat"
+              value={ws.icon_concept || ""} onChange={(e) => setWS({ icon_concept: e.target.value })} />
+            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+              {ws.icon ? <img src={ws.icon} alt="slide icon" style={{ width: 64, height: 64, objectFit: "contain", background: "#F6F3FF", borderRadius: 8 }} /> : null}
+              <button type="button" className="btn btn-outline-primary" disabled={generatingIcon} onClick={onGenerateIcon}>
+                {generatingIcon ? (<><span className="spinner-border spinner-border-sm mr-2" /> Generating…</>) : "Generate icon"}
+              </button>
+              <input type="file" accept="image/png" onChange={(e) => onIconUpload(e.target.files?.[0])} />
+              {ws.icon ? <button type="button" className="btn btn-link p-0" onClick={() => setWS({ icon: "" })}>Remove</button> : null}
+            </div>
+          </div>
           <div className="form-group mt-3 mb-2">
             <label className="labels">Welcome illustration</label>
             <p className="objective-description mb-2">Portrait image (about 1024 x 1536). Upload your own or generate one with AI. If left empty, the first activity photo is used.</p>

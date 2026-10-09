@@ -142,3 +142,6 @@ hbs.registerHelper('learningModel', function (data, accent) {
 });
 
 hbs.registerHelper('upper', (s) => String(s || '').toUpperCase());
+
+// Activity icon for slides: new AI icon (game_icon) if present, else the original logo
+hbs.registerHelper('activityIcon', (data) => (data && (data.game_icon || data.game_logo)) || '');

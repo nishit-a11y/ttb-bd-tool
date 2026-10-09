@@ -365,6 +365,8 @@ function BottomSection({ activityData }) {
                 elements: [0, 1, 2, 3].map((i) => ({ label: els[i]?.label ?? "", line: els[i]?.line ?? "" })),
                 image: data.data.game_welcome_image ?? "",
                 scene: data.data.welcome_scene ?? "",
+                icon: data.data.game_icon ?? "",
+                icon_concept: data.data.icon_concept ?? "",
               })
             );
           }

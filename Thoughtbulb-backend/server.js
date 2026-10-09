@@ -198,25 +198,26 @@ app.post("/api/ai/chat", verifyFirebaseToken, aiRateLimit, async (req, res) => {
 
 app.post("/api/ai/image", verifyFirebaseToken, aiRateLimit, async (req, res) => {
     try {
-        const { prompt, size } = req.body;
+        const { prompt, size, background } = req.body;
         if (!prompt) return res.status(400).json({ error: "prompt is required" });
         // Optional size (whitelisted). Default stays landscape for the Notes slide; welcome illustrations ask for portrait.
         const allowedSizes = ["1536x864", "1024x1536", "1536x1024", "1024x1024"];
         const imageSize = allowedSizes.includes(size) ? size : "1536x864";
-        const response = await fetch("https://api.openai.com/v1/images/generations", {
+        const callOpenAI = (body) => fetch("https://api.openai.com/v1/images/generations", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-            },
-            body: JSON.stringify({
-                model: "gpt-image-2",
-                prompt: prompt,
-                n: 1,
-                size: imageSize,
-            }),
-        });
-        const data = await response.json();
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
+            body: JSON.stringify(body),
+        }).then((r) => r.json());
+        let data;
+        if (background === "transparent") {
+            // Transparent icons: gpt-image-1.5, falling back to gpt-image-1 (both support transparent backgrounds)
+            for (const model of ["gpt-image-1.5", "gpt-image-1"]) {
+                data = await callOpenAI({ model, prompt, n: 1, size: "1024x1024", quality: "medium", background: "transparent" });
+                if (!data.error) break;
+            }
+        } else {
+            data = await callOpenAI({ model: "gpt-image-2", prompt: prompt, n: 1, size: imageSize });
+        }
         if (data.error) return res.status(400).json({ error: data.error });
         // gpt-image-1 returns b64_json directly; fall back to URL fetch for other models
         let b64 = data.data[0].b64_json;

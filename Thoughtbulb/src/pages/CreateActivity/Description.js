@@ -92,6 +92,8 @@ const Description = ({
       model_elements: (welcomeSlide?.elements ?? []).map((e) => ({ label: (e.label || "").trim(), line: (e.line || "").trim() })),
       game_welcome_image: groupedURLs["welcome_images"]?.[0] ?? "",
       welcome_scene: welcomeSlide?.scene ?? "",
+      game_icon: groupedURLs["game_icons"]?.[0] ?? "",
+      icon_concept: welcomeSlide?.icon_concept ?? "",
       key_title1: descriptionData?.title?.[0] ?? "",
       key_title2: descriptionData?.title?.[1] ?? "",
       key_title3: descriptionData?.title?.[2] ?? "",

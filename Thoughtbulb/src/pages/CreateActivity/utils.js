@@ -79,6 +79,7 @@ export function pushToFBStorage() {
     { images: filteredImagesActivity, folder: "games_activity" },
     { images: filteredImagesSpecial, folder: "games_special" },
     { images: welcomeSlide?.image ? [welcomeSlide.image] : [], folder: "welcome_images" },
+    { images: welcomeSlide?.icon ? [welcomeSlide.icon] : [], folder: "game_icons" },
   ];
 
   imageArrays.forEach(({ images, folder }) => {

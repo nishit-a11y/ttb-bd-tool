@@ -9,6 +9,8 @@ const initialState = {
   welcomeSlide: {
     tagline: "", welcome: "", model_name: "", model_type: "wheel", model_reference: "",
     elements: [{ label: "", line: "" }, { label: "", line: "" }, { label: "", line: "" }, { label: "", line: "" }],
+    icon: "", // slide icon URL (game_icon)
+    icon_concept: "", // what the icon shows (used by "Generate icon")
     scene: "", // illustration idea used by "Generate illustration"
     image: "", // welcome illustration: existing URL or new dataURL (uploaded on save)
   },

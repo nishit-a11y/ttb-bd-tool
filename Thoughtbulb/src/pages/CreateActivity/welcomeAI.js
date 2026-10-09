@@ -158,3 +158,49 @@ export async function generateIllustration(s, scene) {
   await uploadString(storageRef, dataUrl, "data_url");
   return getDownloadURL(storageRef);
 }
+
+// ---- Slide icon (shown above "OPTION n" on proposal slides) ----
+const ICON_STYLE =
+  "A single clean icon of {concept}. Front-facing view, one simple main object with at most one small prop, bold readable silhouette. " +
+  "Flat modern vector illustration with soft rounded shapes and subtle soft shading, centred, fully transparent background. " +
+  "No frame, no panel, no tile, no square or circle badge behind it. " +
+  "Colour palette: deep navy #002F59 outlines and details, warm orange #FF8A00 used as an accent (not as a large flat fill), " +
+  "with soft pastel coral #FF6B6B, yellow #F8D665, teal #22A26C and purple #7B6FD8 as supporting fills. " +
+  "Friendly, premium, consistent icon-set style, readable at small sizes. " +
+  "Simple cartoon characters are fine, but no realistic people or crowds. No text, letters or numbers, no logos, no brands or known characters.";
+
+// Trim transparent margins and fit into a 512x512 canvas so every icon sits at the same size
+function normaliseIcon(b64) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const c = document.createElement("canvas"); c.width = img.width; c.height = img.height;
+      const ctx = c.getContext("2d"); ctx.drawImage(img, 0, 0);
+      const { data } = ctx.getImageData(0, 0, c.width, c.height);
+      let x0 = c.width, y0 = c.height, x1 = 0, y1 = 0;
+      for (let y = 0; y < c.height; y++) for (let x = 0; x < c.width; x++) {
+        if (data[(y * c.width + x) * 4 + 3] > 20) { if (x < x0) x0 = x; if (y < y0) y0 = y; if (x > x1) x1 = x; if (y > y1) y1 = y; }
+      }
+      if (x1 <= x0) { x0 = 0; y0 = 0; x1 = c.width - 1; y1 = c.height - 1; }
+      const w = x1 - x0 + 1, h = y1 - y0 + 1, box = 430, k = Math.min(box / w, box / h);
+      const out = document.createElement("canvas"); out.width = 512; out.height = 512;
+      out.getContext("2d").drawImage(c, x0, y0, w, h, (512 - w * k) / 2, (512 - h * k) / 2, w * k, h * k);
+      resolve(out.toDataURL("image/png"));
+    };
+    img.onerror = () => reject(new Error("Could not read the generated icon"));
+    img.src = `data:image/png;base64,${b64}`;
+  });
+}
+
+// Generates a transparent slide icon and stores it in Firebase Storage. Returns the download URL.
+export async function generateIcon(s, concept) {
+  const fallback = `the most recognisable object of a team activity called "${s.game_name}"`;
+  const prompt = ICON_STYLE.replace("{concept}", String(concept || fallback).trim().replace(/[. ]+$/, ""));
+  const res = await fetch(`${baseUrl}/api/ai/image`, { method: "POST", headers: await authHeaders(), body: JSON.stringify({ prompt, background: "transparent" }) });
+  const data = await res.json();
+  if (data.error) throw new Error(typeof data.error === "string" ? data.error : data.error.message || "Icon generation failed");
+  const dataUrl = await normaliseIcon(data.b64_json);
+  const storageRef = ref(getStorage(fire), `game_icons/${Date.now()}_${(s.game_name || "activity").replace(/[^a-z0-9]+/gi, "_")}.png`);
+  await uploadString(storageRef, dataUrl, "data_url");
+  return getDownloadURL(storageRef);
+}
