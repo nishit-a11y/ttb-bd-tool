@@ -2215,11 +2215,12 @@ font-weight: 800;
           </div>
 
           {{#if data.game_url}}
-          <a href="{{data.game_url}}" target="_blank" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; gap: 4px;">
-            <img class="image" style="width: 80px; height: 80px; opacity: 0.95"
-              src="https://api.bd.eskoops.com/assets/pngAssets/play-icon.png" />
-            <span style="font-family: Nunito, sans-serif; font-size: 11px; font-weight: 700; color: #FF8A00; letter-spacing: 0.05em; text-transform: uppercase;">Watch Activity</span>
-          </a>
+          <a href="{{data.game_url}}" target="_blank" style="display: inline-flex; align-items: center; gap: 10px; margin-top: 14px; padding: 5px 18px 5px 5px; background: #FFFFFF; border: 1.5px solid color-mix(in srgb, {{strip_color}} 35%, white); border-radius: 999px; text-decoration: none;">
+          <span style="width: 34px; height: 34px; flex: 0 0 34px; border-radius: 50%; background: {{strip_color}}; display: inline-flex; align-items: center; justify-content: center;">
+            <svg width="14" height="14" viewBox="0 0 14 14" style="margin-left: 2px;"><path d="M2 1.2v11.6c0 .6.7 1 1.2.7l9.4-5.8c.5-.3.5-1.1 0-1.4L3.2.5C2.7.2 2 .6 2 1.2z" fill="#FFFFFF"/></svg>
+          </span>
+          <span style="font-family: Nunito, sans-serif; font-size: 15px; font-weight: 800; color: color-mix(in srgb, {{strip_color}} 72%, black); white-space: nowrap;">Watch activity</span>
+        </a>
           {{/if}}
 
         </div>
@@ -2268,10 +2269,11 @@ font-weight: 800;
         </div>
 
         {{#if data.game_url}}
-        <a href="{{data.game_url}}" target="_blank" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; gap: 4px;">
-          <img class="image" style="width: 80px; height: 80px; opacity: 0.95"
-            src="https://api.bd.eskoops.com/assets/pngAssets/play-icon.png" />
-          <span style="font-family: Nunito, sans-serif; font-size: 11px; font-weight: 700; color: #FF8A00; letter-spacing: 0.05em; text-transform: uppercase;">Watch Activity</span>
+        <a href="{{data.game_url}}" target="_blank" style="display: inline-flex; align-items: center; gap: 10px; margin-top: 14px; padding: 5px 18px 5px 5px; background: #FFFFFF; border: 1.5px solid color-mix(in srgb, {{strip_color}} 35%, white); border-radius: 999px; text-decoration: none;">
+          <span style="width: 34px; height: 34px; flex: 0 0 34px; border-radius: 50%; background: {{strip_color}}; display: inline-flex; align-items: center; justify-content: center;">
+            <svg width="14" height="14" viewBox="0 0 14 14" style="margin-left: 2px;"><path d="M2 1.2v11.6c0 .6.7 1 1.2.7l9.4-5.8c.5-.3.5-1.1 0-1.4L3.2.5C2.7.2 2 .6 2 1.2z" fill="#FFFFFF"/></svg>
+          </span>
+          <span style="font-family: Nunito, sans-serif; font-size: 15px; font-weight: 800; color: color-mix(in srgb, {{strip_color}} 72%, black); white-space: nowrap;">Watch activity</span>
         </a>
         {{/if}}
 
