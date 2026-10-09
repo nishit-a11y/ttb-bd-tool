@@ -218,6 +218,14 @@ app.post("/api/ai/image", verifyFirebaseToken, aiRateLimit, async (req, res) => 
 
 const PORT = process.env.PORT || 3001;
 
-app.listen(PORT, () => {
-    console.log("Server running on " + PORT);
-});
+// Only bind to a port when running locally (not on Vercel serverless)
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log("Server running on " + PORT);
+    });
+}
+
+// Export for Vercel serverless — avoids legacy-server mode where Vercel
+// proxies the request using the rewrite *destination* (/server.js) as the
+// path instead of the original URL, which caused Express to return 404.
+module.exports = app;
