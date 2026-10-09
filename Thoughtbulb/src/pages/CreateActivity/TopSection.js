@@ -58,6 +58,7 @@ const TopSection = () => {
       model_reference: welcomeSlide?.model_reference ?? "",
       model_elements: (welcomeSlide?.elements ?? []).map((e) => ({ label: (e.label || "").trim(), line: (e.line || "").trim() })),
       game_welcome_image: groupedURLs["welcome_images"]?.[0] ?? "",
+      welcome_scene: welcomeSlide?.scene ?? "",
       key_title1: descriptionData?.title?.[0] ?? "",
       key_title2: descriptionData?.title?.[1] ?? "",
       key_title3: descriptionData?.title?.[2] ?? "",

@@ -9,6 +9,7 @@ const initialState = {
   welcomeSlide: {
     tagline: "", welcome: "", model_name: "", model_type: "wheel", model_reference: "",
     elements: [{ label: "", line: "" }, { label: "", line: "" }, { label: "", line: "" }, { label: "", line: "" }],
+    scene: "", // illustration idea used by "Generate illustration"
     image: "", // welcome illustration: existing URL or new dataURL (uploaded on save)
   },
   descriptionData: { title: [], description: [] },

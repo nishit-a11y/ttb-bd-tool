@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { draftWelcome, generateIllustration, hasEnoughContext } from "./welcomeAI";
 import "./index.css";
 import { useSelector, useDispatch } from "react-redux";
 import "cropperjs/dist/cropper.css";
@@ -55,7 +56,27 @@ const Objectives = ({
   const { objectiveData, objectivePoints, outcomes, welcomeSlide } = useSelector(
     (state) => state.createActivity
   );
+  const formState = useSelector((state) => state.createActivity);
+  const [drafting, setDrafting] = useState(false);
+  const [generatingImg, setGeneratingImg] = useState(false);
   const ws = welcomeSlide ?? { elements: [{}, {}, {}, {}] };
+  const onDraft = async () => {
+    if (!hasEnoughContext(formState)) { alert("Please fill the activity name (step 1) and the Objective above first, so the AI has context."); return; }
+    const filled = ws.tagline || ws.welcome || (ws.elements || []).some((e) => e.label || e.line);
+    if (filled && !window.confirm("Replace the current welcome slide text with a new AI draft?")) return;
+    setDrafting(true);
+    try { const d = await draftWelcome(formState); setWS(d); }
+    catch (e) { alert(e.message || "AI draft failed. Please try again."); }
+    finally { setDrafting(false); }
+  };
+  const onGenerateImage = async () => {
+    if (!formState.game_name) { alert("Please fill the activity name (step 1) first."); return; }
+    if (ws.image && !window.confirm("Replace the current illustration with a new AI image? (about $0.20 per image)")) return;
+    setGeneratingImg(true);
+    try { const url = await generateIllustration(formState, ws.scene); setWS({ image: url }); }
+    catch (e) { alert(e.message || "Image generation failed. Please try again."); }
+    finally { setGeneratingImg(false); }
+  };
   const setWS = (patch) => dispatch(setWelcomeSlide(patch));
   const setElement = (i, key, value) =>
     setWS({ elements: (ws.elements || []).map((e, k) => (k === i ? { ...e, [key]: value } : e)) });
@@ -215,6 +236,12 @@ const Objectives = ({
             Optional. When a tagline is filled in, proposals show the new welcome slide (tagline, welcome line, learning model and
             illustration) instead of the old cover image.
           </p>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+            <button type="button" className="btn btn-outline-primary" disabled={drafting} onClick={onDraft}>
+              {drafting ? (<><span className="spinner-border spinner-border-sm mr-2" /> Drafting…</>) : "Draft with AI"}
+            </button>
+            <span className="objective-description">Uses the activity name, objective, slide bullets and key pillars. Review and edit before saving.</span>
+          </div>
           <div className="row">
             <div className="form-group col-md-5 mb-3">
               <label className="labels">Tagline</label>
@@ -260,7 +287,15 @@ const Objectives = ({
           ))}
           <div className="form-group mt-3 mb-2">
             <label className="labels">Welcome illustration</label>
-            <p className="objective-description mb-2">Portrait image (about 1024 x 1536). If left empty, the first activity photo is used.</p>
+            <p className="objective-description mb-2">Portrait image (about 1024 x 1536). Upload your own or generate one with AI. If left empty, the first activity photo is used.</p>
+            <textarea className="form-control mb-2" rows="2" placeholder="Illustration idea (optional) — e.g. colleagues building a cardboard throne while two colleagues in paper crowns test-sit it"
+              value={ws.scene || ""} onChange={(e) => setWS({ scene: e.target.value })} />
+            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 10 }}>
+              <button type="button" className="btn btn-outline-primary" disabled={generatingImg} onClick={onGenerateImage}>
+                {generatingImg ? (<><span className="spinner-border spinner-border-sm mr-2" /> Generating… (about a minute)</>) : "Generate illustration"}
+              </button>
+              <span className="objective-description">Same style as the existing illustrations: global diverse team, Thought Bulb colours, no text. About $0.20 per image.</span>
+            </div>
             <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
               {ws.image ? <img src={ws.image} alt="welcome illustration" style={{ width: 80, height: 120, objectFit: "cover", borderRadius: 8 }} /> : null}
               <input type="file" accept="image/*" onChange={(e) => onWelcomeImage(e.target.files?.[0])} />

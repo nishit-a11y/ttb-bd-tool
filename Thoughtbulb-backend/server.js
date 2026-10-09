@@ -198,8 +198,11 @@ app.post("/api/ai/chat", verifyFirebaseToken, aiRateLimit, async (req, res) => {
 
 app.post("/api/ai/image", verifyFirebaseToken, aiRateLimit, async (req, res) => {
     try {
-        const { prompt } = req.body;
+        const { prompt, size } = req.body;
         if (!prompt) return res.status(400).json({ error: "prompt is required" });
+        // Optional size (whitelisted). Default stays landscape for the Notes slide; welcome illustrations ask for portrait.
+        const allowedSizes = ["1536x864", "1024x1536", "1536x1024", "1024x1024"];
+        const imageSize = allowedSizes.includes(size) ? size : "1536x864";
         const response = await fetch("https://api.openai.com/v1/images/generations", {
             method: "POST",
             headers: {
@@ -210,7 +213,7 @@ app.post("/api/ai/image", verifyFirebaseToken, aiRateLimit, async (req, res) => 
                 model: "gpt-image-2",
                 prompt: prompt,
                 n: 1,
-                size: "1536x864",
+                size: imageSize,
             }),
         });
         const data = await response.json();
