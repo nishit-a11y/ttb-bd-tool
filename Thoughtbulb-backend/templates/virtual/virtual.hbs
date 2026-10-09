@@ -2196,10 +2196,9 @@ font-weight: 800;
 {{#each selected_games}}
 
 {{#if data.game_cover}}
-    <div class="page" style="
-    background: url('https://api.bd.eskoops.com/assets/pngAssets/NEW_BG/BG5.jpg');
-    background-repeat: no-repeat;
-    background-size: 1080px 608px;">
+    <div class="page" style="background: {{bg_gradient}};">
+      <div style="position: absolute; left: 0; top: 0; width: 10px; height: 100%; background: {{strip_color}}; z-index: 1; border-radius: 0 0 0 4px;"></div>
+      <img src="https://api.bd.eskoops.com/assets/pngAssets/ttb-logo.png" style="position: absolute; top: 14px; left: 16px; width: 72px; opacity: 0.9; z-index: 10;" alt="The Thought Bulb" />
       <!-- Content for Page 6 -->
       <div style="height: 100%; display: flex; flex-direction: row; align-items: center;">
 
@@ -2217,14 +2216,14 @@ font-weight: 800;
 
           {{#if data.game_url}}
           <a href="{{data.game_url}}" target="_blank">
-            <img class="image" style=" width: 80px; height: 80px; opacity: 0.90"
-              src="https://api.bd.eskoops.com/assets/pngAssets/youtube.png" />
+            <img class="image" style=" width: 80px; height: 80px; opacity: 0.95"
+              src="https://api.bd.eskoops.com/assets/pngAssets/play-icon.png" />
           </a>
           {{/if}}
 
         </div>
 
-        {{!-- <div class="rightbox" 
+        {{!-- <div class="rightbox"
               style=
               "height:100%; background-repeat: no-repeat;
               background-size:contain;
@@ -2249,10 +2248,9 @@ font-weight: 800;
 {{/if}}
 
 
-  <div class="page" style="
-  background: url('https://api.bd.eskoops.com/assets/pngAssets/NEW_BG/BG5.jpg');
-  background-repeat: no-repeat;
-  background-size: 1080px 608px;">
+  <div class="page" style="background: {{bg_gradient}};">
+      <div style="position: absolute; left: 0; top: 0; width: 10px; height: 100%; background: {{strip_color}}; z-index: 1; border-radius: 0 0 0 4px;"></div>
+      <img src="https://api.bd.eskoops.com/assets/pngAssets/ttb-logo.png" style="position: absolute; top: 14px; left: 16px; width: 72px; opacity: 0.9; z-index: 10;" alt="The Thought Bulb" />
     <!-- Content for Page 6 -->
     <div style="height: 100%; display: flex; flex-direction: row; align-items: center;">
 
@@ -2270,8 +2268,8 @@ font-weight: 800;
 
         {{#if data.game_url}}
         <a href="{{data.game_url}}" target="_blank">
-          <img class="image" style=" width: 80px; height: 80px; opacity: 0.90"
-            src="https://api.bd.eskoops.com/assets/pngAssets/youtube.png" />
+          <img class="image" style=" width: 80px; height: 80px; opacity: 0.95"
+            src="https://api.bd.eskoops.com/assets/pngAssets/play-icon.png" />
         </a>
         {{/if}}
 
@@ -2387,10 +2385,9 @@ font-weight: 800;
  
  {{!-- praveen for custom notes --}}
  {{#if custom_notes}}
-  <div class="page" style="
-  background: url('https://api.bd.eskoops.com/assets/pngAssets/NEW_BG/BG5.jpg');
-  background-repeat: no-repeat;
-  background-size: 1080px 608px;">
+  <div class="page" style="background: {{bg_gradient}};">
+      <div style="position: absolute; left: 0; top: 0; width: 10px; height: 100%; background: {{strip_color}}; z-index: 1; border-radius: 0 0 0 4px;"></div>
+      <img src="https://api.bd.eskoops.com/assets/pngAssets/ttb-logo.png" style="position: absolute; top: 14px; left: 16px; width: 72px; opacity: 0.9; z-index: 10;" alt="The Thought Bulb" />
     <!-- Content for Page 6 -->
     <div style="height: 100%; display: flex; flex-direction: row; align-items: center;">
 
