@@ -11,13 +11,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Log ALL x-* headers to find which one Vercel uses for the original URL
+// Vercel rewrite passes original path as ?__path=<captured-group>.
+// Restore req.url so Express routes match the original request path.
 app.use((req, _res, next) => {
-    const all = Object.entries(req.headers)
-        .filter(([k]) => k.startsWith('x-') || k === 'host')
-        .map(([k, v]) => `${k}=${v}`)
-        .join(' | ');
-    console.log('[HEADERS] url=' + req.url + ' | ' + all);
+    const rawPath = req.query && req.query.__path;
+    if (rawPath !== undefined) {
+        const originalUrl = rawPath ? '/' + rawPath : '/';
+        console.log('[URL-FIX] restored req.url from', req.url, 'to', originalUrl);
+        req.url = originalUrl;
+    }
     next();
 });
 
