@@ -311,12 +311,14 @@ const generate = async function (data, objs, games, preview) {
 
                   // Activity background gradients — one per activity, cycles if >5 activities
                   // ROLLBACK: remove these lines and replace {{bg_gradient}} in hbs with BG5.jpg url
+                  // Near-white tints: visible identity per activity without competing with
+                  // the orange text, blue/green/orange info boxes, or photo content.
                   const activityGradients = [
-                    "linear-gradient(135deg, #FFBFC5 0%, #FFD9CE 100%)",  // 1 — coral/peach
-                    "linear-gradient(135deg, #C8C5F5 0%, #DEC5F5 100%)",  // 2 — lavender
-                    "linear-gradient(135deg, #FFD8A0 0%, #FFEEAA 100%)",  // 3 — warm amber
-                    "linear-gradient(135deg, #A8EDBE 0%, #AAEEE0 100%)",  // 4 — mint green
-                    "linear-gradient(135deg, #A0CCEE 0%, #AADAF5 100%)",  // 5 — sky blue
+                    "linear-gradient(150deg, #FFF2F2 0%, #FFF7F4 100%)",  // 1 — blush (warm red tint)
+                    "linear-gradient(150deg, #F5F2FF 0%, #F8F4FF 100%)",  // 2 — lavender mist
+                    "linear-gradient(150deg, #FFFBF0 0%, #FFFDF6 100%)",  // 3 — warm cream
+                    "linear-gradient(150deg, #F0FFF6 0%, #F4FFFA 100%)",  // 4 — mint whisper
+                    "linear-gradient(150deg, #F0F7FF 0%, #F4F9FF 100%)",  // 5 — ice blue
                   ];
                   game.bg_gradient = activityGradients[index % activityGradients.length];
 
