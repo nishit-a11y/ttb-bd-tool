@@ -314,13 +314,22 @@ const generate = async function (data, objs, games, preview) {
                   // Near-white tints: visible identity per activity without competing with
                   // the orange text, blue/green/orange info boxes, or photo content.
                   const activityGradients = [
-                    "linear-gradient(150deg, #FFF2F2 0%, #FFF7F4 100%)",  // 1 — blush (warm red tint)
+                    "linear-gradient(150deg, #FFF2F2 0%, #FFF7F4 100%)",  // 1 — blush
                     "linear-gradient(150deg, #F5F2FF 0%, #F8F4FF 100%)",  // 2 — lavender mist
                     "linear-gradient(150deg, #FFFBF0 0%, #FFFDF6 100%)",  // 3 — warm cream
                     "linear-gradient(150deg, #F0FFF6 0%, #F4FFFA 100%)",  // 4 — mint whisper
                     "linear-gradient(150deg, #F0F7FF 0%, #F4F9FF 100%)",  // 5 — ice blue
                   ];
-                  game.bg_gradient = activityGradients[index % activityGradients.length];
+                  // Saturated strip colors — same hue family as the gradient above
+                  const activityStripColors = [
+                    "#D95F6A",  // 1 — coral rose  (blush family)
+                    "#7B6FD8",  // 2 — medium purple (lavender family)
+                    "#C48A20",  // 3 — warm amber   (cream family)
+                    "#2E9E60",  // 4 — medium green  (mint family)
+                    "#3A7EC9",  // 5 — medium blue   (ice blue family)
+                  ];
+                  game.bg_gradient  = activityGradients[index % activityGradients.length];
+                  game.strip_color  = activityStripColors[index % activityStripColors.length];
 
                     selected_games.push(game);
 
