@@ -45,3 +45,10 @@ hbs.registerHelper('if_even', function(conditional, options) {
       return options.inverse(this);
     }
   });
+// Renders **phrase** as bold (used for objective bullets game_obj_1..3).
+// Text is HTML-escaped first, so only the bold markers become markup. Use with triple braces: {{{boldmd data.game_obj_1}}}
+hbs.registerHelper('boldmd', function (text) {
+  if (!text) return '';
+  const safe = hbs.escapeExpression(String(text));
+  return new hbs.SafeString(safe.replace(/\*\*(.+?)\*\*/g, '<strong style="font-weight: 800;">$1</strong>'));
+});

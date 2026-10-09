@@ -2278,106 +2278,73 @@ font-weight: 800;
       </div>
 
       <div class="rightbox">
-        <div class="normal-text" style="font-size: 24px;">
-          Objective</div>
+        <div class="normal-text" style="font-size: 24px; display: flex; align-items: center; gap: 10px;">
+          <span style="width: 4px; height: 24px; border-radius: 2px; background: {{strip_color}};"></span>Objective</div>
 
-        <div style="font-size: 14px; padding: 15px 0; text-align: justify; color: #002F59;">
-          {{data.game_objective}}
-        </div>
-        <div style="flex:6;display: grid;  grid-template-columns: 
-            repeat(3, 260px);align-items: center; gap: 20px;  margin-top: 35px;">
-
-       {{#if_even index}}
-            <div class="rounded-activity-rectangle activity-box blue-linear-bg">
-                <img class="image" style="width: 40px; height: 40px" src="https://api.bd.eskoops.com/assets/pngAssets/play.png" />
-                <div class="normal-color-text"
-                  style="padding: 5px; font-size: 18px; font-family: Nunito; font-weight: 900; line-height: 18px; word-wrap: break-word">
-                  {{data.key_title1}} </div>
-                <div class="text"
-                  style="width: 221px; text-align: center; color: #1E1E1E; font-size: 12px; font-family: Nunito; font-weight: 500; line-height: 16px; word-wrap: break-word">
-                  {{data.key_description1}}
-                </div>
-              </div>
-              <div class="rounded-activity-rectangle activity-box act-image-cont">
-                <img class="act-image" src="{{data.game_image}}" />
-              </div>
-              <div class="rounded-activity-rectangle activity-box orange-linear-bg">
-                <img class="image" style="width: 40px; height: 40px" src="https://api.bd.eskoops.com/assets/pngAssets/login.png" />
-                <div class="normal-color-text"
-                  style="padding: 5px; font-size: 18px; font-family: Nunito; font-weight: 900; line-height: 18px; word-wrap: break-word">
-                  {{data.key_title2}}</div>
-                <div class="text"
-                  style="width: 221px; text-align: center; color: #1E1E1E; font-size: 12px; font-family: Nunito; font-weight: 500; line-height: 16px; word-wrap: break-word">
-                  {{data.key_description2}}
-                </div>
-              </div>
-              <div class="rounded-activity-rectangle activity-box act-image-cont">
-                <img class="act-image" src="{{data.game_image1}}" />
-
-              </div>
-              <div class="rounded-activity-rectangle activity-box green-linear-bg" style="padding-top: 5px">
-                <img class="image" style="width: 40px; height: 40px"
-                  src="https://api.bd.eskoops.com/assets/pngAssets/win.png" />
-                <div class="normal-color-text"
-                  style="padding: 5px; font-size: 18px; font-family: Nunito; font-weight: 900; line-height: 18px; word-wrap: break-word">
-                  {{data.key_title3}}</div>
-                <div class="text"
-                  style="width: 221px; text-align: center; color: #1E1E1E; font-size: 12px; font-family: Nunito; font-weight: 500; line-height: 16px; word-wrap: break-word">
-                  {{data.key_description3}}
-                </div>
-              </div>
-              <div class="rounded-activity-rectangle activity-box act-image-cont">
-                <img class="act-image" src="{{data.game_image2}}" />
-
-              </div>
+        {{!-- Objective bullets (game_obj_1..3); falls back to paragraph for games without them --}}
+        {{#if data.game_obj_1}}
+          <div style="display: flex; flex-direction: column; gap: 6px; padding: 12px 0 4px; font-size: 14px; line-height: 20px; color: #002F59; font-family: Nunito, sans-serif;">
+            <div style="display: flex; gap: 10px; align-items: flex-start;"><span style="flex: 0 0 8px; width: 8px; height: 8px; margin-top: 6px; border-radius: 50%; background: {{strip_color}};"></span><span>{{{boldmd data.game_obj_1}}}</span></div>
+            <div style="display: flex; gap: 10px; align-items: flex-start;"><span style="flex: 0 0 8px; width: 8px; height: 8px; margin-top: 6px; border-radius: 50%; background: {{strip_color}};"></span><span>{{{boldmd data.game_obj_2}}}</span></div>
+            <div style="display: flex; gap: 10px; align-items: flex-start;"><span style="flex: 0 0 8px; width: 8px; height: 8px; margin-top: 6px; border-radius: 50%; background: {{strip_color}};"></span><span>{{{boldmd data.game_obj_3}}}</span></div>
+          </div>
         {{else}}
-            <div class="rounded-activity-rectangle activity-box act-image-cont">
-                <img class="act-image" src="{{data.game_image}}" />
-              </div>
+          <div style="font-size: 14px; padding: 15px 0; text-align: justify; color: #002F59;">
+            {{data.game_objective}}
+          </div>
+        {{/if}}
+
+        {{!-- Column stack: pillar box on top, session photo below --}}
+        <div style="display: grid; grid-template-columns: repeat(3, 260px); align-items: center; gap: 20px; margin-top: 16px;">
             <div class="rounded-activity-rectangle activity-box blue-linear-bg">
-                <img class="image" style="width: 40px; height: 40px" src="https://api.bd.eskoops.com/assets/pngAssets/play.png" />
-                <div class="normal-color-text"
-                  style="padding: 5px; font-size: 18px; font-family: Nunito; font-weight: 900; line-height: 18px; word-wrap: break-word">
-                  {{data.key_title1}}</div>
-                <div class="text"
-                  style="width: 221px; text-align: center; color: #1E1E1E; font-size: 12px; font-family: Nunito; font-weight: 500; line-height: 16px; word-wrap: break-word">
-                  {{data.key_description1}}
-                </div>
+              <img class="image" style="width: 40px; height: 40px" src="https://api.bd.eskoops.com/assets/pngAssets/play.png" />
+              <div class="normal-color-text"
+                style="padding: 5px; font-size: 18px; font-family: Nunito; font-weight: 900; line-height: 18px; word-wrap: break-word">
+                {{data.key_title1}}</div>
+              <div class="text"
+                style="width: 221px; text-align: center; color: #1E1E1E; font-size: 12px; font-family: Nunito; font-weight: 500; line-height: 16px; word-wrap: break-word">
+                {{data.key_description1}}
               </div>
-
-              <div class="rounded-activity-rectangle activity-box act-image-cont">
-                <img class="act-image" src="{{data.game_image1}}" />
-              </div>  
-              <div class="rounded-activity-rectangle activity-box orange-linear-bg">
-                <img class="image" style="width: 40px; height: 40px" src="https://api.bd.eskoops.com/assets/pngAssets/login.png" />
-                <div class="normal-color-text"
-                  style="padding: 5px; font-size: 18px; font-family: Nunito; font-weight: 900; line-height: 18px; word-wrap: break-word">
-                  {{data.key_title2}}</div>
-                <div class="text"
-                  style="width: 221px; text-align: center; color: #1E1E1E; font-size: 12px; font-family: Nunito; font-weight: 500; line-height: 16px; word-wrap: break-word">
-                  {{data.key_description2}}
-                </div>
+            </div>
+            <div class="rounded-activity-rectangle activity-box orange-linear-bg">
+              <img class="image" style="width: 40px; height: 40px" src="https://api.bd.eskoops.com/assets/pngAssets/login.png" />
+              <div class="normal-color-text"
+                style="padding: 5px; font-size: 18px; font-family: Nunito; font-weight: 900; line-height: 18px; word-wrap: break-word">
+                {{data.key_title2}}</div>
+              <div class="text"
+                style="width: 221px; text-align: center; color: #1E1E1E; font-size: 12px; font-family: Nunito; font-weight: 500; line-height: 16px; word-wrap: break-word">
+                {{data.key_description2}}
               </div>
-            
+            </div>
+            <div class="rounded-activity-rectangle activity-box green-linear-bg" style="padding-top: 5px">
+              <img class="image" style="width: 40px; height: 40px" src="https://api.bd.eskoops.com/assets/pngAssets/win.png" />
+              <div class="normal-color-text"
+                style="padding: 5px; font-size: 18px; font-family: Nunito; font-weight: 900; line-height: 18px; word-wrap: break-word">
+                {{data.key_title3}}</div>
+              <div class="text"
+                style="width: 221px; text-align: center; color: #1E1E1E; font-size: 12px; font-family: Nunito; font-weight: 500; line-height: 16px; word-wrap: break-word">
+                {{data.key_description3}}
+              </div>
+            </div>
             <div class="rounded-activity-rectangle activity-box act-image-cont">
-                <img class="act-image" src="{{data.game_image2}}" />
-
-              </div>
-              <div class="rounded-activity-rectangle activity-box green-linear-bg" style="padding-top: 5px">
-                <img class="image" style="width: 40px; height: 40px"
-                  src="https://api.bd.eskoops.com/assets/pngAssets/win.png" />
-                <div class="normal-color-text"
-                  style="padding: 5px; font-size: 18px; font-family: Nunito; font-weight: 900; line-height: 18px; word-wrap: break-word">
-                  {{data.key_title3}}</div>
-                <div class="text"
-                  style="width: 221px; text-align: center; color: #1E1E1E; font-size: 12px; font-family: Nunito; font-weight: 500; line-height: 16px; word-wrap: break-word">
-                  {{data.key_description3}}
-                </div>
-              </div>
-              
-    {{/if_even}}
-
+              <img class="act-image" src="{{data.game_image}}" />
+            </div>
+            <div class="rounded-activity-rectangle activity-box act-image-cont">
+              <img class="act-image" src="{{data.game_image1}}" />
+            </div>
+            <div class="rounded-activity-rectangle activity-box act-image-cont">
+              <img class="act-image" src="{{data.game_image2}}" />
+            </div>
         </div>
+
+        {{#if data.game_outcome_1}}
+        <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 8px 10px; margin-top: 16px; padding: 10px 14px; border-radius: 12px; background: color-mix(in srgb, {{strip_color}} 12%, white); font-family: Nunito, sans-serif; width: 820px; box-sizing: border-box;">
+          <span style="font-size: 12px; font-weight: 800; color: {{strip_color}}; text-transform: uppercase; letter-spacing: 0.06em; margin-right: 2px;">Teams walk away with &rarr;</span>
+          <span style="background: #FFFFFF; border: 1.5px solid color-mix(in srgb, {{strip_color}} 28%, white); border-radius: 999px; padding: 5px 14px; font-size: 13px; font-weight: 800; color: {{strip_color}}; white-space: nowrap;">{{data.game_outcome_1}}</span>
+          <span style="background: #FFFFFF; border: 1.5px solid color-mix(in srgb, {{strip_color}} 28%, white); border-radius: 999px; padding: 5px 14px; font-size: 13px; font-weight: 800; color: {{strip_color}}; white-space: nowrap;">{{data.game_outcome_2}}</span>
+          <span style="background: #FFFFFF; border: 1.5px solid color-mix(in srgb, {{strip_color}} 28%, white); border-radius: 999px; padding: 5px 14px; font-size: 13px; font-weight: 800; color: {{strip_color}}; white-space: nowrap;">{{data.game_outcome_3}}</span>
+        </div>
+        {{/if}}
 
       </div>
 
