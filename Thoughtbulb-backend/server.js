@@ -11,9 +11,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// DEBUG: log every incoming request to understand Vercel routing
+// Vercel rewrite sets req.url = "/server.js" instead of the original path.
+// x-matched-path contains the original request path — restore it here.
 app.use((req, _res, next) => {
-    console.log('[DEBUG] incoming:', req.method, req.url, '| path:', req.path);
+    const originalPath = req.headers['x-matched-path'];
+    if (originalPath && req.url !== originalPath) {
+        console.log('[URL-FIX] restoring req.url from', req.url, 'to', originalPath);
+        req.url = originalPath;
+    }
     next();
 });
 
