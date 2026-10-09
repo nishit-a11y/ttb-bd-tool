@@ -308,6 +308,18 @@ const generate = async function (data, objs, games, preview) {
                   const noteObj = JSON.parse(data.custom_notes).filter(noteobj => noteobj.id == game.id)[0];
                   game.custom_notes = noteObj.note || "";
                   game.custom_image = noteObj.image || "";
+
+                  // Activity background gradients — one per activity, cycles if >5 activities
+                  // ROLLBACK: remove these lines and replace {{bg_gradient}} in hbs with BG5.jpg url
+                  const activityGradients = [
+                    "linear-gradient(135deg, #FDECEA 0%, #FEF0F5 100%)",  // 1 — pink/peach (website brand)
+                    "linear-gradient(135deg, #EEF0FD 0%, #F5F0FE 100%)",  // 2 — soft lavender
+                    "linear-gradient(135deg, #FEF5EA 0%, #FEF9F0 100%)",  // 3 — warm amber
+                    "linear-gradient(135deg, #EAFDF0 0%, #F0FEF4 100%)",  // 4 — mint green
+                    "linear-gradient(135deg, #EAF4FD 0%, #F0F8FE 100%)",  // 5 — sky blue
+                  ];
+                  game.bg_gradient = activityGradients[index % activityGradients.length];
+
                     selected_games.push(game);
 
                 }
