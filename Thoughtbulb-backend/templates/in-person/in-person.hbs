@@ -2225,7 +2225,42 @@ font-weight: 800;
   <!-- Page 6 -->
   {{#each selected_games}}
 
-{{#if data.game_cover}}
+{{#if data.game_tagline}}
+  {{!-- WELCOME SLIDE: tagline + learning model + illustration (falls back to data.game_cover slide below) --}}
+  <div class="page" style="position: relative; overflow: hidden; background: {{bg_gradient}};">
+    <div style="position: absolute; left: 0; top: 0; width: 10px; height: 100%; background: {{strip_color}}; z-index: 3; border-radius: 0 0 0 4px;"></div>
+    <img src="https://api.bd.eskoops.com/assets/pngAssets/ttb-logo.png" style="position: absolute; top: 14px; left: 16px; width: 72px; opacity: 0.9; z-index: 10;" alt="The Thought Bulb" />
+
+    <div style="position: absolute; right: -40px; top: -30px; width: 420px; height: 668px; border-radius: 260px 0 0 260px / 334px 0 0 334px; background: color-mix(in srgb, {{strip_color}} 16%, white);"></div>
+    <div style="position: absolute; right: 0; top: 0; width: 350px; height: 608px; border-radius: 220px 0 0 220px / 304px 0 0 304px; overflow: hidden;">
+      <img src="{{#if data.game_welcome_image}}{{data.game_welcome_image}}{{else}}{{data.game_image}}{{/if}}" style="width: 100%; height: 100%; object-fit: cover; object-position: center 40%;" alt="" />
+    </div>
+
+    <div style="position: absolute; left: 10px; top: 0; width: 194px; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 12px; box-sizing: border-box; font-family: Nunito, sans-serif;">
+      <img style="width: 80px; height: 80px; object-fit: contain;" src="{{data.game_logo}}" />
+      <div style="font-size: 22px; font-weight: 800; color: #002F59; padding: 10px 0 4px;">OPTION {{index}}</div>
+      <div style="font-size: 22px; font-weight: 800; color: #FF8A00; line-height: 1.15;">{{data.game_name}}</div>
+      {{#if data.game_url}}
+      <a href="{{data.game_url}}" target="_blank" style="display: inline-flex; align-items: center; gap: 10px; margin-top: 14px; padding: 5px 18px 5px 5px; background: #FFFFFF; border: 1.5px solid color-mix(in srgb, {{strip_color}} 35%, white); border-radius: 999px; text-decoration: none;">
+        <span style="width: 34px; height: 34px; flex: 0 0 34px; border-radius: 50%; background: {{strip_color}}; display: inline-flex; align-items: center; justify-content: center;">
+          <svg width="14" height="14" viewBox="0 0 14 14" style="margin-left: 2px;"><path d="M2 1.2v11.6c0 .6.7 1 1.2.7l9.4-5.8c.5-.3.5-1.1 0-1.4L3.2.5C2.7.2 2 .6 2 1.2z" fill="#FFFFFF"/></svg>
+        </span>
+        <span style="font-family: Nunito, sans-serif; font-size: 15px; font-weight: 800; color: color-mix(in srgb, {{strip_color}} 72%, black); white-space: nowrap;">Watch activity</span>
+      </a>
+      {{/if}}
+    </div>
+
+    <div style="position: absolute; left: 222px; top: 44px; width: 500px; font-family: Nunito, sans-serif; color: #002F59;">
+      <div style="font-size: 13px; font-weight: 800; letter-spacing: 0.12em; color: {{strip_color}};">WELCOME TO {{upper data.game_name}}</div>
+      <div style="font-size: 38px; font-weight: 900; line-height: 1.05; margin: 8px 0 10px;">{{data.game_tagline}}</div>
+      <div style="font-size: 16px; font-weight: 600; line-height: 1.45; color: #33475f; max-width: 440px;">{{data.game_welcome}}</div>
+      <div style="display: flex; align-items: center; gap: 8px; margin: 20px 0 8px; font-size: 12px; font-weight: 800; letter-spacing: 0.1em; color: {{strip_color}};">
+        <span style="width: 4px; height: 16px; border-radius: 2px; background: {{strip_color}};"></span>THE LEARNING MODEL{{#if data.model_name}}<span style="color: #002F59; letter-spacing: 0.04em; margin-left: 4px;">&middot; {{upper data.model_name}}</span>{{/if}}
+      </div>
+      {{{learningModel data strip_color}}}
+    </div>
+  </div>
+{{else if data.game_cover}}
  <!-- ROLLBACK BG: background: url('https://api.bd.eskoops.com/assets/pngAssets/NEW_BG/BG5.jpg'); background-repeat: no-repeat; background-size: 1080px 608px; -->
  <div class="page" style="background: {{bg_gradient}};">
     <div style="position: absolute; left: 0; top: 0; width: 10px; height: 100%; background: {{strip_color}}; z-index: 1; border-radius: 0 0 0 4px;"></div>
