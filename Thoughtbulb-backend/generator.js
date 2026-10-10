@@ -430,7 +430,7 @@ const generate = async function (data, objs, games, preview) {
                     addon: addonFee && !isDiscount ? { desc: addonDesc, fee: inr(addonFee) } : null,
                     discount: addonFee && isDiscount ? { fee: inr(addonFee) } : null,
                     part_a: inr(partA), part_b: inr(partB), total: inr(partA + partB),
-                    per_person: "", pax,
+                    per_person: "", pax, show_total: !!is_fulfilled && mode !== "fixed_multi", // finalised plan → show the exact total
                     items, pick, n_items: items.length, compact: items.length > 4,
                     card_width: items.length >= 5 ? 196 : items.length == 4 ? 236 : 300,
                 };
