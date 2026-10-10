@@ -371,6 +371,65 @@ const generate = async function (data, objs, games, preview) {
         }
         data.day2_activity_array = day2_activity_array;
 
+        // ---- New pricing page view-model (in-person). Modes:
+        // fixed_single (A + B), fixed_multi (A + B = total), pick1 (one complete card per option), choice (A + B menu + formula)
+        try {
+            const isVirtual = !data.inperson && data.virtual;
+            const info0 = isVirtual ? data.virtual_info : data.inperson_info;
+            if (data.pricing && info0 && info0.day1) {
+                const inr = (n) => "₹" + Math.round(Math.abs(n)).toLocaleString("en-IN");
+                const ACC = ["#D95F6A", "#7B6FD8", "#C48A20", "#2E9E60", "#3A7EC9"];
+                const TINT = ["#FFF2F2", "#F5F2FF", "#FFFBF0", "#EEFBF3", "#EEF5FF"];
+                const info = info0, days = info.days == 2 ? 2 : 1;
+                const cap = (d) => isVirtual ? (checkActivitiesForVirtual(d.time) || 0) : (checkActivitiesForInPerson(d.participants, d.time) || 0);
+                const f = data.pricing.facilitation_fee || {};
+                // Virtual: only the program fee per activity is shown and totalled (no facilitation / travel / add-ons)
+                const fac = isVirtual ? 0 : (parseInt(f.facilitation) || 0);
+                const travelAmt = isVirtual || data.on_actuals ? 0 : (parseInt(f.travel_stay_meals) || 0);
+                const addonFee = isVirtual ? 0 : (parseInt(f.addons && f.addons.fee) || 0);
+                const addonDesc = (f.addons && f.addons.description) || "";
+                const isDiscount = addonDesc === "Discount" || addonFee < 0;
+                const fees = data.pricing.material_cost_fees || [];
+                const d1 = cap(info.day1);
+                const d2 = days == 2 ? cap(info.day2) : 0;
+                const pax = Math.max(parseInt(info.day1.participants) || 0, days == 2 ? (parseInt(info.day2.participants) || 0) : 0);
+                const addonSigned = isDiscount ? -Math.abs(addonFee) : addonFee; // a "Discount" always reduces the price
+                const partA = fac + travelAmt + addonSigned;
+                const items = selected_games.map((g, i) => {
+                    const fee = parseInt(fees[i]) || 0;
+                    const total = partA + fee;
+                    return { name: (g.data.game_name || "").trim(), icon: g.data.game_icon || g.data.game_logo || "", fee: fee ? inr(fee) : "Included", fee_raw: fee, day: i < d1 ? 1 : 2,
+                        accent: ACC[i % 5], tint: TINT[i % 5], option: i + 1, total: inr(total), per_person: pax ? inr(total / pax) : "" };
+                });
+                const partB = selected_games.reduce((s, g, i) => s + (parseInt(fees[i]) || 0), 0);
+                const pick = d1 + d2;
+                let mode;
+                // fewer activities than slots = nothing to choose, so treat as fixed; pick-1 cards only fit up to 5 options
+                const fixed = is_fulfilled || items.length <= pick;
+                if (fixed) mode = days == 2 ? "fixed_multi" : "fixed_single";
+                else mode = days == 1 && pick == 1 && items.length <= 5 ? "pick1" : "choice";
+                const timeLabel = (t) => (t === "Full Day" ? "Full day" : t === "Half Day" ? "Half day" : t === "Short" ? "Short session" : t === "Extended" ? "Extended session" : t || "");
+                const place = !isVirtual && info.location && info.location !== "TBD" ? info.location : "";
+                const subBits = days == 2 ? [`Day 1: ${timeLabel(info.day1.time)}`, `Day 2: ${timeLabel(info.day2.time)}`] : [timeLabel(info.day1.time)];
+                if (place) subBits.push(place);
+                if (pax) subBits.push(`${pax} participants`);
+                if (mode === "pick1") subBits.push("choose any 1");
+                data.pv = {
+                    [mode]: true, mode, days, multi: days == 2, virtual: isVirtual, has_fac: fac > 0, show_a: !isVirtual,
+                    b_title: isVirtual ? "Program Fee" : "Consumable Material Cost", b_unit: isVirtual ? "program fee" : "materials",
+                    subtitle: subBits.filter(Boolean).join(" · "),
+                    fac: inr(fac), part_a_plain: partA,
+                    travel_actuals: !isVirtual && !!data.on_actuals, travel: travelAmt ? inr(travelAmt) : "", travel_nil: !data.on_actuals && !travelAmt,
+                    addon: addonFee && !isDiscount ? { desc: addonDesc, fee: inr(addonFee) } : null,
+                    discount: addonFee && isDiscount ? { fee: inr(addonFee) } : null,
+                    part_a: inr(partA), part_b: inr(partB), total: inr(partA + partB),
+                    per_person: pax ? inr((partA + partB) / pax) : "", pax,
+                    items, pick, n_items: items.length, compact: items.length > 4,
+                    card_width: items.length >= 5 ? 196 : items.length == 4 ? 236 : 300,
+                };
+            }
+        } catch (e) { console.log("pricing view error", e); data.pv = null; }
+
         //End - Praveen
 
         let content;

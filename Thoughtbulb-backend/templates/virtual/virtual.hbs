@@ -2961,6 +2961,118 @@ Summary</p>
   </div>
 
   <!-- Page 12 -->
+    {{#if pv}}
+    {{!-- NEW PRICING PAGE (modes: fixed_single, fixed_multi, pick1, choice). Old table page below is the fallback. --}}
+    <div class="page" style="position: relative; overflow: hidden; background: linear-gradient(160deg, #FFFBF4, #F6F3FF); font-family: Nunito, sans-serif; color: #002F59;">
+      <img src="https://api.bd.eskoops.com/assets/pngAssets/ttb-logo.png" style="position: absolute; top: 14px; left: 16px; width: 72px; z-index: 5;" alt="The Thought Bulb" />
+      <div style="text-align: center; padding-top: 26px;">
+        <div style="font-size: 11px; font-weight: 800; letter-spacing: .14em; color: #FF8A00;">INVESTMENT</div>
+        <div style="font-size: 30px; font-weight: 900; line-height: 1.2;">{{#if pv.fixed_multi}}Your 2-day {{#if pv.virtual}}virtual {{/if}}programme{{else if pv.pick1}}{{#if pv.virtual}}Virtual programme — pick your experience{{else}}Pick your experience{{/if}}{{else}}What goes into your {{#if pv.virtual}}virtual {{/if}}programme{{/if}}</div>
+        <div style="font-size: 14px; font-weight: 600; color: #4a5b70;">{{pv.subtitle}}</div>
+      </div>
+
+      {{#if pv.pick1}}
+      {{#if pv.virtual}}
+      <div style="display: flex; gap: 18px; justify-content: center; margin-top: 26px;">
+        {{#each pv.items}}
+        <div style="width: {{../pv.card_width}}px; background: #fff; border-radius: 18px; box-shadow: 0 10px 28px rgba(0,47,89,.08); padding: 22px 18px; border-top: 5px solid {{accent}}; text-align: center; box-sizing: border-box;">
+          <img src="{{icon}}" style="width: 60px; height: 60px; object-fit: contain;" />
+          <div style="font-size: 11px; font-weight: 800; letter-spacing: .12em; color: {{accent}}; margin-top: 6px;">OPTION {{option}}</div>
+          <div style="font-size: 17px; font-weight: 900; line-height: 1.15;">{{name}}</div>
+          <div style="font-size: 32px; font-weight: 900; margin-top: 10px;">{{total}}</div>
+          <div style="font-size: 11px; color: #8a96a8; font-weight: 700;">{{#if ../pv.has_fac}}facilitation {{../pv.part_a}} + program fee {{fee}}{{else}}program fee · all-inclusive{{/if}}</div>
+          {{#if per_person}}<div style="margin-top: 8px;"><span style="font-size: 12px; font-weight: 800; background: {{tint}}; color: {{accent}}; border-radius: 999px; padding: 3px 10px;">≈ {{per_person}} per participant</span></div>{{/if}}
+        </div>
+        {{/each}}
+      </div>
+      <div style="text-align: center; margin-top: 18px; font-size: 13px; color: #4a5b70; font-weight: 700;">Includes host, platform, facilitation and digital kit · No travel costs for virtual{{#if pv.discount}} · includes a discount of {{pv.discount.fee}}{{/if}}</div>
+      <div style="position: absolute; bottom: 16px; left: 0; right: 0; text-align: center; font-size: 12px; font-weight: 800; color: #FF8A00;">All prices exclude 18% GST</div>
+      {{else}}
+      {{!-- one complete card per option --}}
+      <div style="display: flex; gap: 18px; justify-content: center; margin-top: 22px;">
+        {{#each pv.items}}
+        <div style="width: {{../pv.card_width}}px; background: #fff; border-radius: 18px; box-shadow: 0 10px 28px rgba(0,47,89,.08); padding: 18px 20px; border-top: 5px solid {{accent}}; box-sizing: border-box;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="{{icon}}" style="width: 48px; height: 48px; object-fit: contain;" />
+            <div><div style="font-size: 11px; font-weight: 800; letter-spacing: .12em; color: {{accent}};">OPTION {{option}}</div><div style="font-size: 17px; font-weight: 900; line-height: 1.1;">{{name}}</div></div>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 14px; font-weight: 700; color: #33475f; padding: 7px 0; margin-top: 10px;"><span>Base fee (Part A)</span><span>{{../pv.part_a}}</span></div>
+          <div style="display: flex; justify-content: space-between; font-size: 14px; font-weight: 700; color: #33475f; padding: 7px 0;"><span>Materials</span><span>{{fee}}</span></div>
+          <div style="display: flex; justify-content: space-between; border-top: 1px dashed #E3E7EE; padding-top: 10px; font-size: 22px; font-weight: 900;"><span>Total</span><span>{{total}}</span></div>
+          {{#if per_person}}<div style="text-align: center; margin-top: 8px;"><span style="font-size: 12px; font-weight: 800; background: {{tint}}; color: {{accent}}; border-radius: 999px; padding: 3px 10px;">≈ {{per_person}} per participant</span></div>{{/if}}
+        </div>
+        {{/each}}
+      </div>
+      <div style="text-align: center; margin-top: 16px; font-size: 13px; color: #4a5b70; font-weight: 700;">
+        Base fee covers facilitation{{#if pv.travel_actuals}} · team travel &amp; stay billed at actuals{{else if pv.travel}} and team travel &amp; stay ({{pv.travel}}){{/if}}{{#if pv.addon}} · add-on: {{pv.addon.desc}} ({{pv.addon.fee}}){{/if}}{{#if pv.discount}} · includes a discount of {{pv.discount.fee}}{{/if}} · No hidden add-ons
+      </div>
+      <div style="position: absolute; bottom: 16px; left: 0; right: 0; text-align: center; font-size: 12px; font-weight: 800; color: #FF8A00;">All prices exclude 18% GST</div>
+
+      {{/if}}
+      {{else if pv.fixed_multi}}
+      {{!-- A + B = total (finalised multi-day plan) --}}
+      <div style="display: flex; gap: 16px; justify-content: center; align-items: flex-start; margin-top: 22px;">
+        {{#if pv.show_a}}
+        <div style="width: 300px; background: #fff; border-radius: 18px; box-shadow: 0 10px 28px rgba(0,47,89,.08); padding: 18px 20px; box-sizing: border-box;">
+          <div style="display: flex; align-items: center; gap: 8px;"><span style="width: 28px; height: 28px; border-radius: 8px; background: #002F59; color: #fff; font-weight: 900; display: flex; align-items: center; justify-content: center;">A</span><b style="font-size: 16px;">Facilitation Fee</b></div>
+          <div style="font-size: 11px; color: #8a96a8; font-weight: 700; margin: 2px 0 6px 36px;">Fixed — same whichever activities you choose</div>
+          <div style="display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: 700; color: #33475f; padding: 7px 0;"><span>Facilitation{{#unless pv.virtual}} (2 days){{/unless}}</span><span>{{pv.fac}}</span></div>
+          {{#unless pv.virtual}}<div style="display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: 700; color: #33475f; padding: 7px 0;"><span>Travel &amp; stay of our team</span><span>{{#if pv.travel_actuals}}<span style="font-size: 11px; font-weight: 800; background: #FFF4E5; color: #B26A00; border-radius: 999px; padding: 3px 10px;">At actuals</span>{{else if pv.travel}}{{pv.travel}}{{else}}Nil{{/if}}</span></div>{{/unless}}
+          {{#if pv.addon}}<div style="display: flex; justify-content: space-between; font-size: 14px; font-weight: 700; color: #33475f; padding: 7px 0;"><span>Add-on: {{pv.addon.desc}}</span><span>{{pv.addon.fee}}</span></div>{{/if}}
+          {{#if pv.discount}}<div style="display: flex; justify-content: space-between; font-size: 14px; font-weight: 700; color: #33475f; padding: 7px 0;"><span>Discount</span><span style="color: #D23B3B;">– {{pv.discount.fee}}</span></div>{{/if}}
+          <div style="display: flex; justify-content: space-between; border-top: 1px dashed #E3E7EE; margin-top: 6px; padding-top: 10px; font-size: 16px; font-weight: 900;"><span>Part A</span><span>{{pv.part_a}}</span></div>
+        </div>
+        <div style="font-size: 26px; font-weight: 900; color: #9AA7B8; margin-top: 110px;">+</div>
+        {{/if}}
+        <div style="width: 330px; background: #fff; border-radius: 18px; box-shadow: 0 10px 28px rgba(0,47,89,.08); padding: 16px 18px; box-sizing: border-box;">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;"><span style="width: 28px; height: 28px; border-radius: 8px; background: #FF8A00; color: #fff; font-weight: 900; display: flex; align-items: center; justify-content: center;">B</span><b style="font-size: 16px;">Your activities</b></div>
+          {{#each pv.items}}
+          <div style="display: flex; align-items: center; gap: 12px; padding: {{#if ../pv.compact}}5px{{else}}8px{{/if}} 10px; border-radius: 12px; background: {{tint}}; border: 1.5px solid {{accent}}; margin-bottom: {{#if ../pv.compact}}6px{{else}}8px{{/if}};">
+            <img src="{{icon}}" style="width: {{#if ../pv.compact}}28{{else}}36{{/if}}px; height: {{#if ../pv.compact}}28{{else}}36{{/if}}px; object-fit: contain;" />
+            <div style="flex: 1;"><div style="font-size: {{#if ../pv.compact}}13{{else}}15{{/if}}px; font-weight: 900; line-height: 1.15;">{{name}}</div><div style="font-size: 11px; font-weight: 800; color: {{accent}};">DAY {{day}}</div></div>
+            <div style="text-align: right;"><div style="font-size: {{#if ../pv.compact}}13{{else}}15{{/if}}px; font-weight: 900;">{{fee}}</div><div style="font-size: 10px; color: #8a96a8; font-weight: 700;">{{pv.b_unit}}</div></div>
+          </div>
+          {{/each}}
+          <div style="display: flex; justify-content: space-between; border-top: 1px dashed #E3E7EE; padding-top: 8px; font-size: 16px; font-weight: 900;"><span>Part B</span><span>{{pv.part_b}}</span></div>
+        </div>
+        <div style="font-size: 26px; font-weight: 900; color: #9AA7B8; margin-top: 110px;">=</div>
+        <div style="width: 270px; margin-top: 50px; background: #002F59; color: #fff; border-radius: 18px; padding: 20px; text-align: center; box-sizing: border-box;">
+          <div style="font-size: 11px; font-weight: 800; letter-spacing: .14em; color: #FFB766;">TOTAL INVESTMENT</div>
+          <div style="font-size: 36px; font-weight: 900; margin: 6px 0 2px;">{{pv.total}}</div>
+          <div style="font-size: 12px; opacity: .75; font-weight: 700;">+ 18% GST{{#if pv.travel_actuals}} · + travel at actuals{{/if}}</div>
+          {{#if pv.per_person}}<div style="margin-top: 12px; background: rgba(255,255,255,.12); border-radius: 999px; padding: 6px 10px; font-size: 13px; font-weight: 800;">≈ {{pv.per_person}} per participant</div><div style="font-size: 11px; opacity: .65; margin-top: 4px;">based on {{pv.pax}} participants</div>{{/if}}
+        </div>
+      </div>
+      <div style="position: absolute; bottom: 16px; left: 0; right: 0; text-align: center; font-size: 12px; font-weight: 800; color: #FF8A00;">{{#if pv.travel_actuals}}Travel &amp; stay billed at actuals · {{/if}}All prices exclude 18% GST</div>
+
+      {{else}}
+      {{!-- fixed_single and choice: A (expertise rows) + B (consumable material cost rows) + formula --}}
+      <div style="display: flex; gap: 14px; justify-content: center; align-items: stretch; margin-top: 16px;">
+        {{#if pv.show_a}}
+        <div style="width: 400px; background: #fff; border-radius: 18px; box-shadow: 0 10px 28px rgba(0,47,89,.08); padding: 16px 20px; border-top: 5px solid #002F59; box-sizing: border-box;">
+          <div style="display: flex; align-items: center; gap: 8px;"><span style="width: 28px; height: 28px; border-radius: 8px; background: #002F59; color: #fff; font-weight: 900; display: flex; align-items: center; justify-content: center;">A</span><b style="font-size: 17px;">Facilitation Fee</b></div>
+          <div style="font-size: 13px; font-weight: 700; color: #6b7a8f; margin: 2px 0 8px 36px;">Our team{{#if pv.multi}} for 2 days{{/if}} · fixed, whichever activities you pick</div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 7px 0; border-top: 1px dashed #E8ECF2;"><span style="width: 28px; text-align: center; font-size: 18px;">🎤</span><span style="flex: 1; font-size: 14px; font-weight: 800;">Facilitation<div style="font-size: 11px; font-weight: 700; color: #8a96a8;">programme design · on-ground delivery · debrief{{#if pv.multi}} · 2 days{{/if}}</div></span><span style="font-size: 15px; font-weight: 900;">{{pv.fac}}</span></div>
+          {{#unless pv.virtual}}<div style="display: flex; align-items: center; gap: 10px; padding: 7px 0; border-top: 1px dashed #E8ECF2;"><span style="width: 28px; text-align: center; font-size: 18px;">✈️</span><span style="flex: 1; font-size: 14px; font-weight: 800;">Travel &amp; stay of our team</span><span style="font-size: 15px; font-weight: 900; color: #3B5B85;">{{#if pv.travel_actuals}}<span style="font-size: 11px; font-weight: 800; background: #FFF4E5; color: #B26A00; border-radius: 999px; padding: 3px 10px;">At actuals</span>{{else if pv.travel}}+ {{pv.travel}}{{else}}Nil{{/if}}</span></div>{{/unless}}
+          {{#if pv.addon}}<div style="display: flex; align-items: center; gap: 10px; padding: 7px 0; border-top: 1px dashed #E8ECF2;"><span style="width: 28px; text-align: center; font-size: 18px;">✨</span><span style="flex: 1; font-size: 14px; font-weight: 800;">Add-on<div style="font-size: 11px; font-weight: 700; color: #8a96a8;">{{pv.addon.desc}}</div></span><span style="font-size: 15px; font-weight: 900; color: #3B5B85;">+ {{pv.addon.fee}}</span></div>{{/if}}
+          {{#if pv.discount}}<div style="display: flex; align-items: center; gap: 10px; padding: 7px 0; border-top: 1px dashed #E8ECF2;"><span style="width: 28px; text-align: center; font-size: 18px;">🏷️</span><span style="flex: 1; font-size: 14px; font-weight: 800;">Discount</span><span style="font-size: 15px; font-weight: 900; color: #D23B3B;">– {{pv.discount.fee}}</span></div>{{/if}}
+        </div>
+        <div style="font-size: 26px; font-weight: 900; color: #9AA7B8; align-self: center;">+</div>
+        {{/if}}
+        <div style="width: 400px; background: #fff; border-radius: 18px; box-shadow: 0 10px 28px rgba(0,47,89,.08); padding: 16px 20px; border-top: 5px solid #FF8A00; box-sizing: border-box;">
+          <div style="display: flex; align-items: center; gap: 8px;"><span style="width: 28px; height: 28px; border-radius: 8px; background: #FF8A00; color: #fff; font-weight: 900; display: flex; align-items: center; justify-content: center;">B</span><b style="font-size: 17px;">{{pv.b_title}}</b></div>
+          <div style="font-size: 13px; font-weight: 700; color: #6b7a8f; margin: 2px 0 8px 36px;">{{#if pv.choice}}Choose any {{pv.pick}} of these {{pv.n_items}} · cost per activity{{else}}For your {{pv.n_items}} {{#if (eq pv.n_items 1)}}activity{{else}}activities{{/if}}{{/if}}</div>
+          {{#each pv.items}}
+          <div style="display: flex; align-items: center; gap: 10px; padding: {{#if ../pv.compact}}4px{{else}}7px{{/if}} 0; border-top: 1px dashed #E8ECF2;"><img src="{{icon}}" style="width: 28px; height: 28px; object-fit: contain;" /><span style="flex: 1; font-size: 14px; font-weight: 800;">{{name}}</span><span style="font-size: 15px; font-weight: 900; color: {{accent}};">{{#if fee_raw}}+ {{/if}}{{fee}}</span></div>
+          {{/each}}
+        </div>
+      </div>
+      <div style="text-align: center; margin-top: 12px;"><span style="display: inline-block; background: #002F59; color: #fff; border-radius: 999px; padding: 8px 20px; font-size: 14px; font-weight: 800;">Final price = {{#if pv.show_a}}everything in A + {{/if}}{{#if pv.choice}}{{#if pv.virtual}}program fee{{else}}material cost{{/if}} of the {{pv.pick}} {{#if (eq pv.pick 1)}}activity{{else}}activities{{/if}} you choose{{else}}B{{/if}} + 18% GST{{#if pv.travel_actuals}} <span style="color: #FFB766;">· travel billed at actuals</span>{{/if}}</span></div>
+      <div style="position: absolute; bottom: 52px; left: 0; right: 0; text-align: center; font-size: 12px; font-weight: 700; color: #6b7a8f;">Trusted by teams at <b style="color: #002F59;">Google · Amazon · KPMG · BCG · Volvo · Airbus · PepsiCo · Uniqlo</b> &nbsp;·&nbsp; <i>"Seamless delivery and an amazing experience!" — L&amp;D, Gap Inc.</i></div>
+      <div style="position: absolute; bottom: 14px; left: 0; right: 0; text-align: center;"><span style="display: inline-block; background: #FFF1E0; color: #B85E00; font-size: 13px; font-weight: 800; border-radius: 999px; padding: 7px 18px;">Dates are held for 7 days from this proposal — confirm to secure your preferred date</span></div>
+      {{/if}}
+    </div>
+    {{else}}
   <div class="page" style="
         background: url('https://api.bd.eskoops.com/assets/pngAssets/NEW_BG/BG8.jpg');
         background-repeat: no-repeat;
@@ -3092,6 +3204,7 @@ Summary</p>
      </div>
      </div>
   </div>
+    {{/if}}
 
   <!-- Page 13 -->
   <div class="page" style="
