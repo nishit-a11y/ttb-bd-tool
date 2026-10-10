@@ -437,6 +437,62 @@ const generate = async function (data, objs, games, preview) {
             }
         } catch (e) { console.log("pricing view error", e); data.pv = null; }
 
+        // ---- New program-flow view-model (one page; replaces the divider + per-day flow pages)
+        try {
+            const isV = !data.inperson && data.virtual;
+            const info = isV ? data.virtual_info : data.inperson_info;
+            if (info && info.day1 && !data.remove_program_flow) {
+                const ACC = ["#D95F6A", "#7B6FD8", "#C48A20", "#2E9E60", "#3A7EC9"];
+                const TINT = ["#FFF2F2", "#F5F2FF", "#FFFBF0", "#EEFBF3", "#EEF5FF"];
+                const days = info.days == 2 ? 2 : 1;
+                const cap = (d) => isV ? (checkActivitiesForVirtual(d.time) || 0) : (checkActivitiesForInPerson(d.participants, d.time) || 0);
+                const caps = [cap(info.day1), days == 2 ? cap(info.day2) : 0];
+                const slots = caps[0] + caps[1];
+                const timeLabel = (t) => (t === "Full Day" ? "Full day" : t === "Half Day" ? "Half day" : t === "Short" ? "Short session" : t === "Extended" ? "Extended session" : t || "");
+                const actTime = (t) => (t === "Short" ? "" : "90–120 MINS");
+                const items = selected_games.map((g, i) => ({
+                    name: (g.data.game_name || "").trim(), icon: g.data.game_icon || g.data.game_logo || "",
+                    tagline: g.data.game_tagline || "", welcome: g.data.game_welcome || "",
+                    outcomes: [g.data.game_outcome_1, g.data.game_outcome_2].filter(Boolean),
+                    accent: ACC[i % 5], tint: TINT[i % 5],
+                }));
+                const fixed = items.length <= slots;
+                const E = { energiser: true }, D = { debrief: true }, B = { brk: true };
+                const withBreaks = (list) => list.reduce((acc, n, i) => (i ? acc.concat([B, n]) : [n]), []);
+                const clean = (x) => String(x || "").replace(/<[^>]+>/g, "");
+                const dayInfo = [info.day1, info.day2].map((x) => x && ({ ...x, date: clean(x.date) }));
+                let cursor = 0, slotNo = 0;
+                const dayRows = [];
+                for (let d = 0; d < days; d++) {
+                    const di = dayInfo[d]; let mid = [];
+                    if (fixed) {
+                        const take = d == days - 1 ? items.length - cursor : Math.min(caps[d], items.length - cursor);
+                        mid = items.slice(cursor, cursor + take).map((it) => ({ act: true, ...it, time: actTime(di.time) }));
+                        cursor += take;
+                    } else if (slots == 1) {
+                        mid = [{ chosen: true, time: actTime(di.time) }];
+                    } else {
+                        for (let k = 0; k < caps[d]; k++) { slotNo++; mid.push({ slot: true, n: slotNo, accent: ACC[(slotNo - 1) % 5], time: actTime(di.time) }); }
+                    }
+                    dayRows.push({ label: `DAY ${d + 1}`, sub: [di.date, timeLabel(di.time)].filter(Boolean).join(" · "), nodes: [E, ...withBreaks(mid), D], count: mid.length });
+                }
+                const place = !isV && info.location && info.location !== "TBD" ? info.location : "";
+                const pax = Math.max(parseInt(info.day1.participants) || 0, days == 2 ? (parseInt(info.day2.participants) || 0) : 0);
+                const subtitle = (days == 1 ? [timeLabel(info.day1.time), dayInfo[0].date, place] : [place]).concat(pax ? [`${pax} participants`] : []).filter(Boolean).join(" · ");
+                const icebreakers = isV ? ["Similarities", "Wow Orchestra", "Clap-Clap-Go", "My Preferences"]
+                    : ["Similarities", "Wow Orchestra", "Creative Handshakes", "Mexican Wave", "Clap-Clap-Go", "04 Corners", "My Preferences"];
+                data.fv = {
+                    multi: days == 2, single: days == 1, virtual: isV, subtitle,
+                    title: days == 2 ? "Your 2-day program flow" : "Program flow",
+                    row: dayRows[0], rows: dayRows, fixed, choice: !fixed, pick: slots,
+                    options: items, two_col: items.length > 3, n_items: items.length,
+                    one_item: fixed && items.length == 1, item: items[0],
+                    many_items: fixed && items.length > 1,
+                    icebreakers, wide_track: dayRows[0].nodes.length <= 3,
+                };
+            }
+        } catch (e) { console.log("flow view error", e); data.fv = null; }
+
         //End - Praveen
 
         let content;

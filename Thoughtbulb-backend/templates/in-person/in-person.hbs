@@ -779,6 +779,124 @@ Handlebars.registerHelper('formatObjectives', function(originalText) {
 
 
   {{#unless remove_program_flow}}
+  {{#if fv}}
+  {{!-- NEW PROGRAM FLOW PAGE (one page). Old divider + flow pages below are the fallback. --}}
+  {{#*inline "fnode"}}
+  <div style="flex: 1; min-width: 0; text-align: center; position: relative; z-index: 2;">
+    {{#if energiser}}
+    <div style="width: {{#if small}}44{{else}}60{{/if}}px; height: {{#if small}}44{{else}}60{{/if}}px; margin: 0 auto; border-radius: 50%; background: #2E9E60; box-shadow: 0 0 0 6px #fff; display: flex; align-items: center; justify-content: center; color: #fff; font-size: {{#if small}}17{{else}}22{{/if}}px; font-weight: 900;">⚡</div>
+    <div style="font-size: {{#if small}}12{{else}}15{{/if}}px; font-weight: 900; margin-top: 8px;">Energisers <span style="font-size: 9px; font-weight: 900; color: #fff; background: #2E9E60; border-radius: 999px; padding: 1px 6px; vertical-align: 2px;">FREE</span></div>
+    <div style="font-size: 10px; font-weight: 800; color: #2E9E60; letter-spacing: .04em;">20–30 MINS</div>
+    {{else if debrief}}
+    <div style="width: {{#if small}}44{{else}}60{{/if}}px; height: {{#if small}}44{{else}}60{{/if}}px; margin: 0 auto; border-radius: 50%; background: #3A7EC9; box-shadow: 0 0 0 6px #fff; display: flex; align-items: center; justify-content: center; color: #fff; font-size: {{#if small}}17{{else}}22{{/if}}px; font-weight: 900;">★</div>
+    <div style="font-size: {{#if small}}12{{else}}15{{/if}}px; font-weight: 900; margin-top: 8px; line-height: 1.15;">Debrief &amp; high-energy closing</div>
+    <div style="font-size: 10px; font-weight: 800; color: #3A7EC9; letter-spacing: .04em;">20–30 MINS</div>
+    {{else if brk}}
+    <div style="width: {{#if small}}36{{else}}46{{/if}}px; height: {{#if small}}36{{else}}46{{/if}}px; margin: {{#if small}}4{{else}}7{{/if}}px auto 0; border-radius: 50%; background: #E8EDF4; box-shadow: 0 0 0 6px #fff; display: flex; align-items: center; justify-content: center; font-size: {{#if small}}15{{else}}19{{/if}}px;">☕</div>
+    <div style="font-size: {{#if small}}12{{else}}14{{/if}}px; font-weight: 900; margin-top: 8px; color: #6b7a8f;">Break</div>
+    {{else if act}}
+    <div style="width: {{#if small}}44{{else}}60{{/if}}px; height: {{#if small}}44{{else}}60{{/if}}px; margin: 0 auto; border-radius: 50%; background: {{tint}}; box-shadow: 0 0 0 6px #fff; display: flex; align-items: center; justify-content: center;"><img src="{{icon}}" style="width: {{#if small}}32{{else}}44{{/if}}px; height: {{#if small}}32{{else}}44{{/if}}px; object-fit: contain;" /></div>
+    <div style="font-size: {{#if small}}12{{else}}15{{/if}}px; font-weight: 900; margin-top: 8px; line-height: 1.15;">{{name}}</div>
+    {{#if time}}<div style="font-size: 10px; font-weight: 800; color: {{accent}}; letter-spacing: .04em;">{{time}}</div>{{/if}}
+    {{else if slot}}
+    <div style="width: {{#if small}}44{{else}}60{{/if}}px; height: {{#if small}}44{{else}}60{{/if}}px; margin: 0 auto; border-radius: 50%; background: #fff; border: 2.5px dashed {{accent}}; box-shadow: 0 0 0 6px #fff; display: flex; align-items: center; justify-content: center; color: {{accent}}; font-size: {{#if small}}17{{else}}22{{/if}}px; font-weight: 900; box-sizing: border-box;">{{n}}</div>
+    <div style="font-size: {{#if small}}12{{else}}15{{/if}}px; font-weight: 900; margin-top: 8px;">Experience {{n}}</div>
+    <div style="font-size: 10px; font-weight: 800; color: {{accent}}; letter-spacing: .04em;">{{#if small}}YOUR PICK{{else}}{{#if time}}{{time}} · {{/if}}YOUR PICK{{/if}}</div>
+    {{else if chosen}}
+    <div style="width: 60px; height: 60px; margin: 0 auto; border-radius: 50%; background: #fff; border: 2.5px dashed #FF8A00; box-shadow: 0 0 0 6px #fff; display: flex; align-items: center; justify-content: center; color: #FF8A00; font-size: 22px; font-weight: 900; box-sizing: border-box;">?</div>
+    <div style="font-size: 15px; font-weight: 900; margin-top: 8px;">Your chosen experience</div>
+    {{#if time}}<div style="font-size: 10px; font-weight: 800; color: #FF8A00; letter-spacing: .04em;">{{time}}</div>{{/if}}
+    {{/if}}
+  </div>
+  {{/inline}}
+  {{#*inline "icebreakers"}}
+  <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px;">
+    {{#each @root.fv.icebreakers}}<span style="display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 800; color: #1F6B42; background: #E9F7EF; border-radius: 999px; padding: 3px 4px 3px 9px;">{{this}}<span style="font-size: 8px; font-weight: 900; color: #fff; background: #2E9E60; border-radius: 999px; padding: 1px 5px;">FREE</span></span>{{/each}}
+    <span style="font-size: 11px; font-weight: 800; color: #6b7a8f; padding: 3px 4px;">&amp; more</span>
+  </div>
+  {{/inline}}
+  {{#*inline "optlist"}}
+  <div style="display: grid; grid-template-columns: {{#if @root.fv.two_col}}1fr 1fr{{else}}1fr{{/if}}; gap: 2px 14px; margin-top: 4px;">
+    {{#each @root.fv.options}}
+    <div style="display: flex; align-items: center; gap: 8px; padding: 4px 0;"><img src="{{icon}}" style="width: 28px; height: 28px; object-fit: contain;" /><div style="min-width: 0;"><div style="font-size: 13px; font-weight: 900; line-height: 1.1;">{{name}}</div>{{#if tagline}}<div style="font-size: 10px; font-weight: 600; color: #6b7a8f;">{{tagline}}</div>{{/if}}</div></div>
+    {{/each}}
+  </div>
+  {{/inline}}
+
+  <div class="page" style="position: relative; overflow: hidden; background: linear-gradient(160deg, #F5F9FF, #FFF7F0); font-family: Nunito, sans-serif; color: #002F59;">
+    <img src="https://api.bd.eskoops.com/assets/pngAssets/ttb-logo.png" style="position: absolute; top: 14px; left: 16px; width: 72px; z-index: 5;" alt="The Thought Bulb" />
+    <div style="text-align: center; padding-top: 26px;">
+      <div style="font-size: 11px; font-weight: 800; letter-spacing: .14em; color: #FF8A00;">HOW THE DAY FLOWS</div>
+      <div style="font-size: 30px; font-weight: 900; line-height: 1.2;">{{fv.title}}</div>
+      <div style="font-size: 14px; font-weight: 600; color: #4a5b70;">{{fv.subtitle}}</div>
+    </div>
+
+    {{#if fv.single}}
+    <div style="position: absolute; left: 40px; right: 40px; top: 120px; bottom: 26px; display: flex; flex-direction: column; justify-content: center; gap: 40px;">
+      <div style="position: relative; display: flex; align-items: flex-start; gap: 6px; padding: 0 10px; margin: 0 {{#if fv.wide_track}}140px{{else}}20px{{/if}};">
+        <div style="position: absolute; left: 70px; right: 70px; top: 29px; height: 3px; background: repeating-linear-gradient(90deg, #CBD5E1 0 9px, transparent 9px 16px); z-index: 1;"></div>
+        {{#each fv.row.nodes}}{{> fnode}}{{/each}}
+      </div>
+      <div style="display: flex; gap: 16px; align-items: stretch;">
+        <div style="flex: 1.25; min-width: 0; background: #fff; border-radius: 16px; padding: 14px 16px; box-shadow: 0 8px 22px rgba(0,47,89,.07); border-top: 4px solid #2E9E60; box-sizing: border-box;">
+          <div style="display: flex; align-items: center; justify-content: space-between;"><div style="font-size: 10px; font-weight: 800; letter-spacing: .12em; color: #2E9E60;">STEP 1 · 20–30 MINS</div><span style="font-size: 11px; font-weight: 900; color: #fff; background: #2E9E60; border-radius: 999px; padding: 2px 10px;">FREE</span></div>
+          <div style="font-size: 15px; font-weight: 900; margin: 2px 0 2px;">Energisers</div>
+          <div style="font-size: 12px; font-weight: 600; color: #4a5b70; line-height: 1.35;">Mini icebreakers we run before the main experience, on us:</div>
+          {{> icebreakers}}
+        </div>
+        {{#if fv.one_item}}
+        <div style="flex: 1; min-width: 0; background: #fff; border-radius: 16px; padding: 14px 16px; box-shadow: 0 8px 22px rgba(0,47,89,.07); border-top: 4px solid {{fv.item.accent}}; box-sizing: border-box;">
+          <div style="font-size: 10px; font-weight: 800; letter-spacing: .12em; color: {{fv.item.accent}};">STEP 2 · THE EXPERIENCE</div>
+          <div style="font-size: 15px; font-weight: 900; margin: 2px 0 4px;">{{fv.item.name}}</div>
+          <div style="font-size: 12px; font-weight: 600; color: #4a5b70; line-height: 1.4;">{{fv.item.welcome}}</div>
+          <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px;">{{#each fv.item.outcomes}}<span style="font-size: 10px; font-weight: 800; color: {{../fv.item.accent}}; background: {{../fv.item.tint}}; border-radius: 999px; padding: 2px 8px;">{{this}}</span>{{/each}}</div>
+        </div>
+        {{else}}
+        <div style="flex: {{#if fv.two_col}}1.5{{else}}1.1{{/if}}; min-width: 0; background: #fff; border-radius: 16px; padding: 12px 16px; box-shadow: 0 8px 22px rgba(0,47,89,.07); border-top: 4px solid #FF8A00; box-sizing: border-box;">
+          <div style="font-size: 10px; font-weight: 800; letter-spacing: .12em; color: #FF8A00;">{{#if fv.choice}}{{#if (eq fv.pick 1)}}STEP 2 · CHOOSE ANY 1{{else}}YOUR EXPERIENCES · PICK ANY {{fv.pick}}{{/if}}{{else}}YOUR EXPERIENCES{{/if}}</div>
+          {{> optlist}}
+        </div>
+        {{/if}}
+        <div style="flex: 0.9; min-width: 0; background: #fff; border-radius: 16px; padding: 14px 16px; box-shadow: 0 8px 22px rgba(0,47,89,.07); border-top: 4px solid #3A7EC9; box-sizing: border-box;">
+          <div style="font-size: 10px; font-weight: 800; letter-spacing: .12em; color: #3A7EC9;">FINAL STEP · 20–30 MINS</div>
+          <div style="font-size: 15px; font-weight: 900; margin: 2px 0 4px;">Debrief &amp; closing</div>
+          <div style="font-size: 12px; font-weight: 600; color: #4a5b70; line-height: 1.4;">We connect the experience back to work: what we learnt, what we'll do differently, and end on a high.</div>
+        </div>
+      </div>
+    </div>
+
+    {{else}}
+    {{!-- 2-day: one row per day; choice adds a shared pick panel --}}
+    <div style="position: absolute; left: 30px; right: 30px; top: 116px; bottom: 70px; display: flex; gap: 16px; align-items: center;">
+      <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 14px;">
+        {{#each fv.rows}}
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 108px; flex: 0 0 108px;"><div style="font-size: 11px; font-weight: 800; letter-spacing: .12em; color: #FF8A00;">{{label}}</div><div style="font-size: 13px; font-weight: 800; line-height: 1.25;">{{sub}}</div></div>
+          <div style="flex: 1; min-width: 0; background: rgba(255,255,255,.8); border: 1px solid #E6EAF0; border-radius: 16px; padding: 12px 6px;">
+            <div style="position: relative; display: flex; align-items: flex-start; gap: 4px; padding: 0 6px;">
+              <div style="position: absolute; left: 50px; right: 50px; top: 21px; height: 3px; background: repeating-linear-gradient(90deg, #CBD5E1 0 9px, transparent 9px 16px); z-index: 1;"></div>
+              {{#each nodes}}{{> fnode small=true}}{{/each}}
+            </div>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+      {{#if fv.choice}}
+      <div style="width: 270px; flex: 0 0 270px; background: #fff; border-radius: 16px; padding: 12px 16px; box-shadow: 0 8px 22px rgba(0,47,89,.08); box-sizing: border-box;">
+        <div style="font-size: 10px; font-weight: 800; letter-spacing: .12em; color: #FF8A00; margin-bottom: 2px;">PICK ANY {{fv.pick}} ACROSS BOTH DAYS</div>
+        <div style="display: flex; flex-direction: column; gap: 0;">
+          {{#each fv.options}}<div style="display: flex; align-items: center; gap: 8px; padding: 4px 0;"><img src="{{icon}}" style="width: 26px; height: 26px; object-fit: contain;" /><div style="font-size: 13px; font-weight: 900; line-height: 1.1;">{{name}}</div></div>{{/each}}
+        </div>
+      </div>
+      {{/if}}
+    </div>
+    <div style="position: absolute; left: 30px; right: 30px; bottom: 18px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center;">
+      <span style="font-size: 12px; font-weight: 900; color: #1F6B42;">Every day starts with FREE energisers:</span>
+      {{#each fv.icebreakers}}<span style="font-size: 11px; font-weight: 800; color: #1F6B42; background: #E9F7EF; border-radius: 999px; padding: 3px 9px;">{{this}}</span>{{/each}}
+    </div>
+    {{/if}}
+  </div>
+  {{else}}
 
     <div class="page" style="
         background: url('https://api.bd.eskoops.com/assets/pngAssets/NEW_BG/BG2.jpg');
@@ -2141,7 +2259,7 @@ margin-bottom: 6px;
   </div>
 
   {{/if}}
-
+  {{/if}}
   {{/unless}}
 
 
