@@ -405,7 +405,7 @@ const generate = async function (data, objs, games, preview) {
                     const fee = parseInt(fees[i]) || 0;
                     const total = partA + fee;
                     return { name: (g.data.game_name || "").trim(), icon: g.data.game_icon || g.data.game_logo || "", fee: fee ? inr(fee) : "Included", fee_raw: fee, day: i < d1 ? 1 : 2,
-                        accent: ACC[i % 5], tint: TINT[i % 5], show_day: true, option: i + 1, total: inr(total), per_person: pax ? inr(total / pax) : "" };
+                        accent: ACC[i % 5], tint: TINT[i % 5], show_day: true, option: i + 1, total: inr(total), per_person: "" }; // per-participant pricing intentionally not shown
                 });
                 const partB = selected_games.reduce((s, g, i) => s + (parseInt(fees[i]) || 0), 0);
                 const pick = d1 + d2;
@@ -430,7 +430,7 @@ const generate = async function (data, objs, games, preview) {
                     addon: addonFee && !isDiscount ? { desc: addonDesc, fee: inr(addonFee) } : null,
                     discount: addonFee && isDiscount ? { fee: inr(addonFee) } : null,
                     part_a: inr(partA), part_b: inr(partB), total: inr(partA + partB),
-                    per_person: pax ? inr((partA + partB) / pax) : "", pax,
+                    per_person: "", pax,
                     items, pick, n_items: items.length, compact: items.length > 4,
                     card_width: items.length >= 5 ? 196 : items.length == 4 ? 236 : 300,
                 };
