@@ -3073,7 +3073,7 @@ margin-bottom: 6px;
           {{#each pv.items}}
           <div style="display: flex; align-items: center; gap: 12px; padding: {{#if ../pv.compact}}5px{{else}}8px{{/if}} 10px; border-radius: 12px; background: {{tint}}; border: 1.5px solid {{accent}}; margin-bottom: {{#if ../pv.compact}}6px{{else}}8px{{/if}};">
             <img src="{{icon}}" style="width: {{#if ../pv.compact}}28{{else}}36{{/if}}px; height: {{#if ../pv.compact}}28{{else}}36{{/if}}px; object-fit: contain;" />
-            <div style="flex: 1;"><div style="font-size: {{#if ../pv.compact}}13{{else}}15{{/if}}px; font-weight: 900; line-height: 1.15;">{{name}}</div><div style="font-size: 11px; font-weight: 800; color: {{accent}};">DAY {{day}}</div></div>
+            <div style="flex: 1;"><div style="font-size: {{#if ../pv.compact}}13{{else}}15{{/if}}px; font-weight: 900; line-height: 1.15;">{{name}}</div>{{#if show_day}}<div style="font-size: 11px; font-weight: 800; color: {{accent}};">DAY {{day}}</div>{{/if}}</div>
             <div style="text-align: right;"><div style="font-size: {{#if ../pv.compact}}13{{else}}15{{/if}}px; font-weight: 900;">{{fee}}</div><div style="font-size: 10px; color: #8a96a8; font-weight: 700;">{{pv.b_unit}}</div></div>
           </div>
           {{/each}}

@@ -305,7 +305,10 @@ const generate = async function (data, objs, games, preview) {
                     //  if (data.custom_notes)
                     // console.log("custom notes"+ JSON.parse(data.custom_notes).length)
 
-                  const noteObj = JSON.parse(data.custom_notes).filter(noteobj => noteobj.id == game.id)[0];
+                  // Older proposals have no custom_notes (or miss an activity) - treat as "no custom slide" instead of crashing
+                  let notesArr = [];
+                  try { notesArr = data.custom_notes ? JSON.parse(data.custom_notes) : []; } catch (e) { notesArr = []; }
+                  const noteObj = (Array.isArray(notesArr) ? notesArr : []).filter(noteobj => noteobj && noteobj.id == game.id)[0] || {};
                   game.custom_notes = noteObj.note || "";
                   game.custom_image = noteObj.image || "";
 
@@ -376,7 +379,9 @@ const generate = async function (data, objs, games, preview) {
         try {
             const isVirtual = !data.inperson && data.virtual;
             const info0 = isVirtual ? data.virtual_info : data.inperson_info;
-            if (data.pricing && info0 && info0.day1) {
+            const feeCount = ((data.pricing && data.pricing.material_cost_fees) || []).length;
+            // if saved prices don't line up with the selected activities, keep the old table (shows exactly what was saved)
+            if (data.pricing && info0 && info0.day1 && feeCount === selected_games.length) {
                 const inr = (n) => "₹" + Math.round(Math.abs(n)).toLocaleString("en-IN");
                 const ACC = ["#D95F6A", "#7B6FD8", "#C48A20", "#2E9E60", "#3A7EC9"];
                 const TINT = ["#FFF2F2", "#F5F2FF", "#FFFBF0", "#EEFBF3", "#EEF5FF"];
@@ -399,10 +404,11 @@ const generate = async function (data, objs, games, preview) {
                     const fee = parseInt(fees[i]) || 0;
                     const total = partA + fee;
                     return { name: (g.data.game_name || "").trim(), icon: g.data.game_icon || g.data.game_logo || "", fee: fee ? inr(fee) : "Included", fee_raw: fee, day: i < d1 ? 1 : 2,
-                        accent: ACC[i % 5], tint: TINT[i % 5], option: i + 1, total: inr(total), per_person: pax ? inr(total / pax) : "" };
+                        accent: ACC[i % 5], tint: TINT[i % 5], show_day: true, option: i + 1, total: inr(total), per_person: pax ? inr(total / pax) : "" };
                 });
                 const partB = selected_games.reduce((s, g, i) => s + (parseInt(fees[i]) || 0), 0);
                 const pick = d1 + d2;
+                if (!(items.length === pick)) items.forEach((it) => { it.show_day = false; }); // day split only known when every slot is filled
                 let mode;
                 // fewer activities than slots = nothing to choose, so treat as fixed; pick-1 cards only fit up to 5 options
                 const fixed = is_fulfilled || items.length <= pick;
@@ -418,7 +424,7 @@ const generate = async function (data, objs, games, preview) {
                     [mode]: true, mode, days, multi: days == 2, virtual: isVirtual, has_fac: fac > 0, show_a: !isVirtual,
                     b_title: isVirtual ? "Program Fee" : "Consumable Material Cost", b_unit: isVirtual ? "program fee" : "materials",
                     subtitle: subBits.filter(Boolean).join(" · "),
-                    fac: inr(fac), part_a_plain: partA,
+                    fac: fac ? inr(fac) : "Nil", part_a_plain: partA,
                     travel_actuals: !isVirtual && !!data.on_actuals, travel: travelAmt ? inr(travelAmt) : "", travel_nil: !data.on_actuals && !travelAmt,
                     addon: addonFee && !isDiscount ? { desc: addonDesc, fee: inr(addonFee) } : null,
                     discount: addonFee && isDiscount ? { fee: inr(addonFee) } : null,
