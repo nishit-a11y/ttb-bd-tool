@@ -2352,11 +2352,17 @@ font-weight: 800;
       <img src="{{#if data.game_welcome_image}}{{data.game_welcome_image}}{{else}}{{data.game_image}}{{/if}}" style="width: 100%; height: 100%; object-fit: cover; object-position: center 40%;" alt="" />
     </div>
 
-    <div style="position: absolute; left: 10px; top: 0; width: 194px; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 12px; box-sizing: border-box; font-family: Nunito, sans-serif;">
-      <img style="width: 80px; height: 80px; object-fit: contain;" src="{{activityIcon data}}" />
-      <div style="font-size: 22px; font-weight: 800; color: #002F59; padding: 10px 0 4px;">OPTION {{index}}</div>
-      <div style="font-size: 22px; font-weight: 800; color: #FF8A00; line-height: 1.15;">{{data.game_name}}</div>
-      {{#if data.game_url}}
+    <div style="position: absolute; left: 0; top: 0; height: 100%; display: flex; flex-direction: row; align-items: center; z-index: 4;">
+      <div class="leftbox" style="width: 194.4px;">
+        <img class="event-image" style=" width: 80px; height: 80px;" src="{{activityIcon data}}" />
+        <div class="text uppercase event-title normal-color-text"
+          style="font-size: 22px; padding:10px 0; font-weight: 800;">
+<span class="opt">Option </span>{{index}}
+        </div>
+        <div class="text orange-color-text event-name" style="font-size: 22px; font-weight: 800;">
+          {{data.game_name}}
+        </div>
+        {{#if data.game_url}}
       <a href="{{data.game_url}}" target="_blank" style="display: inline-flex; align-items: center; gap: 10px; margin-top: 14px; padding: 5px 18px 5px 5px; background: #FFFFFF; border: 1.5px solid color-mix(in srgb, {{strip_color}} 35%, white); border-radius: 999px; text-decoration: none;">
         <span style="width: 34px; height: 34px; flex: 0 0 34px; border-radius: 50%; background: {{strip_color}}; display: inline-flex; align-items: center; justify-content: center;">
           <svg width="14" height="14" viewBox="0 0 14 14" style="margin-left: 2px;"><path d="M2 1.2v11.6c0 .6.7 1 1.2.7l9.4-5.8c.5-.3.5-1.1 0-1.4L3.2.5C2.7.2 2 .6 2 1.2z" fill="#FFFFFF"/></svg>
@@ -2364,6 +2370,7 @@ font-weight: 800;
         <span style="font-family: Nunito, sans-serif; font-size: 15px; font-weight: 800; color: color-mix(in srgb, {{strip_color}} 72%, black); white-space: nowrap;">Watch activity</span>
       </a>
       {{/if}}
+      </div>
     </div>
 
     <div style="position: absolute; left: 222px; top: 44px; width: 500px; font-family: Nunito, sans-serif; color: #002F59;">
