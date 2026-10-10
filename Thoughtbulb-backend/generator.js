@@ -45,11 +45,12 @@ function getOrdinal(n) {
 }
 
 function checkActivitiesForInPerson(participants, time) {
+    // up to 30 participants (inclusive) fit one more activity - matches the program flow rule
     if (time === "Full Day") {
-        return 3 - (participants < 30 ? 0 : 1);
+        return 3 - (participants <= 30 ? 0 : 1);
     }
     if (time === "Half Day") {
-        return 2 - (participants < 30 ? 0 : 1);
+        return 2 - (participants <= 30 ? 0 : 1);
     }
     if (time === "Short") {
         return 1;
@@ -241,7 +242,7 @@ const generate = async function (data, objs, games, preview) {
                     data.proposal1_flow3 = false;
                     virtual_act_count = virtual_act_count + 2;
                 }
-                if (data.virtual_info.day1.time === "Short") {
+                if (data.virtual_info.day2.time === "Short") {
                     data.proposal1_flow1 = true;
                     data.proposal1_flow2 = false;
                     data.proposal1_flow3 = false;
