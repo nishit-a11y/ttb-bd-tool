@@ -479,7 +479,7 @@ const generate = async function (data, objs, games, preview) {
                 const place = !isV && info.location && info.location !== "TBD" ? info.location : "";
                 const pax = Math.max(parseInt(info.day1.participants) || 0, days == 2 ? (parseInt(info.day2.participants) || 0) : 0);
                 const subtitle = (days == 1 ? [timeLabel(info.day1.time), dayInfo[0].date, place] : [place]).concat(pax ? [`${pax} participants`] : []).filter(Boolean).join(" · ");
-                const icebreakers = isV ? ["Similarities", "Wow Orchestra", "Clap-Clap-Go", "My Preferences"]
+                const icebreakers = isV ? ["Wave", "Find it", "Move Your Body", "Switch On/Off", "My Favourite", "Stretches"]
                     : ["Similarities", "Wow Orchestra", "Creative Handshakes", "Mexican Wave", "Clap-Clap-Go", "04 Corners", "My Preferences"];
                 data.fv = {
                     multi: days == 2, single: days == 1, virtual: isV, subtitle,
