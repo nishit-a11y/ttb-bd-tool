@@ -733,26 +733,26 @@
         {{#each fv.row.nodes}}{{> fnode}}{{/each}}
       </div>
       <div style="display: flex; gap: 16px; align-items: stretch;">
-        <div style="flex: 1.25; min-width: 0; background: #fff; border-radius: 16px; padding: 14px 16px; box-shadow: 0 8px 22px rgba(0,47,89,.07); border-top: 4px solid #2E9E60; box-sizing: border-box;">
+        <div style="flex: 1.25; min-width: 0; background: #fff linear-gradient(#2E9E60, #2E9E60) top / 100% 4px no-repeat;  border-radius: 16px; padding: 14px 16px; box-sizing: border-box; border: 1px solid #E3E8EF;">
           <div style="display: flex; align-items: center; justify-content: space-between;"><div style="font-size: 10px; font-weight: 800; letter-spacing: .12em; color: #2E9E60;">STEP 1 · 20–30 MINS</div><span style="font-size: 11px; font-weight: 900; color: #fff; background: #2E9E60; border-radius: 999px; padding: 2px 10px;">FREE</span></div>
           <div style="font-size: 15px; font-weight: 900; margin: 2px 0 2px;">Energisers</div>
           <div style="font-size: 12px; font-weight: 600; color: #4a5b70; line-height: 1.35;">Mini icebreakers we run before the main experience, on us:</div>
           {{> icebreakers}}
         </div>
         {{#if fv.one_item}}
-        <div style="flex: 1; min-width: 0; background: #fff; border-radius: 16px; padding: 14px 16px; box-shadow: 0 8px 22px rgba(0,47,89,.07); border-top: 4px solid {{fv.item.accent}}; box-sizing: border-box;">
+        <div style="flex: 1; min-width: 0; background: #fff linear-gradient({{fv.item.accent}}, {{fv.item.accent}}) top / 100% 4px no-repeat;  border-radius: 16px; padding: 14px 16px; box-sizing: border-box; border: 1px solid #E3E8EF;">
           <div style="font-size: 10px; font-weight: 800; letter-spacing: .12em; color: {{fv.item.accent}};">STEP 2 · THE EXPERIENCE</div>
           <div style="font-size: 15px; font-weight: 900; margin: 2px 0 4px;">{{fv.item.name}}</div>
           <div style="font-size: 12px; font-weight: 600; color: #4a5b70; line-height: 1.4;">{{fv.item.welcome}}</div>
           <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px;">{{#each fv.item.outcomes}}<span style="font-size: 10px; font-weight: 800; color: {{../fv.item.accent}}; background: {{../fv.item.tint}}; border-radius: 999px; padding: 2px 8px;">{{this}}</span>{{/each}}</div>
         </div>
         {{else}}
-        <div style="flex: {{#if fv.two_col}}1.5{{else}}1.1{{/if}}; min-width: 0; background: #fff; border-radius: 16px; padding: 12px 16px; box-shadow: 0 8px 22px rgba(0,47,89,.07); border-top: 4px solid #FF8A00; box-sizing: border-box;">
+        <div style="flex: {{#if fv.two_col}}1.5{{else}}1.1{{/if}}; min-width: 0; background: #fff linear-gradient(#FF8A00, #FF8A00) top / 100% 4px no-repeat;  border-radius: 16px; padding: 12px 16px; box-sizing: border-box; border: 1px solid #E3E8EF;">
           <div style="font-size: 10px; font-weight: 800; letter-spacing: .12em; color: #FF8A00;">{{#if fv.choice}}{{#if (eq fv.pick 1)}}STEP 2 · CHOOSE ANY 1{{else}}YOUR EXPERIENCES · PICK ANY {{fv.pick}}{{/if}}{{else}}YOUR EXPERIENCES{{/if}}</div>
           {{> optlist}}
         </div>
         {{/if}}
-        <div style="flex: 0.9; min-width: 0; background: #fff; border-radius: 16px; padding: 14px 16px; box-shadow: 0 8px 22px rgba(0,47,89,.07); border-top: 4px solid #3A7EC9; box-sizing: border-box;">
+        <div style="flex: 0.9; min-width: 0; background: #fff linear-gradient(#3A7EC9, #3A7EC9) top / 100% 4px no-repeat;  border-radius: 16px; padding: 14px 16px; box-sizing: border-box; border: 1px solid #E3E8EF;">
           <div style="font-size: 10px; font-weight: 800; letter-spacing: .12em; color: #3A7EC9;">FINAL STEP · 20–30 MINS</div>
           <div style="font-size: 15px; font-weight: 900; margin: 2px 0 4px;">Debrief &amp; closing</div>
           <div style="font-size: 12px; font-weight: 600; color: #4a5b70; line-height: 1.4;">We connect the experience back to work: what we learnt, what we'll do differently, and end on a high.</div>
@@ -777,7 +777,7 @@
         {{/each}}
       </div>
       {{#if fv.choice}}
-      <div style="width: 270px; flex: 0 0 270px; background: #fff; border-radius: 16px; padding: 12px 16px; box-shadow: 0 8px 22px rgba(0,47,89,.08); box-sizing: border-box;">
+      <div style="width: 270px; flex: 0 0 270px; background: #fff; border-radius: 16px; padding: 12px 16px; box-sizing: border-box; border: 1px solid #E3E8EF;">
         <div style="font-size: 10px; font-weight: 800; letter-spacing: .12em; color: #FF8A00; margin-bottom: 2px;">PICK ANY {{fv.pick}} ACROSS BOTH DAYS</div>
         <div style="display: flex; flex-direction: column; gap: 0;">
           {{#each fv.options}}<div style="display: flex; align-items: center; gap: 8px; padding: 4px 0;"><img src="{{icon}}" style="width: 26px; height: 26px; object-fit: contain;" /><div style="font-size: 13px; font-weight: 900; line-height: 1.1;">{{name}}</div></div>{{/each}}
@@ -3093,7 +3093,7 @@ Summary</p>
       {{#if pv.virtual}}
       <div style="display: flex; gap: 18px; justify-content: center; margin-top: 26px;">
         {{#each pv.items}}
-        <div style="width: {{../pv.card_width}}px; background: #fff; border-radius: 18px; box-shadow: 0 10px 28px rgba(0,47,89,.08); padding: 22px 18px; border-top: 5px solid {{accent}}; text-align: center; box-sizing: border-box;">
+        <div style="width: {{../pv.card_width}}px; background: #fff linear-gradient({{accent}}, {{accent}}) top / 100% 5px no-repeat;  border-radius: 18px; padding: 22px 18px; text-align: center; box-sizing: border-box; border: 1px solid #E3E8EF;">
           <img src="{{icon}}" style="width: 60px; height: 60px; object-fit: contain;" />
           <div style="font-size: 11px; font-weight: 800; letter-spacing: .12em; color: {{accent}}; margin-top: 6px;">OPTION {{option}}</div>
           <div style="font-size: 17px; font-weight: 900; line-height: 1.15;">{{name}}</div>
@@ -3110,7 +3110,7 @@ Summary</p>
       {{!-- one complete card per option --}}
       <div style="display: flex; gap: 18px; justify-content: center; margin-top: 22px;">
         {{#each pv.items}}
-        <div style="width: {{../pv.card_width}}px; background: #fff; border-radius: 18px; box-shadow: 0 10px 28px rgba(0,47,89,.08); padding: 18px 20px; border-top: 5px solid {{accent}}; box-sizing: border-box;">
+        <div style="width: {{../pv.card_width}}px; background: #fff linear-gradient({{accent}}, {{accent}}) top / 100% 5px no-repeat;  border-radius: 18px; padding: 18px 20px; box-sizing: border-box; border: 1px solid #E3E8EF;">
           <div style="display: flex; align-items: center; gap: 10px;">
             <img src="{{icon}}" style="width: 48px; height: 48px; object-fit: contain;" />
             <div><div style="font-size: 11px; font-weight: 800; letter-spacing: .12em; color: {{accent}};">OPTION {{option}}</div><div style="font-size: 17px; font-weight: 900; line-height: 1.1;">{{name}}</div></div>
@@ -3133,7 +3133,7 @@ Summary</p>
       {{!-- A + B = total (finalised multi-day plan) --}}
       <div style="display: flex; gap: 16px; justify-content: center; align-items: flex-start; margin-top: 22px;">
         {{#if pv.show_a}}
-        <div style="width: 300px; background: #fff; border-radius: 18px; box-shadow: 0 10px 28px rgba(0,47,89,.08); padding: 18px 20px; box-sizing: border-box;">
+        <div style="width: 300px; background: #fff; border-radius: 18px; padding: 18px 20px; box-sizing: border-box; border: 1px solid #E3E8EF;">
           <div style="display: flex; align-items: center; gap: 8px;"><span style="width: 28px; height: 28px; border-radius: 8px; background: #002F59; color: #fff; font-weight: 900; display: flex; align-items: center; justify-content: center;">A</span><b style="font-size: 16px;">Facilitation Fee</b></div>
           <div style="font-size: 11px; color: #8a96a8; font-weight: 700; margin: 2px 0 6px 36px;">Fixed — same whichever activities you choose</div>
           <div style="display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: 700; color: #33475f; padding: 7px 0;"><span>Facilitation{{#unless pv.virtual}} (2 days){{/unless}}</span><span>{{pv.fac}}</span></div>
@@ -3144,7 +3144,7 @@ Summary</p>
         </div>
         <div style="font-size: 26px; font-weight: 900; color: #9AA7B8; margin-top: 110px;">+</div>
         {{/if}}
-        <div style="width: 330px; background: #fff; border-radius: 18px; box-shadow: 0 10px 28px rgba(0,47,89,.08); padding: 16px 18px; box-sizing: border-box;">
+        <div style="width: 330px; background: #fff; border-radius: 18px; padding: 16px 18px; box-sizing: border-box; border: 1px solid #E3E8EF;">
           <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;"><span style="width: 28px; height: 28px; border-radius: 8px; background: #FF8A00; color: #fff; font-weight: 900; display: flex; align-items: center; justify-content: center;">B</span><b style="font-size: 16px;">Your activities</b></div>
           {{#each pv.items}}
           <div style="display: flex; align-items: center; gap: 12px; padding: {{#if ../pv.compact}}5px{{else}}8px{{/if}} 10px; border-radius: 12px; background: {{tint}}; border: 1.5px solid {{accent}}; margin-bottom: {{#if ../pv.compact}}6px{{else}}8px{{/if}};">
@@ -3170,7 +3170,7 @@ Summary</p>
       {{!-- fixed_single and choice: A (expertise rows) + B (consumable material cost rows) + formula --}}
       <div style="display: flex; gap: 14px; justify-content: center; align-items: stretch; margin-top: 16px;">
         {{#if pv.show_a}}
-        <div style="width: 400px; background: #fff; border-radius: 18px; box-shadow: 0 10px 28px rgba(0,47,89,.08); padding: 16px 20px; border-top: 5px solid #002F59; box-sizing: border-box;">
+        <div style="width: 400px; background: #fff linear-gradient(#002F59, #002F59) top / 100% 5px no-repeat;  border-radius: 18px; padding: 16px 20px; box-sizing: border-box; border: 1px solid #E3E8EF;">
           <div style="display: flex; align-items: center; gap: 8px;"><span style="width: 28px; height: 28px; border-radius: 8px; background: #002F59; color: #fff; font-weight: 900; display: flex; align-items: center; justify-content: center;">A</span><b style="font-size: 17px;">Facilitation Fee</b></div>
           <div style="font-size: 13px; font-weight: 700; color: #6b7a8f; margin: 2px 0 8px 36px;">Our team{{#if pv.multi}} for 2 days{{/if}} · fixed, whichever activities you pick</div>
           <div style="display: flex; align-items: center; gap: 10px; padding: 7px 0; border-top: 1px dashed #E8ECF2;"><span style="width: 28px; text-align: center; font-size: 18px;">🎤</span><span style="flex: 1; font-size: 14px; font-weight: 800;">Facilitation<div style="font-size: 11px; font-weight: 700; color: #8a96a8;">programme design · on-ground delivery · debrief{{#if pv.multi}} · 2 days{{/if}}</div></span><span style="font-size: 15px; font-weight: 900;">{{pv.fac}}</span></div>
@@ -3180,7 +3180,7 @@ Summary</p>
         </div>
         <div style="font-size: 26px; font-weight: 900; color: #9AA7B8; align-self: center;">+</div>
         {{/if}}
-        <div style="width: 400px; background: #fff; border-radius: 18px; box-shadow: 0 10px 28px rgba(0,47,89,.08); padding: 16px 20px; border-top: 5px solid #FF8A00; box-sizing: border-box;">
+        <div style="width: 400px; background: #fff linear-gradient(#FF8A00, #FF8A00) top / 100% 5px no-repeat;  border-radius: 18px; padding: 16px 20px; box-sizing: border-box; border: 1px solid #E3E8EF;">
           <div style="display: flex; align-items: center; gap: 8px;"><span style="width: 28px; height: 28px; border-radius: 8px; background: #FF8A00; color: #fff; font-weight: 900; display: flex; align-items: center; justify-content: center;">B</span><b style="font-size: 17px;">{{pv.b_title}}</b></div>
           <div style="font-size: 13px; font-weight: 700; color: #6b7a8f; margin: 2px 0 8px 36px;">{{#if pv.choice}}Choose any {{pv.pick}} of these {{pv.n_items}} · cost per activity{{else}}For your {{pv.n_items}} {{#if (eq pv.n_items 1)}}activity{{else}}activities{{/if}}{{/if}}</div>
           {{#each pv.items}}
