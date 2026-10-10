@@ -3063,7 +3063,7 @@ Summary</p>
           <div style="display: flex; align-items: center; gap: 8px;"><span style="width: 28px; height: 28px; border-radius: 8px; background: #FF8A00; color: #fff; font-weight: 900; display: flex; align-items: center; justify-content: center;">B</span><b style="font-size: 17px;">{{pv.b_title}}</b></div>
           <div style="font-size: 13px; font-weight: 700; color: #6b7a8f; margin: 2px 0 8px 36px;">{{#if pv.choice}}Choose any {{pv.pick}} of these {{pv.n_items}} · cost per activity{{else}}For your {{pv.n_items}} {{#if (eq pv.n_items 1)}}activity{{else}}activities{{/if}}{{/if}}</div>
           {{#each pv.items}}
-          <div style="display: flex; align-items: center; gap: 10px; padding: {{#if ../pv.compact}}4px{{else}}7px{{/if}} 0; border-top: 1px dashed #E8ECF2;"><img src="{{icon}}" style="width: 28px; height: 28px; object-fit: contain;" /><span style="flex: 1; font-size: 14px; font-weight: 800;">{{name}}</span><span style="font-size: 15px; font-weight: 900; color: {{accent}};">{{#if fee_raw}}+ {{/if}}{{fee}}</span></div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: {{#if ../pv.compact}}4px{{else}}7px{{/if}} 0; border-top: 1px dashed #E8ECF2;"><img src="{{icon}}" style="width: 28px; height: 28px; object-fit: contain;" /><span style="flex: 1; font-size: 14px; font-weight: 800;">{{name}}</span><span style="font-size: 15px; font-weight: 900; color: {{accent}};">{{#if fee_raw}}{{#unless ../pv.virtual}}+ {{/unless}}{{/if}}{{fee}}</span></div>
           {{/each}}
         </div>
       </div>
