@@ -13,6 +13,8 @@ import {
   setObjectivePoints,
   setOutcomes,
   setWelcomeSlide,
+  setProgramModules,
+  setProgramPost,
 } from "./CreateActivitySlice";
 
 const MODEL_TYPES = [
@@ -32,6 +34,7 @@ const POINT_HINTS = [
   "What it builds — e.g. Builds **customer focus** by turning feedback into a better product",
 ];
 const OUTCOME_HINTS = ["e.g. Faster group decisions", "e.g. Stronger team bonds", "e.g. Creative confidence"];
+const PROG = { name: 34, how: 170, post: 90, maxModules: 6 };
 
 // Shows **phrase** as bold, exactly like the proposal slide
 const BoldPreview = ({ text }) =>
@@ -53,9 +56,13 @@ const Objectives = ({
   setDisabled,
   handleContinue,
 }) => {
-  const { objectiveData, objectivePoints, outcomes, welcomeSlide } = useSelector(
+  const { objectiveData, objectivePoints, outcomes, welcomeSlide, format, programModules, programPost } = useSelector(
     (state) => state.createActivity
   );
+  const isProgram = format === "program";
+  const mods = programModules ?? [];
+  const setMod = (i, key, value) => dispatch(setProgramModules(mods.map((m, k) => (k === i ? { ...m, [key]: value } : m))));
+  const totalMins = mods.reduce((t, m) => t + (parseInt(m.mins) || 0), 0);
   const formState = useSelector((state) => state.createActivity);
   const [drafting, setDrafting] = useState(false);
   const [generatingImg, setGeneratingImg] = useState(false);
@@ -127,11 +134,23 @@ const Objectives = ({
       alert("A bold phrase is missing its closing ** in one of the bullet points");
       return false;
     } else if (takeaways.some((o) => !o || o.trim().length < 3)) {
-      alert('Please fill all 3 "Teams walk away with" points');
+      alert(isProgram ? "Please fill all 3 training outcomes" : 'Please fill all 3 "Teams walk away with" points');
       return false;
     } else if (takeaways.some((o) => o.length > OUTCOME_MAX)) {
       alert(`Each "Teams walk away with" point should be under ${OUTCOME_MAX} characters`);
       return false;
+    } else if (isProgram) {
+      const filled = mods.filter((m) => (m.name || "").trim());
+      if (!ws.tagline || !ws.tagline.trim()) { alert("Please add the program headline (shown at the top of program slide 1)"); return false; }
+      if (ws.tagline.length > LIMITS.tagline) { alert(`Program headline should be under ${LIMITS.tagline} characters`); return false; }
+      if (filled.length < 2) { alert("Please add at least 2 program modules (name, duration and how)"); return false; }
+      if (mods.some((m) => !(m.name || "").trim() && ((m.how || "").trim() || m.mins))) { alert("Every module with a duration or description needs a name"); return false; }
+      if (filled.some((m) => m.name.length > PROG.name)) { alert(`Each module name should be under ${PROG.name} characters`); return false; }
+      if (filled.some((m) => (m.how || "").length > PROG.how)) { alert(`Each "How" description should be under ${PROG.how} characters so it fits on the slide`); return false; }
+      if (filled.some((m) => ((m.how || "").match(/\*\*/g) || []).length % 2 !== 0)) { alert("A bold phrase is missing its closing ** in one of the module descriptions"); return false; }
+      if (filled.some((m) => m.mins !== "" && m.mins != null && !(parseInt(m.mins) > 0))) { alert("Module durations should be a number of minutes"); return false; }
+      if ((programPost || "").length > PROG.post) { alert(`Post-program line should be under ${PROG.post} characters`); return false; }
+      return true;
     } else if (ws.tagline && ws.tagline.trim()) {
       // Welcome slide is optional, but if a tagline is given the rest must be complete
       const els = ws.elements || [];
@@ -219,9 +238,11 @@ const Objectives = ({
         </div>
 
         <div className="mt-4">
-          <label className="labels">Teams walk away with *</label>
+          <label className="labels">{isProgram ? "Training outcomes *" : "Teams walk away with *"}</label>
           <p className="objective-description mb-2">
-            3 short takeaways (2–4 words each), shown as pills at the bottom of the slide.
+            {isProgram
+              ? "3 short outcomes (2–4 words each), shown as a checklist on program slide 1."
+              : "3 short takeaways (2–4 words each), shown as pills at the bottom of the slide."}
           </p>
           <div className="row">
             {takeaways.map((outcome, index) => (
@@ -246,10 +267,11 @@ const Objectives = ({
 
         <hr className="my-4" />
         <div>
-          <label className="labels" style={{ fontSize: 18 }}>Welcome slide (first activity slide)</label>
+          <label className="labels" style={{ fontSize: 18 }}>{isProgram ? "Program slide 1 (headline, icon and illustration)" : "Welcome slide (first activity slide)"}</label>
           <p className="objective-description mb-3">
-            Optional. When a tagline is filled in, proposals show the new welcome slide (tagline, welcome line, learning model and
-            illustration) instead of the old cover image.
+            {isProgram
+              ? "The headline sits above the objectives and training outcomes; the illustration fills the right side of the slide."
+              : "Optional. When a tagline is filled in, proposals show the new welcome slide (tagline, welcome line, learning model and illustration) instead of the old cover image."}
           </p>
           <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
             <button type="button" className="btn btn-outline-primary" disabled={drafting} onClick={onDraft}>
@@ -259,18 +281,19 @@ const Objectives = ({
           </div>
           <div className="row">
             <div className="form-group col-md-5 mb-3">
-              <label className="labels">Tagline</label>
+              <label className="labels">{isProgram ? "Program headline *" : "Tagline"}</label>
               <input type="text" className="form-control" placeholder="e.g. Unleash team superpowers" value={ws.tagline || ""}
                 onChange={(e) => setWS({ tagline: e.target.value })} />
               <p className="objective-description mb-0 mt-1">{counter((ws.tagline || "").length, LIMITS.tagline)}</p>
             </div>
-            <div className="form-group col-md-7 mb-3">
+            {!isProgram && <div className="form-group col-md-7 mb-3">
               <label className="labels">Welcome line (to participants)</label>
               <input type="text" className="form-control" placeholder="e.g. You'll become storytellers, turning your company's message into a comic strip."
                 value={ws.welcome || ""} onChange={(e) => setWS({ welcome: e.target.value })} />
               <p className="objective-description mb-0 mt-1">{counter((ws.welcome || "").length, LIMITS.welcome)}</p>
-            </div>
+            </div>}
           </div>
+          {!isProgram && <>
           <div className="row">
             <div className="form-group col-md-5 mb-3">
               <label className="labels">Learning model name</label>
@@ -300,6 +323,7 @@ const Objectives = ({
               </div>
             </div>
           ))}
+          </>}
           <div className="form-group mt-3 mb-3">
             <label className="labels">Slide icon (shown above "Option" on the slides)</label>
             <p className="objective-description mb-2">Square icon with a transparent background. Generate one in the house style or upload your own. If empty, the activity logo is used.</p>
@@ -332,6 +356,56 @@ const Objectives = ({
             </div>
           </div>
         </div>
+        {isProgram && (
+          <>
+            <hr className="my-4" />
+            <label className="labels" style={{ fontSize: 18 }}>Program slide 2 (program flow)</label>
+            <p className="objective-description mb-3">
+              One card per module, left to right. Keep each "How" to about 25 words and wrap the exercise name in
+              <strong> **double asterisks** </strong> to make it bold. The 3 activity photos from step 1 appear under the modules.
+              {totalMins ? ` Total: ${Math.round((totalMins / 60) * 2) / 2} hours.` : ""}
+            </p>
+            {mods.map((m, i) => (
+              <div key={`mod-${i}`} style={{ border: "1px solid #E3E8EF", borderRadius: 12, padding: "12px 14px", marginBottom: 12 }}>
+                <div className="row">
+                  <div className="form-group col-md-7 mb-2">
+                    <label className="labels">Module {i + 1} name</label>
+                    <input type="text" className="form-control" placeholder={["e.g. Lead by Example", "e.g. Lead without Title", "e.g. Lead with Flexibility", "e.g. Lead the Heart"][i] || "Module name"}
+                      value={m.name || ""} onChange={(e) => setMod(i, "name", e.target.value)} />
+                    <p className="objective-description mb-0 mt-1">{counter((m.name || "").length, PROG.name)}</p>
+                  </div>
+                  <div className="form-group col-md-3 mb-2">
+                    <label className="labels">Duration (mins)</label>
+                    <input type="number" min="0" className="form-control" placeholder="e.g. 90" value={m.mins ?? ""}
+                      onChange={(e) => setMod(i, "mins", e.target.value)} />
+                  </div>
+                  <div className="col-md-2 mb-2" style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
+                    {mods.length > 2 && (
+                      <button type="button" className="btn btn-link p-0" onClick={() => dispatch(setProgramModules(mods.filter((_, k) => k !== i)))}>Remove</button>
+                    )}
+                  </div>
+                </div>
+                <label className="labels">How</label>
+                <textarea className="form-control" rows="2" placeholder="e.g. **Pyramid Assembly**: see how every role and goal feeds the vision, then map your everyday leadership behaviours."
+                  value={m.how || ""} onChange={(e) => setMod(i, "how", e.target.value)} />
+                <p className="objective-description mb-0 mt-1" style={{ display: "flex", justifyContent: "space-between", gap: 12 }}>
+                  <span style={{ color: "#002F59" }}>{m.how ? <>Preview: <BoldPreview text={m.how} /></> : ""}</span>
+                  {counter((m.how || "").length, PROG.how)}
+                </p>
+              </div>
+            ))}
+            {mods.length < PROG.maxModules && (
+              <button type="button" className="btn btn-outline-primary mb-3" onClick={() => dispatch(setProgramModules([...mods, { name: "", mins: "", how: "" }]))}>
+                + Add module
+              </button>
+            )}
+            <div className="form-group mt-2 mb-3">
+              <label className="labels">Post-program line (navy bar at the bottom; leave empty to hide)</label>
+              <input type="text" className="form-control" value={programPost ?? ""} onChange={(e) => dispatch(setProgramPost(e.target.value))} />
+              <p className="objective-description mb-0 mt-1">{counter((programPost || "").length, PROG.post)}</p>
+            </div>
+          </>
+        )}
         <div className="continue">
           <button
             class="btn btn-primary continue-button"

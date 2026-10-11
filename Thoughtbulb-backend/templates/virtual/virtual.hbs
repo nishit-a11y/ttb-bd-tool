@@ -2310,6 +2310,9 @@ font-weight: 800;
 
 {{#each selected_games}}
 
+{{#if prog}}
+{{> progSlides}}
+{{else}}
 {{#if data.game_tagline}}
   {{!-- WELCOME SLIDE: tagline + learning model + illustration (falls back to data.game_cover slide below) --}}
   <div class="page" style="position: relative; overflow: hidden; background: {{bg_gradient}};">
@@ -2511,6 +2514,8 @@ font-weight: 800;
   </div>
 
  
+{{/if}}{{!-- /prog --}}
+
  {{!-- praveen for custom notes --}}
  {{#if custom_notes}}
   <div class="page" style="background: {{bg_gradient}};">

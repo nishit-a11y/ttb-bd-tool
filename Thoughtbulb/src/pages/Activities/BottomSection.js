@@ -58,6 +58,9 @@ import {
   setWelcomeSlide,
   setProgramFee,
   setSpecialActivity,
+  setFormat,
+  setProgramModules,
+  setProgramPost,
   reset,
 } from "../CreateActivity/CreateActivitySlice";
 
@@ -377,6 +380,21 @@ function BottomSection({ activityData }) {
               data.data.game_outcome_3 ?? "",
             ])
           );
+          {
+            const isProg = data.data.format === "program";
+            const pm = Array.isArray(data.data.program_modules) ? data.data.program_modules : [];
+            dispatch(setFormat(isProg ? "program" : "activity"));
+            dispatch(
+              setProgramModules(
+                (pm.length ? pm : [{}, {}, {}, {}]).map((m) => ({ name: m.name ?? "", mins: m.mins ? String(m.mins) : "", how: m.how ?? "" }))
+              )
+            );
+            dispatch(
+              setProgramPost(
+                data.data.program_post ?? "Action planning: every participant commits to goals they take back to work"
+              )
+            );
+          }
         }
         navigate("/create-activity");
       });

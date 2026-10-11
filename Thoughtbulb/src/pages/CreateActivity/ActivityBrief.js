@@ -30,6 +30,7 @@ import {
   setSpecialActivity,
   setgame_type,
   setImageCover,
+  setFormat,
 } from "./CreateActivitySlice";
 import {
   inpersonButtonClass,
@@ -49,6 +50,7 @@ const ActivityBrief = ({
   handleContinue,
 }) => {
   const dispatch = useDispatch();
+  const format = useSelector((state) => state.createActivity.format);
   const [gameType, setGameType] = useState("Inperson");
   const inpersonButtonClass =
     gameType === "Inperson" ? "tab-button--selected" : "";
@@ -720,6 +722,22 @@ const ActivityBrief = ({
         )}
       </AccordionSummary>
       <AccordionDetails>
+        <h6 className="objective-title">Team activity or learning program?</h6>
+        <p className="objective-description">
+          Learning programs (multi-module workshops) get 2 program slides in the proposal: objectives + training outcomes, then the module-by-module program flow.
+        </p>
+        <div style={{ display: "flex", gap: 10, margin: "8px 0 24px" }}>
+          {[["activity", "Team activity"], ["program", "Learning program"]].map(([v, label]) => (
+            <button
+              key={v}
+              type="button"
+              className={format === v ? "btn btn-primary" : "btn btn-outline-primary"}
+              onClick={() => dispatch(setFormat(v))}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
         <h6 className="objective-title">
           What kind of program would you like to add?
         </h6>

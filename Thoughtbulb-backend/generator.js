@@ -335,6 +335,31 @@ const generate = async function (data, objs, games, preview) {
                   game.bg_gradient  = activityGradients[index % activityGradients.length];
                   game.strip_color  = activityStripColors[index % activityStripColors.length];
 
+                  // Learning programs (format "program" + modules) get 2 dedicated slides instead of the activity slides
+                  game.prog = null;
+                  try {
+                    const gd = game.data || {};
+                    const mods = (Array.isArray(gd.program_modules) ? gd.program_modules : [])
+                      .filter((m) => m && String(m.name || "").trim());
+                    if (gd.format === "program" && mods.length) {
+                      const MC = ["#D95F6A", "#7B6FD8", "#C48A20", "#2E9E60", "#3A7EC9", "#D95F6A"];
+                      const totalMins = mods.reduce((s, m) => s + (parseInt(m.mins) || 0), 0);
+                      const h = Math.round((totalMins / 60) * 2) / 2;
+                      const photos = [gd.game_image, gd.game_image1, gd.game_image2].filter((p) => p && String(p).trim());
+                      game.prog = {
+                        modules: mods.slice(0, 6).map((m, i) => ({ n: i + 1, name: String(m.name).trim(), mins: parseInt(m.mins) || 0, how: String(m.how || "").trim(), c: MC[i] })),
+                        n_modules: Math.min(mods.length, 6),
+                        hours: h ? String(h) : "",
+                        objectives: [gd.game_obj_1, gd.game_obj_2, gd.game_obj_3].filter((o) => o && String(o).trim()),
+                        outcomes: [gd.game_outcome_1, gd.game_outcome_2, gd.game_outcome_3, gd.game_outcome_4].filter((o) => o && String(o).trim()),
+                        title: String(gd.game_tagline || "").trim(),
+                        image: gd.game_welcome_image || gd.game_image || "",
+                        photos,
+                        post: String(gd.program_post == null ? "Action planning: every participant commits to goals they take back to work" : gd.program_post).trim(),
+                      };
+                    }
+                  } catch (e) { game.prog = null; }
+
                     selected_games.push(game);
 
                 }

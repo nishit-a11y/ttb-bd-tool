@@ -29,6 +29,10 @@ const initialState = {
   firebaseURLSpecial: [],
   category: "",
   program_fee: [0, 0, 0, 0, 0],
+  // "activity" (team activity) or "program" (learning program: 2 program slides instead of the activity slides)
+  format: "activity",
+  programModules: [1, 2, 3, 4].map(() => ({ name: "", mins: "", how: "" })), // -> program_modules
+  programPost: "Action planning: every participant commits to goals they take back to work", // -> program_post
 };
 
 // Create the user slice using createSlice
@@ -102,6 +106,15 @@ export const CreateActivitySlice = createSlice({
     setSpecialActivity: (state, action) => {
       state.specialActivity = action.payload;
     },
+    setFormat: (state, action) => {
+      state.format = action.payload;
+    },
+    setProgramModules: (state, action) => {
+      state.programModules = action.payload;
+    },
+    setProgramPost: (state, action) => {
+      state.programPost = action.payload;
+    },
     setEditActivity: (state, action) => {
       state.editActivity = action.payload;
     },
@@ -134,6 +147,9 @@ export const {
   setMaterialCost,
   setError,
   setEditActivity,
+  setFormat,
+  setProgramModules,
+  setProgramPost,
   reset,
 } = CreateActivitySlice.actions;
 export default CreateActivitySlice.reducer;

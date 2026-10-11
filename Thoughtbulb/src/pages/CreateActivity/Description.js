@@ -64,6 +64,9 @@ const Description = ({
     imagesLogo,
     imagesActivity,
     editActivity,
+    format,
+    programModules,
+    programPost,
     imagesSpecial,
   } = useSelector((state) => state.createActivity);
 
@@ -101,6 +104,11 @@ const Description = ({
       key_description2: descriptionData?.description?.[1] ?? "",
       key_description3: descriptionData?.description?.[2] ?? "",
       game_type: game_type ?? "Inperson",
+      format: format === "program" ? "program" : "activity",
+      program_modules: format === "program"
+        ? (programModules ?? []).filter((m) => (m.name || "").trim()).map((m) => ({ name: m.name.trim(), mins: parseInt(m.mins) || 0, how: (m.how || "").trim() }))
+        : [],
+      program_post: (programPost ?? "").trim(),
       isDeleted: false,
       created_date: moment(new Date()).format("YYYY-MM-DD h:mm:ss"),
       game_image: groupedURLs["games_activity"]?.[0] ?? "",
@@ -131,7 +139,7 @@ const Description = ({
   }
 
   function validateDescription() {
-    console.log(descriptionData.title, descriptionData.description);
+    if (format === "program") return true; // learning programs don't use the 3 key pillars
     if (
       !descriptionData ||
       descriptionData?.title.includes("") ||
@@ -196,7 +204,12 @@ const Description = ({
           )}
         </AccordionSummary>
         <AccordionDetails>
-          {descriptionHeadings.map((data, index) => {
+          {format === "program" && (
+            <p className="objective-description mt-2 mb-3">
+              Learning programs don't use the 3 key pillars. Click Submit to save the program.
+            </p>
+          )}
+          {format !== "program" && descriptionHeadings.map((data, index) => {
             return (
               <div className="change-addon-form row mt-4">
                 <div class="form-group col">

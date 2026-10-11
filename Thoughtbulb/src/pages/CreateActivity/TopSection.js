@@ -32,6 +32,9 @@ const TopSection = () => {
     category,
     program_fee,
     editActivity,
+    format,
+    programModules,
+    programPost,
   } = useSelector((state) => state.createActivity);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -68,6 +71,11 @@ const TopSection = () => {
       key_description2: descriptionData?.description?.[1] ?? "",
       key_description3: descriptionData?.description?.[2] ?? "",
       game_type: game_type ?? "Inperson",
+      format: format === "program" ? "program" : "activity",
+      program_modules: format === "program"
+        ? (programModules ?? []).filter((m) => (m.name || "").trim()).map((m) => ({ name: m.name.trim(), mins: parseInt(m.mins) || 0, how: (m.how || "").trim() }))
+        : [],
+      program_post: (programPost ?? "").trim(),
       isDeleted: false,
       created_date: moment(new Date()).format("YYYY-MM-DD h:mm:ss"),
       game_image: groupedURLs["games_activity"]?.[0] ?? "",

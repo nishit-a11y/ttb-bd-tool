@@ -145,3 +145,20 @@ hbs.registerHelper('upper', (s) => String(s || '').toUpperCase());
 
 // Activity icon for slides: new AI icon (game_icon) if present, else the original logo
 hbs.registerHelper('activityIcon', (data) => (data && (data.game_icon || data.game_logo)) || '');
+
+// ---- Learning program slides (used by in-person + virtual templates via {{> progSlides}})
+hbs.registerPartial('progLeft', `
+    <div style="position: absolute; left: 0; top: 0; height: 100%; display: flex; flex-direction: row; align-items: center; z-index: 4;">
+      <div class="leftbox" style="width: 194.4px;">
+        <img class="event-image" style="width: 80px; height: 80px;" src="{{activityIcon data}}" />
+        <div class="text uppercase event-title normal-color-text" style="font-size: 22px; padding: 10px 0; font-weight: 800;"><span class="opt">Option </span>{{index}}</div>
+        <div class="text orange-color-text event-name" style="font-size: 22px; font-weight: 800;">{{data.game_name}}</div>
+        {{#if data.game_url}}
+        <a href="{{data.game_url}}" target="_blank" style="display: inline-flex; align-items: center; gap: 10px; margin-top: 14px; padding: 5px 18px 5px 5px; background: #FFFFFF; border: 1.5px solid #CFCAF2; border-radius: 999px; text-decoration: none;">
+          <span style="width: 34px; height: 34px; flex: 0 0 34px; border-radius: 50%; background: #5B4FCF; display: inline-flex; align-items: center; justify-content: center;"><svg width="14" height="14" viewBox="0 0 14 14" style="margin-left: 2px;"><path d="M2 1.2v11.6c0 .6.7 1 1.2.7l9.4-5.8c.5-.3.5-1.1 0-1.4L3.2.5C2.7.2 2 .6 2 1.2z" fill="#FFFFFF"/></svg></span>
+          <span style="font-family: Nunito, sans-serif; font-size: 15px; font-weight: 800; color: #3B3290; white-space: nowrap;">Watch program</span>
+        </a>
+        {{/if}}
+      </div>
+    </div>`);
+hbs.registerPartial('progSlides', require('fs').readFileSync(require('path').join(__dirname, 'program-slides.hbs'), 'utf8'));
