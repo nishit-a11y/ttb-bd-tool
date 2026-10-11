@@ -161,4 +161,12 @@ hbs.registerPartial('progLeft', `
         {{/if}}
       </div>
     </div>`);
-hbs.registerPartial('progSlides', require('fs').readFileSync(require('path').join(__dirname, 'program-slides.hbs'), 'utf8'));
+const _fs = require('fs'), _path = require('path');
+try {
+  hbs.registerPartial('progSlides', _fs.readFileSync(_path.join(__dirname, 'program-slides.hbs'), 'utf8'));
+} catch (e) {
+  // never break proposal generation: without the partial, programs fall back to the activity slides
+  console.log('program-slides.hbs not found', e.message);
+  hbs.registerPartial('progSlides', '');
+}
+hbs.registerHelper('progReady', (prog) => !!prog && !!hbs.partials.progSlides);

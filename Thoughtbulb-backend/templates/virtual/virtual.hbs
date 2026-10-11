@@ -2310,7 +2310,7 @@ font-weight: 800;
 
 {{#each selected_games}}
 
-{{#if prog}}
+{{#if (progReady prog)}}
 {{> progSlides}}
 {{else}}
 {{#if data.game_tagline}}
