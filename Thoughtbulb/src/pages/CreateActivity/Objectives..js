@@ -8,7 +8,11 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import "react-tabs/style/react-tabs.css";
+import { useNavigate } from "react-router-dom";
+import { saveActivity } from "./saveActivity";
 import {
+  reset,
+  setDescriptionData,
   setObjectiveData,
   setObjectivePoints,
   setOutcomes,
@@ -56,10 +60,36 @@ const Objectives = ({
   setDisabled,
   handleContinue,
 }) => {
-  const { objectiveData, objectivePoints, outcomes, welcomeSlide, format, programModules, programPost } = useSelector(
+  const { objectiveData, objectivePoints, outcomes, welcomeSlide, format, programModules, programPost, descriptionData } = useSelector(
     (state) => state.createActivity
   );
   const isProgram = format === "program";
+  const navigate = useNavigate();
+  const [saving, setSaving] = useState(false);
+  const pillars = { title: descriptionData?.title?.length ? descriptionData.title : ["", "", ""], description: descriptionData?.description?.length ? descriptionData.description : ["", "", ""] };
+  const setPillar = (key, i, value) => dispatch(setDescriptionData({ ...pillars, [key]: pillars[key].map((v, k) => (k === i ? value : v)) }));
+  function validatePillars() {
+    if (isProgram) return true; // learning programs don't use the key pillars
+    const t = pillars.title, d = pillars.description;
+    if ([0, 1, 2].some((i) => !t[i] || t[i].trim().length < 3 || !d[i] || d[i].trim().length < 3)) { alert("Please fill all 3 key pillars (title and description)"); return false; }
+    if (t.some((x) => x.length > 15)) { alert("Each key pillar title should be less than 15 characters"); return false; }
+    if (d.some((x) => x.length > 120)) { alert("Each key pillar description should be less than 120 characters"); return false; }
+    return true;
+  }
+  async function onSubmit() {
+    if (!validateObjective() || !validatePillars()) return;
+    setSaving(true);
+    try {
+      await saveActivity({ draft: false });
+      dispatch(reset());
+      alert(isProgram ? "Learning program saved" : "Activity saved");
+      navigate("/activities");
+    } catch (e) {
+      alert("Could not save. Please try again.");
+    } finally {
+      setSaving(false);
+    }
+  }
   const mods = programModules ?? [];
   const setMod = (i, key, value) => dispatch(setProgramModules(mods.map((m, k) => (k === i ? { ...m, [key]: value } : m))));
   const totalMins = mods.reduce((t, m) => t + (parseInt(m.mins) || 0), 0);
@@ -83,7 +113,7 @@ const Objectives = ({
   };
   const ws = welcomeSlide ?? { elements: [{}, {}, {}, {}] };
   const onDraft = async () => {
-    if (!hasEnoughContext(formState)) { alert("Please fill the activity name (step 1) and the Objective above first, so the AI has context."); return; }
+    if (!hasEnoughContext(formState)) { alert("Please fill the activity name (step 1) and the 3 slide bullet points first, so the AI has context."); return; }
     const filled = ws.tagline || ws.welcome || (ws.elements || []).some((e) => e.label || e.line);
     if (filled && !window.confirm("Replace the current welcome slide text with a new AI draft?")) return;
     setDrafting(true);
@@ -118,11 +148,8 @@ const Objectives = ({
   const dispatch = useDispatch();
 
   function validateObjective() {
-    if (!objectiveData || objectiveData === "") {
-      alert("Please enter the Objective of the activity ");
-      return false;
-    } else if (objectiveData.length > 380) {
-      alert("Objective should be less than 380 characters");
+    if (objectiveData && objectiveData.length > 380) {
+      alert("Internal brief should be less than 380 characters");
       return false;
     } else if (points.some((p) => !p || p.trim().length < 10)) {
       alert("Please fill all 3 slide bullet points");
@@ -176,7 +203,7 @@ const Objectives = ({
     >
       <AccordionSummary aria-controls="panel2a-content" id="panel2a-header">
         <Typography fontSize={20} className="accordion-title">
-          2. Objectives
+          2. Slide content
         </Typography>
         {completed && (
           <img
@@ -191,12 +218,15 @@ const Objectives = ({
         <div>
           <div class="form-group">
             <label for="formGroupExampleInput" className="labels">
-              Objective *
+              Internal brief (for AI, optional)
             </label>
+            <p className="objective-description mb-2">
+              Not shown in proposals. A few lines on how the activity works give the AI buttons (welcome draft, custom notes) better context.
+            </p>
             <textarea
               class="form-control textarea"
               id="exampleFormControlTextarea1"
-              rows="6"
+              rows="3"
               onChange={(e) => {
                 dispatch(setObjectiveData(e.target.value));
               }}
@@ -264,6 +294,27 @@ const Objectives = ({
           </div>
         </div>
 
+
+        {!isProgram && (
+          <div className="mt-2">
+            <label className="labels">Key pillars *</label>
+            <p className="objective-description mb-2">The 3 coloured boxes on the objective slide: a 1–2 word title and a short line for each.</p>
+            {[0, 1, 2].map((i) => (
+              <div className="row" key={`pillar-${i}`}>
+                <div className="form-group col-md-4 mb-2">
+                  <input type="text" className="form-control" placeholder={`Pillar ${i + 1} title, e.g. ${["Collaboration", "Big Picture", "Communication"][i]}`}
+                    value={pillars.title[i] || ""} onChange={(e) => setPillar("title", i, e.target.value)} />
+                  <p className="objective-description mb-0 mt-1">{counter((pillars.title[i] || "").length, 15)}</p>
+                </div>
+                <div className="form-group col-md-8 mb-2">
+                  <input type="text" className="form-control" placeholder="One short line on what this builds"
+                    value={pillars.description[i] || ""} onChange={(e) => setPillar("description", i, e.target.value)} />
+                  <p className="objective-description mb-0 mt-1">{counter((pillars.description[i] || "").length, 120)}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
         <hr className="my-4" />
         <div>
@@ -407,15 +458,8 @@ const Objectives = ({
           </>
         )}
         <div className="continue">
-          <button
-            class="btn btn-primary continue-button"
-            onClick={() => {
-              if (validateObjective()) {
-                handleContinue();
-              }
-            }}
-          >
-            Continue
+          <button class="btn btn-primary continue-button" disabled={saving} onClick={onSubmit}>
+            {saving ? <div class="spinner-border spinner-border-sm"></div> : "Submit"}
           </button>
         </div>
       </AccordionDetails>

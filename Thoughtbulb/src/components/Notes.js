@@ -18,6 +18,10 @@ import { getStorage, ref, uploadString, getDownloadURL } from "firebase/storage"
 import fire from "./Firebase";
 import { baseUrl } from "../pages/collection_config";
 
+// The objective paragraph is optional now; fall back to the slide bullets as context for the AI
+const objectiveText = (g) =>
+  g.game_objective || [g.game_obj_1, g.game_obj_2, g.game_obj_3].filter(Boolean).join("; ").replace(/\*\*/g, "");
+
 export default function Notes({ gamesList = [], onGamesListUpdate }) {
   const db = getFirestore(fire);
   const [notesState, setNotesState] = useState({});
@@ -175,7 +179,7 @@ export default function Notes({ gamesList = [], onGamesListUpdate }) {
 Client Context: ${aiDescription}
 
 Activity: ${game.name}
-Objective: ${game.game_objective}
+Objective: ${objectiveText(game)}
 Key Details: ${game.key_title1}: ${game.key_description1}, ${game.key_title2}: ${game.key_description2}, ${game.key_title3}: ${game.key_description3}
 
 OUTPUT REQUIREMENTS
@@ -254,7 +258,7 @@ Return only the final HTML. No preamble, no explanation.`;
   const buildImagePrompt = (game) => {
     const clientContext = aiDescription ? `\n\nClient brief: ${aiDescription}` : "";
     return `Activity: "${game.name}"
-Theme: ${game.game_objective}
+Theme: ${objectiveText(game)}
 Key pillars: ${game.key_title1}, ${game.key_title2}, ${game.key_title3}${clientContext}
 
 Image size: 1536x1024.`;

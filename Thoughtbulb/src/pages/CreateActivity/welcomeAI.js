@@ -33,7 +33,7 @@ export function activityContext(s) {
   const lines = [
     `Activity name: ${s.game_name || "(not set)"}`,
     `Format: ${s.game_type === "Virtual" ? "Virtual" : "In-person"}${s.category ? ` (${s.category})` : ""}`,
-    `Objective: ${s.objectiveData || "(not set)"}`,
+    ...(s.objectiveData ? [`Internal brief: ${s.objectiveData}`] : []),
   ];
   const pts = (s.objectivePoints || []).filter(Boolean).map((p) => p.replace(/\*\*/g, ""));
   if (pts.length) lines.push(`Slide bullets: ${pts.join(" | ")}`);
@@ -45,7 +45,9 @@ export function activityContext(s) {
 }
 
 export function hasEnoughContext(s) {
-  return Boolean(s.game_name && s.objectiveData && s.objectiveData.trim().length > 30);
+  // the objective paragraph is optional now, so the slide bullets also count as context
+  const bullets = (s.objectivePoints || []).filter(Boolean).join(" ");
+  return Boolean(s.game_name && ((s.objectiveData || "").trim().length > 30 || bullets.trim().length > 30));
 }
 
 function buildDraftMessages(s) {
@@ -148,7 +150,7 @@ function compressPortrait(b64) {
 
 // Generates a portrait illustration and stores it in Firebase Storage. Returns the download URL.
 export async function generateIllustration(s, scene) {
-  const fallback = `colleagues taking part in a team activity called "${s.game_name}": ${String(s.objectiveData || "").slice(0, 300)}`;
+  const fallback = `colleagues taking part in a team activity called "${s.game_name}": ${String(s.objectiveData || (s.objectivePoints || []).join(" ").replace(/\*\*/g, "")).slice(0, 300)}`;
   const prompt = IMAGE_STYLE.replace("{scene}", String(scene || fallback).trim().replace(/[. ]+$/, ""));
   const res = await fetch(`${baseUrl}/api/ai/image`, { method: "POST", headers: await authHeaders(), body: JSON.stringify({ prompt, size: "1024x1536" }) });
   const data = await res.json();

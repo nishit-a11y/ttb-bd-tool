@@ -32,6 +32,9 @@ import {
   setImageCover,
   setFormat,
 } from "./CreateActivitySlice";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
+import { fire } from "../../components/Firebase";
+import { CollectionName } from "../collection_config";
 import {
   inpersonButtonClass,
   inpersonSelectCategoryItems,
@@ -39,6 +42,19 @@ import {
   virtualButtonClass,
   virtualSelectCategoryItems,
 } from "./constant";
+
+const normName = (n) => String(n || "").toLowerCase().replace(/\s+/g, " ").trim();
+// Warns if another live activity/program already uses this name. Returns true to continue.
+async function confirmNoDuplicate(name, editId) {
+  try {
+    const snap = await getDocs(collection(getFirestore(fire), CollectionName.games));
+    const clash = snap.docs.find((d) => d.id !== editId && !d.data().isDeleted && normName(d.data().game_name) === normName(name));
+    if (!clash) return true;
+    return window.confirm(`An activity called "${clash.data().game_name.trim()}" already exists${clash.data().draft ? " (as a draft)" : ""}. Continue anyway and create another one with the same name?`);
+  } catch (e) {
+    return true; // never block saving because the check failed
+  }
+}
 
 const ActivityBrief = ({
   completed,
@@ -286,9 +302,9 @@ const ActivityBrief = ({
       { name: "Upload Cover Image", size: "460px x 820px", subtitle: "" },
       { name: "Upload Activity logo *", size: "100px x 100px", subtitle: "" },
       {
-        name: "Upload Activity images *",
-        size: "340px x 230px",
-        subtitle: "You must upload 3 images",
+        name: "Upload 3 activity photos *",
+        size: "at least 800px wide (smaller photos look blurry in the proposal)",
+        subtitle: "Exactly 3 real photos of the activity. The first one is the lead photo.",
       }
     ];
     const [imageTypeState, setImageTypeState] = useState([]);
@@ -301,23 +317,8 @@ const ActivityBrief = ({
     const editorRef = useRef(null);
 
     useEffect(() => {
-      if (specialActivity) {
-        if (
-          imageType.indexOf("Upload Special Activity images") === -1 &&
-          !imageType[3]
-        ) {
-          imageType.push({
-            name: "Upload Special Activity images",
-            size: "1440px x 810px",
-            subtitle: "upload upto 4 images",
-          });
-        }
-      } else {
-        imageType.splice(3, 1);
-      }
-
       setImageTypeState(imageType);
-    }, [specialActivity]);
+    }, []);
     useEffect(() => {
       if (source && source != "") {
         console.log(source);
@@ -394,28 +395,10 @@ const ActivityBrief = ({
 
     return (
       <>
-        <div className="d-flex">
-          <div className="form-check col-lg-10 activity-check cursor-pointer">
-            &nbsp;
-            <input
-              class="form-check-input cursor-pointer"
-              type="checkbox"
-              name=""
-              id="formSelectOnlyMonth"
-              onChange={(e) => {
-                dispatch(setSpecialActivity(!specialActivity));
-              }}
-              defaultChecked={specialActivity}
-              checked={specialActivity}
-            ></input>
-            <label class="form-check-label labels" for="formSelectOnlyMonth">
-              &nbsp;&nbsp;Special Activity
-            </label>
-          </div>
-        </div>
         {imageTypeState?.map((type, index) => {
-          // Cover image upload retired: the welcome slide (step 2) replaces the old cover slide
-          if (index === 0) return null;
+          // Only activity photos are uploaded here. Cover (retired), logo (replaced by the AI slide icon in step 2)
+          // and special images (not used in proposals) are no longer collected; existing values are kept on edit.
+          if (index !== 2) return null;
 
           const filteredImageCover = imageCover.filter((image) => image && image !== "");
           console.log("cover images size", filteredImageCover.length)
@@ -619,6 +602,7 @@ const ActivityBrief = ({
       imageCover,
       imagesActivity,
       editActivityData,
+      editActivity,
     } = useSelector((state) => state.createActivity);
 
     function validateActivityBrief() {
@@ -653,11 +637,8 @@ const ActivityBrief = ({
         alert("Please enter program fee");
         return false;
       }
-       else if (!filteredImagesLogo || filteredImagesLogo.length < 1) {
-        alert("Please upload an activity logo");
-        return false;
-      } else if (!filteredImagesActivity || filteredImagesActivity.length < 3) {
-        alert("Please upload atleast 3 activity images");
+       else if (!filteredImagesActivity || filteredImagesActivity.length < 3) {
+        alert("Please upload 3 activity photos");
         return false;
       } else {
         return true;
@@ -675,8 +656,8 @@ const ActivityBrief = ({
         <div className="continue">
           <button
             class="btn btn-primary continue-button"
-            onClick={() => {
-              if (validateActivityBrief()) {
+            onClick={async () => {
+              if (validateActivityBrief() && (await confirmNoDuplicate(game_name, editActivity))) {
                 handleContinue();
               }
             }}

@@ -4122,7 +4122,7 @@ function Proposal() {
                               <div className="row pt-4 pb-4 act-title">
                                 <div className="col-4">
                                   <img
-                                    src={row.data.game_logo}
+                                    src={row.data.game_icon || row.data.game_logo}
                                     width={65}
                                     height={65}
                                   ></img>
@@ -4211,7 +4211,7 @@ function Proposal() {
                               <div className="row pt-4 pb-4 act-title">
                                 <div className="col-4">
                                   <img
-                                    src={row.data.game_logo}
+                                    src={row.data.game_icon || row.data.game_logo}
                                     width={65}
                                     height={65}
                                   ></img>
@@ -4299,7 +4299,7 @@ function Proposal() {
                               <div className="row pt-4 pb-4 act-title">
                                 <div className="col-4">
                                   <img
-                                    src={row.data.game_logo}
+                                    src={row.data.game_icon || row.data.game_logo}
                                     width={65}
                                     height={65}
                                   ></img>
@@ -4387,7 +4387,7 @@ function Proposal() {
                               <div className="row pt-4 pb-4 act-title">
                                 <div className="col-4">
                                   <img
-                                    src={row.data.game_logo}
+                                    src={row.data.game_icon || row.data.game_logo}
                                     width={65}
                                     height={65}
                                   ></img>
@@ -4532,7 +4532,7 @@ function Proposal() {
                               <div className="row pt-4 pb-4 act-title">
                                 <div className="col-4">
                                   <img
-                                    src={row.data.game_logo}
+                                    src={row.data.game_icon || row.data.game_logo}
                                     width={65}
                                     height={65}
                                   ></img>
@@ -4620,7 +4620,7 @@ function Proposal() {
                               <div className="row pt-4 pb-4 act-title">
                                 <div className="col-4">
                                   <img
-                                    src={row.data.game_logo}
+                                    src={row.data.game_icon || row.data.game_logo}
                                     width={65}
                                     height={65}
                                   ></img>
@@ -4708,7 +4708,7 @@ function Proposal() {
                               <div className="row pt-4 pb-4 act-title">
                                 <div className="col-4">
                                   <img
-                                    src={row.data.game_logo}
+                                    src={row.data.game_icon || row.data.game_logo}
                                     width={65}
                                     height={65}
                                   ></img>
@@ -4796,7 +4796,7 @@ function Proposal() {
                               <div className="row pt-4 pb-4 act-title">
                                 <div className="col-4">
                                   <img
-                                    src={row.data.game_logo}
+                                    src={row.data.game_icon || row.data.game_logo}
                                     width={65}
                                     height={65}
                                   ></img>

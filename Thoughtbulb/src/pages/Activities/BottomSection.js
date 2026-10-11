@@ -525,9 +525,7 @@ function BottomSection({ activityData }) {
                       <img
                         className="company-logo"
                         src={
-                          row.data.game_logo
-                            ? row.data.game_logo
-                            : require("../../assets/images/schedule.png")
+                          row.data.game_icon || row.data.game_logo || require("../../assets/images/schedule.png")
                         }
                         width="30px"
                         height="30px"

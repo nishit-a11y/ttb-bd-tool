@@ -6,7 +6,6 @@ import "react-tabs/style/react-tabs.css";
 import TopSection from "./TopSection";
 import ActivityBrief from "./ActivityBrief";
 import Objectives from "./Objectives.";
-import Description from "./Description";
 
 function Create_activity() {
   const [ActivityBriefExpanded, setActivityBriefExpanded] = useState(true);
@@ -17,9 +16,6 @@ function Create_activity() {
   const [ObjectivesCompleted, setObjectivesCompleted] = useState(false);
   const [ObjectivesDisabled, setObjectivesDisabled] = useState(true);
 
-  const [DescriptionExpanded, setDescriptionExpanded] = useState(false);
-  const [DescriptionCompleted, setDescriptionCompleted] = useState(false);
-  const [DescriptionDisabled, setDescriptionDisabled] = useState(true);
 
   const Content = () => {
     return (
@@ -45,22 +41,9 @@ function Create_activity() {
           setCompleted={setObjectivesCompleted}
           setExpanded={setObjectivesExpanded}
           setDisabled={setObjectivesDisabled}
-          handleContinue={(data) => {
-            setObjectivesExpanded(false);
-            setDescriptionExpanded(true);
-            setDescriptionDisabled(false);
-            setObjectivesCompleted(true);
-          }}
+          handleContinue={() => {}}
         />
-        <Description
-          completed={DescriptionCompleted}
-          expanded={DescriptionExpanded}
-          disabled={DescriptionDisabled}
-          setCompleted={setDescriptionCompleted}
-          setExpanded={setDescriptionExpanded}
-          setDisabled={setDescriptionDisabled}
-          handleContinue={(data) => {}}
-        />
+
       </div>
     );
   };
