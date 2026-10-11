@@ -367,6 +367,8 @@ const generate = async function (data, objs, games, preview) {
         });
 
         data.selected_games = selected_games;
+        // Learning programs carry their own module flow slide, so the day-level program flow page is skipped
+        if (selected_games.some((g) => g.prog)) data.remove_program_flow = true;
         if (selected_games.length > 5) {
             data.more_activities = true;
         }
