@@ -170,3 +170,15 @@ try {
   hbs.registerPartial('progSlides', '');
 }
 hbs.registerHelper('progReady', (prog) => !!prog && !!hbs.partials.progSlides);
+
+// ---- Add-ons slide (Event Stepathon + Event Gamification), shown in every proposal after Terms and Conditions
+hbs.registerHelper('addonTiles', function (...args) {
+  args.pop(); // handlebars options
+  return args.map((a) => { const [icon, label, extra] = String(a).split('|'); return { icon, label, extra }; });
+});
+try {
+  hbs.registerPartial('addonsSlide', _fs.readFileSync(_path.join(__dirname, 'addons-slide.hbs'), 'utf8'));
+} catch (e) {
+  console.log('addons-slide.hbs not found', e.message);
+  hbs.registerPartial('addonsSlide', ''); // never break proposal generation
+}

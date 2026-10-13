@@ -1,0 +1,68 @@
+  {{!-- ADD-ONS slide (every proposal, after Terms and Conditions): Event Stepathon + Event Gamification (VootUp) --}}
+  <div class="page" style="position: relative; overflow: hidden; background: linear-gradient(160deg, #FFF5F0 0%, #FFE8F0 30%, #EDE5FF 65%, #E4ECFF 100%); font-family: Nunito, sans-serif;">
+    <img src="https://api.bd.eskoops.com/assets/pngAssets/ttb-logo.png" style="position: absolute; top: 14px; left: 16px; width: 72px; z-index: 5;" alt="The Thought Bulb" />
+    <div style="text-align: center; padding-top: 20px;">
+      <div style="font-size: 11px; font-weight: 800; letter-spacing: .14em; color: #FF8B37;">OPTIONAL ADD-ONS</div>
+      <div style="font-size: 30px; font-weight: 900; line-height: 1.15; color: #1E2D6F;">Make your whole event <span style="color: #E2557E;">one big game</span></div>
+    </div>
+
+    <div style="display: flex; gap: 18px; padding: 14px 34px 0; height: 470px; box-sizing: border-box;">
+
+      {{!-- Event Stepathon --}}
+      <div style="flex: 1; background: #fff; border-radius: 22px; overflow: hidden; display: flex; flex-direction: column; border: 1px solid #ECE6F7;">
+        <div style="position: relative; height: 292px; background: url('https://api.bd.eskoops.com/assets/pngAssets/addons/event-stepathon.jpg') center 38% / cover no-repeat;">
+          <span style="position: absolute; top: 12px; left: 12px; font-size: 11px; font-weight: 800; letter-spacing: .08em; color: #fff; background: #22A26C; border-radius: 999px; padding: 4px 11px;">ADD-ON</span>
+          <div style="position: absolute; top: 10px; right: 12px; background: #fff; border-radius: 14px; padding: 6px 12px; text-align: right; border: 3px solid #D3EFE1;">
+            <div style="font-size: 22px; font-weight: 900; color: #22A26C; line-height: 1;">₹25,000<span style="font-size: 11px; font-weight: 800; color: #6b7a8f;"> /day</span></div>
+            <div style="font-size: 10.5px; font-weight: 800; color: #1E2D6F; margin-top: 2px;">up to 400 people · + GST</div>
+          </div>
+          <div style="position: absolute; right: 12px; bottom: 12px; width: 140px; border-radius: 12px; overflow: hidden; background: #0E1726; padding: 5px; border: 3px solid #fff;">
+            <img src="https://api.bd.eskoops.com/assets/pngAssets/addons/stepathon-leaderboard.png" style="width: 100%; height: 96px; object-fit: cover; object-position: top; border-radius: 8px; display: block;" alt="" />
+          </div>
+        </div>
+        <div style="padding: 14px 18px; display: flex; flex-direction: column; flex: 1;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="https://api.bd.eskoops.com/assets/pngAssets/addons/stepathon-logo.png" style="height: 34px;" alt="Step-a-thon" />
+            <span style="width: 1px; height: 28px; background: #DDE3EA;"></span>
+            <span style="font-size: 26px; font-weight: 900; letter-spacing: -.01em; color: #1B8F5E;">Event Stepathon</span>
+          </div>
+          <div style="font-size: 16px; font-weight: 800; color: #1E2D6F; margin: 4px 0 10px; line-height: 1.25;">Every walk between sessions counts, right inside your venue</div>
+          <div style="display: flex; align-items: flex-start; margin-top: auto;">
+            {{#each (addonTiles "📲|Join on<br>your phone" "🤝|Walk &amp;<br>network" "📊|Live<br>leaderboard" "🏅|Winners<br>crowned")}}{{#unless @first}}<div style="flex: 0 0 10px; margin-top: 22px; border-top: 2px dotted #22A26C;"></div>{{/unless}}<div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px;"><div style="width: 46px; height: 46px; border-radius: 14px; background: #E7F6EE; display: flex; align-items: center; justify-content: center; font-size: 24px;">{{icon}}</div><div style="font-size: 12px; font-weight: 800; color: #1E2D6F; text-align: center; line-height: 1.15;">{{{label}}}</div></div>{{/each}}
+          </div>
+        </div>
+      </div>
+
+      {{!-- Event Gamification (VootUp) --}}
+      <div style="flex: 1; background: #fff; border-radius: 22px; overflow: hidden; display: flex; flex-direction: column; border: 1px solid #ECE6F7;">
+        <div style="position: relative; height: 292px; background: url('https://api.bd.eskoops.com/assets/pngAssets/addons/event-gamification.jpg') center 38% / cover no-repeat;">
+          <span style="position: absolute; top: 12px; left: 12px; font-size: 11px; font-weight: 800; letter-spacing: .08em; color: #fff; background: #6C47FF; border-radius: 999px; padding: 4px 11px;">ADD-ON</span>
+          <div style="position: absolute; top: 10px; right: 12px; background: #fff; border-radius: 14px; padding: 6px 12px; text-align: right; border: 3px solid #E2DAFF;">
+            <div style="font-size: 22px; font-weight: 900; color: #6C47FF; line-height: 1;">₹35,000<span style="font-size: 11px; font-weight: 800; color: #6b7a8f;"> /day</span></div>
+            <div style="font-size: 10.5px; font-weight: 800; color: #1E2D6F; margin-top: 2px;">up to 400 people · + GST</div>
+          </div>
+          <div style="position: absolute; right: 12px; bottom: 12px; background: #fff; border-radius: 12px; padding: 8px 10px; width: 176px; border: 3px solid #E2DAFF;">
+            {{#each (addonTiles "🧠|Trivia|+25" "📸|Team photo|+50" "🤝|Meet someone new|+30")}}<div style="display: flex; align-items: center; gap: 6px; font-size: 10.5px; font-weight: 800; color: #1E2D6F; padding: 2px 0;"><span>{{icon}}</span><span style="flex: 1;">{{{label}}}</span><span style="color: #6C47FF;">{{extra}}</span></div>{{/each}}
+          </div>
+        </div>
+        <div style="padding: 14px 18px; display: flex; flex-direction: column; flex: 1;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 26px; font-weight: 900; letter-spacing: -.02em; color: #E2557E;">VootUp</span>
+            <span style="width: 1px; height: 28px; background: #DDE3EA;"></span>
+            <span style="font-size: 26px; font-weight: 900; letter-spacing: -.01em; color: #6C47FF;">Event Gamification</span>
+          </div>
+          <div style="font-size: 16px; font-weight: 800; color: #1E2D6F; margin: 4px 0 10px; line-height: 1.25;">Challenges all through your 1–2 days, not just one session</div>
+          <div style="display: flex; align-items: flex-start; margin-top: auto;">
+            {{#each (addonTiles "🧠|Trivia &amp;<br>quizzes" "📸|Photo<br>challenges" "🖼️|Live photo<br>wall" "🏆|Champions<br>crowned")}}{{#unless @first}}<div style="flex: 0 0 10px; margin-top: 22px; border-top: 2px dotted #6C47FF;"></div>{{/unless}}<div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px;"><div style="width: 46px; height: 46px; border-radius: 14px; background: #EFEAFF; display: flex; align-items: center; justify-content: center; font-size: 24px;">{{icon}}</div><div style="font-size: 12px; font-weight: 800; color: #1E2D6F; text-align: center; line-height: 1.15;">{{{label}}}</div></div>{{/each}}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="position: absolute; left: 0; right: 0; bottom: 14px; display: flex; justify-content: center;">
+      <div style="display: flex; align-items: center; gap: 10px; background: linear-gradient(90deg, #FF8B37, #FFA500); border-radius: 999px; padding: 7px 8px 7px 18px; color: #fff;">
+        <span style="font-size: 14px; font-weight: 900;">Better together: one leaderboard for steps + challenges</span>
+        <span style="font-size: 12px; font-weight: 800; background: #fff; color: #E07000; border-radius: 999px; padding: 4px 12px;">Ask us to add it to your quote</span>
+      </div>
+    </div>
+  </div>
