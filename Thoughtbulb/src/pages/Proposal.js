@@ -280,7 +280,7 @@ function Proposal() {
         myContext.setFacilitation_fee(0);
         myContext.setTravel_stay_meals(0);
         myContext.setAddon_description("");
-        myContext.setAddon_fee(0);
+        myContext.setAddon_fee(0); myContext.setOne_day_fac && myContext.setOne_day_fac({ enabled: false, fee: "" });
         myContext.material_cost_fees.length = 0;
         myContext.setCreated_by("");
         navigate("/admin-dashboard");
@@ -460,7 +460,7 @@ function Proposal() {
       myContext.setFacilitation_fee(0);
       myContext.setTravel_stay_meals(0);
       myContext.setAddon_description("");
-      myContext.setAddon_fee(0);
+      myContext.setAddon_fee(0); myContext.setOne_day_fac && myContext.setOne_day_fac({ enabled: false, fee: "" });
       myContext.material_cost_fees.length = 0;
       myContext.setCreated_by("");
       navigate("/admin-dashboard");
@@ -1685,6 +1685,10 @@ function Proposal() {
             description: myContext.addon_description,
             fee: myContext.addon_fee,
           },
+          one_day:
+            myContext.inperson && myContext.inperson_days == 2 && myContext.one_day_fac?.enabled
+              ? { enabled: true, fee: Number(myContext.one_day_fac.fee) || 0 }
+              : { enabled: false, fee: 0 },
         },
         material_cost_games: myContext.material_cost_games,
         material_cost_fees: myContext.material_cost_fees,
@@ -1759,7 +1763,7 @@ function Proposal() {
                       myContext.setFacilitation_fee(0);
                       myContext.setTravel_stay_meals(0);
                       myContext.setAddon_description("");
-                      myContext.setAddon_fee(0);
+                      myContext.setAddon_fee(0); myContext.setOne_day_fac && myContext.setOne_day_fac({ enabled: false, fee: "" });
                       myContext.material_cost_fees.length = 0;
                       myContext.setCreated_by("");
                       myContext.setEdit_proposal(false);
@@ -1826,7 +1830,7 @@ function Proposal() {
                 myContext.setFacilitation_fee(0);
                 myContext.setTravel_stay_meals(0);
                 myContext.setAddon_description("");
-                myContext.setAddon_fee(0);
+                myContext.setAddon_fee(0); myContext.setOne_day_fac && myContext.setOne_day_fac({ enabled: false, fee: "" });
                 myContext.material_cost_fees.length = 0;
                 myContext.setCreated_by("");
                 myContext.setEdit_proposal(false);
@@ -1912,7 +1916,7 @@ function Proposal() {
                       myContext.setFacilitation_fee(0);
                       myContext.setTravel_stay_meals(0);
                       myContext.setAddon_description("");
-                      myContext.setAddon_fee(0);
+                      myContext.setAddon_fee(0); myContext.setOne_day_fac && myContext.setOne_day_fac({ enabled: false, fee: "" });
                       myContext.material_cost_fees.length = 0;
                       myContext.setCreated_by("");
                       setLoading(false);
@@ -1980,7 +1984,7 @@ function Proposal() {
                 myContext.setFacilitation_fee(0);
                 myContext.setTravel_stay_meals(0);
                 myContext.setAddon_description("");
-                myContext.setAddon_fee(0);
+                myContext.setAddon_fee(0); myContext.setOne_day_fac && myContext.setOne_day_fac({ enabled: false, fee: "" });
                 myContext.material_cost_fees.length = 0;
                 myContext.setCreated_by("");
                 setLoading(false);
@@ -2071,6 +2075,10 @@ function Proposal() {
               description: myContext.addon_description,
               fee: myContext.addon_fee,
             },
+            one_day:
+              myContext.inperson && myContext.inperson_days == 2 && myContext.one_day_fac?.enabled
+                ? { enabled: true, fee: Number(myContext.one_day_fac.fee) || 0 }
+                : { enabled: false, fee: 0 },
           },
           material_cost_games: myContext.material_cost_games, // Might have to change to tempArr
           material_cost_fees: myContext.material_cost_fees,
@@ -2134,7 +2142,7 @@ function Proposal() {
                     myContext.setFacilitation_fee(0);
                     myContext.setTravel_stay_meals(0);
                     myContext.setAddon_description("");
-                    myContext.setAddon_fee(0);
+                    myContext.setAddon_fee(0); myContext.setOne_day_fac && myContext.setOne_day_fac({ enabled: false, fee: "" });
                     myContext.material_cost_fees.length = 0;
                     myContext.setCreated_by("");
                     myContext.setEdit_proposal(false);
@@ -2183,7 +2191,7 @@ function Proposal() {
               myContext.setFacilitation_fee(0);
               myContext.setTravel_stay_meals(0);
               myContext.setAddon_description("");
-              myContext.setAddon_fee(0);
+              myContext.setAddon_fee(0); myContext.setOne_day_fac && myContext.setOne_day_fac({ enabled: false, fee: "" });
               myContext.material_cost_fees.length = 0;
               myContext.setCreated_by("");
               myContext.setEdit_proposal(false);
@@ -2250,7 +2258,7 @@ function Proposal() {
                     myContext.setFacilitation_fee(0);
                     myContext.setTravel_stay_meals(0);
                     myContext.setAddon_description("");
-                    myContext.setAddon_fee(0);
+                    myContext.setAddon_fee(0); myContext.setOne_day_fac && myContext.setOne_day_fac({ enabled: false, fee: "" });
                     myContext.material_cost_fees.length = 0;
                     myContext.setCreated_by("");
                     navigate("/admin-dashboard");
@@ -2295,7 +2303,7 @@ function Proposal() {
                 myContext.setFacilitation_fee(0);
                 myContext.setTravel_stay_meals(0);
                 myContext.setAddon_description("");
-                myContext.setAddon_fee(0);
+                myContext.setAddon_fee(0); myContext.setOne_day_fac && myContext.setOne_day_fac({ enabled: false, fee: "" });
                 myContext.material_cost_fees.length = 0;
                 myContext.setCreated_by("");
                 navigate("/admin-dashboard");
@@ -5093,7 +5101,7 @@ function Proposal() {
                                 <img
                                   onClick={(e) => {
                                     myContext.setAddon_description("");
-                                    myContext.setAddon_fee(0);
+                                    myContext.setAddon_fee(0); myContext.setOne_day_fac && myContext.setOne_day_fac({ enabled: false, fee: "" });
                                     setChange_addon(false);
                                     setAddon_val(false);
                                     setAddon_desc("");
@@ -5135,6 +5143,36 @@ function Proposal() {
                       )}
                     </TableBody>
                   </Table>
+                  {myContext.inperson_days == 2 && (
+                    <div style={{ padding: "12px 16px", borderTop: "1px solid #EEF1F5" }}>
+                      <label className="labels" style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", margin: 0 }}>
+                        <input
+                          type="checkbox"
+                          checked={!!myContext.one_day_fac?.enabled}
+                          onChange={(e) =>
+                            myContext.setOne_day_fac({
+                              enabled: e.target.checked,
+                              fee: myContext.one_day_fac?.fee || fac_day1_inperson || "",
+                            })
+                          }
+                        />
+                        Also show a 1-day facilitation fee
+                      </label>
+                      <p className="objective-description mb-2 mt-1">
+                        The client sees "2 days ₹X or 1 day ₹Y" in Part A. Only shown when the client is still choosing activities, not on fixed plans.
+                      </p>
+                      {myContext.one_day_fac?.enabled && (
+                        <input
+                          type="number"
+                          className="form-control"
+                          style={{ maxWidth: 240 }}
+                          placeholder="1-day facilitation fee"
+                          value={myContext.one_day_fac?.fee ?? ""}
+                          onChange={(e) => myContext.setOne_day_fac({ enabled: true, fee: e.target.value })}
+                        />
+                      )}
+                    </div>
+                  )}
                   {!change_addon && !addon_val ? (
                     <p
                       onClick={(e) => setChange_addon(true)}
@@ -5193,7 +5231,7 @@ function Proposal() {
                               } else {
                                 setAddon_val(false);
                                 setChange_addon(false);
-                                myContext.setAddon_fee(0);
+                                myContext.setAddon_fee(0); myContext.setOne_day_fac && myContext.setOne_day_fac({ enabled: false, fee: "" });
                                 setAddon_price(0);
                                 setAddon_desc("");
                               }

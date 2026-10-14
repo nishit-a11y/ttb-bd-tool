@@ -198,6 +198,7 @@ function Admin_dashboard() {
           info.pricing.facilitation_fee.addons.description
         );
         myContext.setAddon_fee(info.pricing.facilitation_fee.addons.fee);
+        myContext.setOne_day_fac && myContext.setOne_day_fac({ enabled: !!info.pricing.facilitation_fee.one_day?.enabled, fee: info.pricing.facilitation_fee.one_day?.fee || "" });
         myContext.setMaterial_cost_fees(info.pricing.material_cost_fees);
         myContext.setdisplay_month_only(info.display_month_only);
         myContext.seton_actuals(info.on_actuals);

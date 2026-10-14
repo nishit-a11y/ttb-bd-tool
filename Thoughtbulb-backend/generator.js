@@ -457,7 +457,11 @@ const generate = async function (data, objs, games, preview) {
                     addon: addonFee && !isDiscount ? { desc: addonDesc, fee: inr(addonFee) } : null,
                     discount: addonFee && isDiscount ? { fee: inr(addonFee) } : null,
                     part_a: inr(partA), part_b: inr(partB), total: inr(partA + partB),
-                    per_person: "", pax, show_total: mode === "fixed_single", // nothing left to choose (all slots filled, or fewer activities than slots) → show the exact total
+                    per_person: "", pax, show_total: mode === "fixed_single",
+                    // 2-day choice plans: optionally show the 1-day facilitation fee as an alternative ("2 days ₹X or 1 day ₹Y")
+                    one_day: !isVirtual && days == 2 && mode === "choice" && f.one_day && f.one_day.enabled && parseInt(f.one_day.fee) > 0
+                        ? { fac: inr(parseInt(f.one_day.fee)) } : null,
+                    a_extra: !!(travelAmt || addonFee || (!isVirtual && data.on_actuals)), // nothing left to choose (all slots filled, or fewer activities than slots) → show the exact total
                     items, pick, n_items: items.length, compact: items.length > 4,
                     card_width: items.length >= 5 ? 196 : items.length == 4 ? 236 : 300,
                 };

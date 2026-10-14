@@ -60,6 +60,8 @@ function App() {
   const [travel_stay_meals, setTravel_stay_meals] = useState(0);
   const [addon_description, setAddon_description] = useState("");
   const [addon_fee, setAddon_fee] = useState(0);
+  // 2-day proposals: optionally show a 1-day facilitation fee too (choice plans only) -> pricing.facilitation_fee.one_day
+  const [one_day_fac, setOne_day_fac] = useState({ enabled: false, fee: "" });
   const [material_cost_fees, setMaterial_cost_fees] = useState([]);
   const [material_cost_games, setMaterial_cost_games] = useState([]);
   const [final_data, setFinal_data] = useState([]);
@@ -195,6 +197,7 @@ function App() {
     travel_stay_meals: travel_stay_meals,
     addon_description: addon_description,
     addon_fee: addon_fee,
+    one_day_fac: one_day_fac,
     material_cost_games: material_cost_games,
     material_cost_fees: material_cost_fees,
     final_data: final_data,
@@ -312,6 +315,7 @@ function App() {
     setTravel_stay_meals,
     setAddon_description,
     setAddon_fee,
+    setOne_day_fac,
     setMaterial_cost_games,
     setMaterial_cost_fees,
     setFinal_data,
