@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { draftWelcome, generateIllustration, generateIcon, hasEnoughContext } from "./welcomeAI";
+import { draftWelcome, draftAllContent, generateIllustration, generateIcon, hasEnoughContext } from "./welcomeAI";
 import "./index.css";
 import { useSelector, useDispatch } from "react-redux";
 import "cropperjs/dist/cropper.css";
@@ -97,6 +97,43 @@ const Objectives = ({
   const [drafting, setDrafting] = useState(false);
   const [generatingImg, setGeneratingImg] = useState(false);
   const [generatingIcon, setGeneratingIcon] = useState(false);
+  const [fillStatus, setFillStatus] = useState(""); // non-empty while "Fill all with AI" runs
+  // Drafts every text field of this step from the activity name + internal brief, then creates the icon and
+  // illustration if they are still empty. Everything stays editable before saving.
+  const onFillAll = async () => {
+    if (!formState.game_name || (objectiveData || "").trim().length < 30) {
+      alert("Please fill the activity name (step 1) and a few lines in the Internal brief first, so the AI knows what the activity is.");
+      return;
+    }
+    const anyFilled = (objectivePoints || []).some(Boolean) || (outcomes || []).some(Boolean) || (ws.tagline || "").trim();
+    if (anyFilled && !window.confirm("Replace the current slide content with a fresh AI draft? Your internal brief and uploaded images are kept.")) return;
+    try {
+      setFillStatus("Writing slide content…");
+      const d = await draftAllContent({ ...formState, objectivePoints: [], outcomes: [], descriptionData: { title: [], description: [] } });
+      dispatch(setObjectivePoints(d.bullets));
+      dispatch(setOutcomes(d.outcomes));
+      if (isProgram) {
+        if (d.modules && d.modules.length) dispatch(setProgramModules(d.modules));
+      } else {
+        dispatch(setDescriptionData(d.pillars));
+      }
+      setWS(d.welcomeSlide);
+      const next = { ...formState, objectivePoints: d.bullets, outcomes: d.outcomes, welcomeSlide: { ...ws, ...d.welcomeSlide } };
+      if (!ws.icon) {
+        setFillStatus("Creating the slide icon…");
+        try { setWS({ icon: await generateIcon(next, d.welcomeSlide.icon_concept) }); } catch (e) { /* icon can be generated later */ }
+      }
+      if (!ws.image) {
+        setFillStatus("Creating the illustration (about a minute)…");
+        try { setWS({ image: await generateIllustration(next, d.welcomeSlide.scene) }); } catch (e) { /* illustration can be generated later */ }
+      }
+      alert("Slide content drafted. Please review every field and edit anything that isn't right before submitting.");
+    } catch (e) {
+      alert(e.message || "AI draft failed. Please try again.");
+    } finally {
+      setFillStatus("");
+    }
+  };
   const onGenerateIcon = async () => {
     if (!formState.game_name) { alert("Please fill the activity name (step 1) first."); return; }
     if (ws.icon && !window.confirm("Replace the current slide icon with a new AI icon? (about $0.04 per icon)")) return;
@@ -236,6 +273,14 @@ const Objectives = ({
           <p className="objective-description char-count mb-3 mt-2">
             {objectiveData?.length}/380
           </p>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, background: "#F5F2FF", border: "1px solid #E2DAFF", borderRadius: 10, padding: "10px 14px" }}>
+            <button type="button" className="btn btn-primary" disabled={!!fillStatus} onClick={onFillAll} style={{ whiteSpace: "nowrap" }}>
+              {fillStatus ? (<><span className="spinner-border spinner-border-sm mr-2" /> {fillStatus}</>) : "✨ Fill all slide content with AI"}
+            </button>
+            <span className="objective-description">
+              Uses the activity name and this brief to draft every field below{isProgram ? " (bullets, outcomes, headline and program modules)" : " (bullets, takeaways, key pillars, welcome slide and learning model)"}, plus the icon and illustration if they are empty. About $0.25. Review before submitting.
+            </span>
+          </div>
         </div>
 
         <div className="mt-4">

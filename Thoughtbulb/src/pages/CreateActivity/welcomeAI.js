@@ -133,6 +133,102 @@ export async function draftWelcome(s) {
   };
 }
 
+// ---- Fill ALL slide content (step 2) from the activity name + internal brief ----
+const hasBold = (t) => /\*\*[^*]+\*\*/.test(t || "") && ((t || "").match(/\*\*/g) || []).length % 2 === 0;
+
+function buildAllMessages(s) {
+  const isProgram = s.format === "program";
+  const common = `You write proposal slide content for The Thought Bulb (corporate team building & learning, India). Readers: HR / L&D buyers.
+Return ONLY a JSON object. Use only facts from the details given; never invent client names, venues, numbers or durations that are not in the brief.
+British/Indian English. No hype words, no emojis, no exclamation marks.
+Keys:
+- bullets: exactly 3 strings for the objective slide, each one line of 60-115 characters, each with exactly ONE key phrase wrapped in **double asterisks**.
+  ${isProgram ? "Bullet 1 = what the program covers, bullet 2 = how participants learn (the methods/exercises), bullet 3 = the capability it builds."
+  : "Bullet 1 = what participants do, bullet 2 = the challenge/twist, bullet 3 = what it builds."}
+- outcomes: exactly 3 short takeaways, 2-4 words each, max 40 characters, no full stop (e.g. "Faster group decisions").
+- icon_concept: one short phrase describing ONE simple object that best represents the activity, for a small icon (no people, no text).
+- scene: 1-2 sentences describing an illustration of the activity in action (objects, setting, mood). Do not describe ethnicity.
+  No brands, logos, known characters, and no text, numbers, clocks, timers or scoreboards.`;
+  const activityKeys = `
+- pillars: exactly 3 objects {"title","description"}: title 1-2 words (max 15 characters), description one sentence of 50-115 characters.
+  The pillars are the three skills or themes the activity builds.
+- tagline: punchy hook, 3-6 words, max 32 characters.
+- welcome: one sentence to participants starting with "You'll", 12-18 words, ends with a full stop.
+- model_name: 2-5 words naming the activity's OWN learning model, sentence case (never the name of an established model).
+- model_type: one of "wheel" | "staircase" | "cycle" | "quadrant" | "clover" (staircase = builds in order; cycle = repeating loop;
+  quadrant = four roles/styles; clover = values/wellbeing/culture; wheel = complementary skills side by side).
+- elements: exactly 4 objects {"label","line"}: label one word (max 11 characters), line 3-6 words (max 30 characters), no full stop.
+  Elements must complement (not copy) the pillars.
+- model_reference: name of an established model ONLY if the brief explicitly names one, else "".
+Approved welcome-slide examples (match this tone): ${JSON.stringify(EXAMPLES.map(({ name, tagline, welcome, model_name, model_type, elements }) => ({ name, tagline, welcome, model_name, model_type, elements })))}`;
+  const programKeys = `
+This is a multi-module LEARNING PROGRAM (workshop), not a game.
+- tagline: the program headline, 3-6 words, max 32 characters.
+- modules: 3-5 objects {"name","mins","how"} in running order: name 2-4 words (max 34 characters);
+  mins = the duration in minutes ONLY if the brief states it, otherwise 0; how = 1-2 sentences (max 165 characters) describing the exercise,
+  with the exercise or activity name wrapped in **double asterisks**.`;
+  return [
+    { role: "system", content: common + (isProgram ? programKeys : activityKeys) },
+    { role: "user", content: `Write all the slide content for this ${isProgram ? "learning program" : "team activity"}:\n${activityContext(s)}` },
+  ];
+}
+
+function allProblems(out, isProgram) {
+  const p = [];
+  const b = Array.isArray(out.bullets) ? out.bullets : [];
+  if (b.length !== 3) p.push("bullets must have exactly 3 items");
+  b.forEach((x, i) => { if (!x || x.length > 120) p.push(`bullet ${i + 1} must be at most 120 characters`); if (!hasBold(x)) p.push(`bullet ${i + 1} needs exactly one **bold** phrase`); });
+  const o = Array.isArray(out.outcomes) ? out.outcomes : [];
+  if (o.length !== 3) p.push("outcomes must have exactly 3 items");
+  o.forEach((x, i) => { if (!x || x.length > 40) p.push(`outcome ${i + 1} must be at most 40 characters`); });
+  if (!out.tagline || out.tagline.length > 32) p.push("tagline must be at most 32 characters");
+  if (isProgram) {
+    const m = Array.isArray(out.modules) ? out.modules : [];
+    if (m.length < 3 || m.length > 5) p.push("modules must have 3 to 5 items");
+    m.forEach((x, i) => { if (!x || !x.name || x.name.length > 34) p.push(`module ${i + 1} name must be at most 34 characters`); if (!x || !x.how || x.how.length > 170) p.push(`module ${i + 1} how must be at most 170 characters`); });
+  } else {
+    const pl = Array.isArray(out.pillars) ? out.pillars : [];
+    if (pl.length !== 3) p.push("pillars must have exactly 3 items");
+    pl.forEach((x, i) => { if (!x || !x.title || x.title.length > 15) p.push(`pillar ${i + 1} title must be at most 15 characters`); if (!x || !x.description || x.description.length > 120) p.push(`pillar ${i + 1} description must be at most 120 characters`); });
+    p.push(...problems(out).filter((x) => !x.startsWith("tagline")));
+  }
+  return p;
+}
+
+export async function draftAllContent(s) {
+  const isProgram = s.format === "program";
+  const headers = await authHeaders();
+  const messages = buildAllMessages(s);
+  let reply = await chat(headers, messages);
+  let out = parseJson(reply);
+  const issues = allProblems(out, isProgram);
+  if (issues.length) {
+    reply = await chat(headers, [...messages, { role: "assistant", content: reply },
+      { role: "user", content: "Fix these issues and return the full corrected JSON only: " + issues.join("; ") }]);
+    try { out = parseJson(reply); } catch (e) { /* keep first draft */ }
+  }
+  const arr = (v) => (Array.isArray(v) ? v : []);
+  const els = arr(out.elements);
+  return {
+    bullets: [0, 1, 2].map((i) => clip(arr(out.bullets)[i], 160)),
+    outcomes: [0, 1, 2].map((i) => clip(arr(out.outcomes)[i], 60)),
+    pillars: { title: [0, 1, 2].map((i) => clip(arr(out.pillars)[i]?.title, 30)), description: [0, 1, 2].map((i) => clip(arr(out.pillars)[i]?.description, 160)) },
+    welcomeSlide: {
+      tagline: clip(out.tagline, 60),
+      ...(isProgram ? {} : {
+        welcome: clip(out.welcome, 160),
+        model_name: clip(out.model_name, 40),
+        model_type: TYPES.includes(out.model_type) ? out.model_type : "wheel",
+        model_reference: clip(out.model_reference, 80),
+        elements: [0, 1, 2, 3].map((i) => ({ label: clip(els[i]?.label, 30), line: clip(els[i]?.line, 60) })),
+      }),
+      scene: clip(out.scene, 400),
+      icon_concept: clip(out.icon_concept, 160),
+    },
+    modules: isProgram ? arr(out.modules).slice(0, 6).map((m) => ({ name: clip(m?.name, 60), mins: parseInt(m?.mins) > 0 ? String(parseInt(m.mins)) : "", how: clip(m?.how, 240) })) : null,
+  };
+}
+
 function compressPortrait(b64) {
   return new Promise((resolve, reject) => {
     const img = new Image();
