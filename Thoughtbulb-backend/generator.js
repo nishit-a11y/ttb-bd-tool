@@ -442,6 +442,11 @@ const generate = async function (data, objs, games, preview) {
                 const fixed = is_fulfilled || items.length <= pick;
                 if (fixed) mode = days == 2 ? "fixed_multi" : "fixed_single";
                 else mode = days == 1 && pick == 1 && items.length <= 5 ? "pick1" : "choice";
+                // Indicative 2-day proposal (BD ticked "also show a 1-day facilitation fee"): client still decides 1 vs 2 days,
+                // so always use the A + per-activity B layout, show "2 days or 1 day" facilitation and never a final total
+                const oneDayFee = parseInt(f.one_day && f.one_day.enabled ? f.one_day.fee : 0) || 0;
+                const indicative = !isVirtual && days == 2 && oneDayFee > 0;
+                if (indicative) mode = "choice";
                 const timeLabel = (t) => (t === "Full Day" ? "Full day" : t === "Half Day" ? "Half day" : t === "Short" ? "Short session" : t === "Extended" ? "Extended session" : t || "");
                 const place = !isVirtual && info.location && info.location !== "TBD" ? info.location : "";
                 const subBits = days == 2 ? [`Day 1: ${timeLabel(info.day1.time)}`, `Day 2: ${timeLabel(info.day2.time)}`] : [timeLabel(info.day1.time)];
@@ -459,9 +464,9 @@ const generate = async function (data, objs, games, preview) {
                     part_a: inr(partA), part_b: inr(partB), total: inr(partA + partB),
                     per_person: "", pax, show_total: mode === "fixed_single",
                     // 2-day choice plans: optionally show the 1-day facilitation fee as an alternative ("2 days ₹X or 1 day ₹Y")
-                    one_day: !isVirtual && days == 2 && mode === "choice" && f.one_day && f.one_day.enabled && parseInt(f.one_day.fee) > 0
-                        ? { fac: inr(parseInt(f.one_day.fee)) } : null,
-                    a_extra: !!(travelAmt || addonFee || (!isVirtual && data.on_actuals)), // nothing left to choose (all slots filled, or fewer activities than slots) → show the exact total
+                    one_day: indicative ? { fac: inr(oneDayFee) } : null,
+                    indicative, // hides the discount (shared in the final proposal) and marks travel as indicative
+                    a_extra: !!(travelAmt || (addonFee && !(indicative && isDiscount)) || (!isVirtual && data.on_actuals)), // nothing left to choose (all slots filled, or fewer activities than slots) → show the exact total
                     items, pick, n_items: items.length, compact: items.length > 4,
                     card_width: items.length >= 5 ? 196 : items.length == 4 ? 236 : 300,
                 };

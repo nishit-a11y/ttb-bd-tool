@@ -5156,10 +5156,10 @@ function Proposal() {
                             })
                           }
                         />
-                        Also show a 1-day facilitation fee
+                        Indicative proposal: also show a 1-day facilitation fee
                       </label>
                       <p className="objective-description mb-2 mt-1">
-                        The client sees "2 days ₹X or 1 day ₹Y" in Part A. Only shown when the client is still choosing activities, not on fixed plans.
+                        Sends an indicative proposal: the client sees "2 days ₹X or 1 day ₹Y", indicative travel and per-activity costs, with no final total or discount. Untick it for the final proposal.
                       </p>
                       {myContext.one_day_fac?.enabled && (
                         <input
