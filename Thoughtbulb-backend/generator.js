@@ -449,7 +449,7 @@ const generate = async function (data, objs, games, preview) {
                 if (indicative) mode = "choice";
                 const timeLabel = (t) => (t === "Full Day" ? "Full day" : t === "Half Day" ? "Half day" : t === "Short" ? "Short session" : t === "Extended" ? "Extended session" : t || "");
                 const place = !isVirtual && info.location && info.location !== "TBD" ? info.location : "";
-                const subBits = days == 2 ? [`Day 1: ${timeLabel(info.day1.time)}`, `Day 2: ${timeLabel(info.day2.time)}`] : [timeLabel(info.day1.time)];
+                const subBits = []; // pricing subtitle shows only city + participants (session duration removed on request)
                 if (place) subBits.push(place);
                 if (pax) subBits.push(`${pax} participants`);
                 if (mode === "pick1") subBits.push("choose any 1");
@@ -468,6 +468,7 @@ const generate = async function (data, objs, games, preview) {
                     indicative, // hides the discount (shared in the final proposal) and marks travel as indicative
                     a_extra: !!(travelAmt || (addonFee && !(indicative && isDiscount)) || (!isVirtual && data.on_actuals)), // nothing left to choose (all slots filled, or fewer activities than slots) → show the exact total
                     items, pick, n_items: items.length, compact: items.length > 4,
+                    b_cols2: items.length >= 6, b_tight: items.length >= 10, // long Part B lists: two columns, then tighter rows
                     card_width: items.length >= 5 ? 196 : items.length == 4 ? 236 : 300,
                 };
             }
